@@ -51,5 +51,8 @@ $app->group('/auth', function () {
 */
 $app->group('', function () {
     $this->post('/verification/phone-number', App\Controllers\VerificationController::class . ':phoneNumber');
+    $this->post('/verification/check-phone-number', App\Controllers\VerificationController::class . ':checkPhoneNumber');
     $this->post('/verification/email', App\Controllers\VerificationController::class . ':email');
+    $this->post('/verification/check-email', App\Controllers\VerificationController::class . ':checkEmail');
+
 })->add(new App\Middlewares\Guest($container->get(Cartalyst\Sentinel\Sentinel::class)));

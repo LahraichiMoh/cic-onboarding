@@ -451,7 +451,7 @@ jQuery(function($) {
                         $button.closest('div.column.one-fourth').find('div.loader').remove();
                         $('label#checkPhoneNumberLabel').closest('div.column.one-fourth').hide();
                         $('div#checkPhoneCode').css('display', 'flex');
-                        $.notify(data.message, 'success');
+                        $.notify(data.message, "success");
                     } else {
                         $('span#phoneSubscribeError').text('Une erreur s\'est produite, rééssayez plus tard !');
                         $button.closest('div.column.one-fourth').find('div.loader').remove();
@@ -484,7 +484,7 @@ jQuery(function($) {
 
         if($phone.val() != '' && $verificationCode.val() != '') {
             $.ajax({
-                url : './OnBoarding/onboarding.treat.php',
+                url : '/verification/check-phone-number',
                 type : 'POST',
                 data: {
                     action: 'phoneNumberVerification',
@@ -492,19 +492,17 @@ jQuery(function($) {
                     code: $verificationCode.val()
                 },
                 success : function(data) {
-                    data = JSON.parse(data);
-                    console.log(data);
+                    data = data;
                     if(data.success) {
                         $button.closest('div.column.one-third').hide();
                         $('div#checkPhoneCode').fadeOut();
                         $('div#editPhoneBloc').fadeOut();
                         // Add indicator to the number and code status
-                        $.notify('Le numéro a été validé avec succès', 'success');
+                        $.notify(data.message, 'success');
                     } else {
                         $('span#verificationCodeError').text('Le code de vérification est erroné');
                         $('a#editPhoneNumber').closest('div.column.one-fourth').fadeIn();
-
-                        $.notify('Le code de vérification est erroné', 'error');
+                        $.notify(data.message, 'error');
                     }
                 }
             });
