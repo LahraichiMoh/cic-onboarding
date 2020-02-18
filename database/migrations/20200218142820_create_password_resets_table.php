@@ -1,9 +1,14 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
+use App\Support\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Builder;
 
+/**
+ * PHPStorm helper
+ * @property Builder schema
+ * @property Blueprint table
+ */
 class CreatePasswordResetsTable extends Migration
 {
     /**
@@ -13,10 +18,11 @@ class CreatePasswordResetsTable extends Migration
      */
     public function up()
     {
-        Schema::create('password_resets', function (Blueprint $table) {
+        $this->schema->create('password_resets', function (Blueprint $table) {
             $table->string('email')->index();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
+            $table->engine = 'InnoDB';
         });
     }
 
@@ -27,6 +33,6 @@ class CreatePasswordResetsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('password_resets');
+        $this->schema->dropIfExists('password_resets');
     }
 }

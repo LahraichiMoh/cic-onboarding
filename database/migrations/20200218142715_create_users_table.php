@@ -1,9 +1,14 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
+use App\Support\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Builder;
 
+/**
+ * PHPStorm helper
+ * @property Builder schema
+ * @property Blueprint table
+ */
 class CreateUsersTable extends Migration
 {
     /**
@@ -13,7 +18,7 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        $this->schema->create('users', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('email')->unique();
@@ -21,6 +26,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+            $table->engine = 'InnoDB';
         });
     }
 
@@ -31,6 +37,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        $this->schema->dropIfExists('users');
     }
 }

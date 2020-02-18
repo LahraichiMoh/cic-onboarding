@@ -439,24 +439,24 @@ jQuery(function($) {
         // If phone number is valid
         if (phoneNumberReg.test( phoneNumber )) {
             $.ajax({
-                url : './OnBoarding/onboarding.treat.php',
+                url : '/verification/phone-number',
                 type : 'POST',
                 data: {
-                    action: 'getPhoneNumberVerificationCode',
                     phone: phoneNumber
                 },
                 success : function(data) {
                     //  If code has been send with success
-                    data = JSON.parse(data);
                     if(data.success) {
                         // remove loader at the end
                         $button.closest('div.column.one-fourth').find('div.loader').remove();
                         $('label#checkPhoneNumberLabel').closest('div.column.one-fourth').hide();
                         $('div#checkPhoneCode').css('display', 'flex');
+                        $.notify(data.message, 'success');
                     } else {
                         $('span#phoneSubscribeError').text('Une erreur s\'est produite, rééssayez plus tard !');
                         $button.closest('div.column.one-fourth').find('div.loader').remove();
                         $button.show();
+                        $.notify(data.message, "error");
                     }
                 }
             });

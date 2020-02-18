@@ -16,6 +16,8 @@ use Slim\Http\Response;
 
 use App\Data\DummyData;
 
+use App\Services\IceService;
+
 
 class RegisterController extends Controller
 {
@@ -24,12 +26,10 @@ class RegisterController extends Controller
     // protected $hasher;
 
     protected $auth;
-
     protected $flash;
-
     private $mailer;
-
     protected $dummyData;
+    protected $iceService;
 
     public function __construct(View $view, Auth $auth, Flash $flash, Mailer $mailer, DummyData $dummyData)
     {
@@ -127,17 +127,8 @@ class RegisterController extends Controller
     
                 // Get ICE information
                 // Check if company exists before continue
-                // $companyInfos = getICEInformations($ice);
-    
-                // // iceFile Treat
-                // if ( 0 < $_FILES['ice-file']['error'] ) {
-                //     $iceFile = null;
-                // }
-                // else {
-                //     $tmpsIceName = time().'_'.$_FILES['ice-file']['name'];
-                //     $iceTmpsPath = 'uploads/ice/tmps/' . $tmpsIceName;
-                //     if(move_uploaded_file($_FILES['ice-file']['tmp_name'], $iceTmpsPath)) $iceFile = true;
-                // }
+                $iceService = new IceService($ice);
+                $companyInfos = $iceService->getICEInformations();
 
                 // upload ICE
                 if (!empty($request->getUploadedFiles())) {
@@ -172,11 +163,11 @@ class RegisterController extends Controller
                     ];
     
                     // ICE Curl
-                    // if(count($companyInfos) > 0) {
-                    //     foreach($companyInfos as $value) {
-                    //         $items[$value['name']] = $value['value'];
-                    //     }
-                    // }
+                    if(count($companyInfos) > 0) {
+                        foreach($companyInfos as $value) {
+                            $items[$value['name']] = $value['value'];
+                        }
+                    }
     
                     foreach($items['files'] as &$file) {
                         if (in_array($file['ext'], ['png', 'jpeg', 'jpg'])) {

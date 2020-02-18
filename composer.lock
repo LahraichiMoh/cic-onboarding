@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "08721af35398b8bb8ff52b82fc34da14",
+    "content-hash": "7a5615f0bb4f2df0b88fb2e6199ad02b",
     "packages": [
         {
             "name": "cakephp/cache",
@@ -1415,6 +1415,39 @@
                 "routing"
             ],
             "time": "2018-02-13T20:26:39+00:00"
+        },
+        {
+            "name": "phpquery/phpquery",
+            "version": "0.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/elboza/PhpQuery.git",
+                "reference": "9556e6d903b89796491caee53baac426c9850159"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/elboza/PhpQuery/zipball/9556e6d903b89796491caee53baac426c9850159",
+                "reference": "9556e6d903b89796491caee53baac426c9850159",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PhpQuery\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Beerware"
+            ],
+            "authors": [
+                {
+                    "name": "Fernando Iazeolla",
+                    "email": "fernando.iazeolla@gmail.com"
+                }
+            ],
+            "description": "jquery for php",
+            "time": "2019-08-08T19:13:26+00:00"
         },
         {
             "name": "pimple/pimple",

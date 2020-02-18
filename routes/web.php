@@ -41,5 +41,15 @@ $app->group('/auth', function () {
     // Send step
     $this->post('/send-step', App\Controllers\Auth\RegisterController::class . ':sendStep');
 
+})->add(new App\Middlewares\Guest($container->get(Cartalyst\Sentinel\Sentinel::class)));
 
+/*
+|--------------------------------------------------------------------------
+| Verification phone number and email
+|--------------------------------------------------------------------------
+|
+*/
+$app->group('', function () {
+    $this->post('/verification/phone-number', App\Controllers\VerificationController::class . ':phoneNumber');
+    $this->post('/verification/email', App\Controllers\VerificationController::class . ':email');
 })->add(new App\Middlewares\Guest($container->get(Cartalyst\Sentinel\Sentinel::class)));
