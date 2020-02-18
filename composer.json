@@ -1,0 +1,52 @@
+{
+    "name": "App",
+    "description": "",
+    "keywords": ["framework", "cus"],
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Soufiane Bahad",
+            "email": "soufianebahad@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1.0",
+        "slim/slim": "^3.8",
+        "vlucas/valitron": "^1.4",
+        "vlucas/phpdotenv": "^2.4",
+        "league/container": "^2.4",
+        "hassankhan/config": "^1.0",
+        "twig/twig": "^2.4",
+        "illuminate/database": "^5.6",
+        "illuminate/pagination": "^5.6",
+        "robmorgan/phinx": "^0.10.6",
+        "swiftmailer/swiftmailer": "5.4",
+        "cartalyst/sentinel": "^2.0",
+        "illuminate/events": "^5.8",
+        "symfony/http-foundation": "^4.3",
+        "kwn/number-to-words": "^1.8",
+        "doctrine/dbal": "^2.9"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^3.2",
+        "phpunit/phpunit": "^5.6"
+    },
+    "autoload": {
+        "psr-4": {
+          "App\\": "app"
+        },
+        "files": ["app/helpers.php"]
+    },
+    "scripts": {
+        "start": [
+            "php -S localhost:8000 -t public"
+        ],
+        "post-root-package-install": [
+            "php -r \"file_exists('.env') ?: copy('.env.dist', '.env');\""
+        ],
+        "post-update-cmd": [
+            "php -r \"file_exists('.env') ?: copy('.env.dist', '.env');\""
+        ]
+    }
+}

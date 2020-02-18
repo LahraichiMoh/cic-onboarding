@@ -1,0 +1,194 @@
+{% extends 'auth/base.twig' %}
+
+{% block title %}Authentification{% endblock %}
+
+{% block content %}
+    {# <div class="kt-grid kt-grid--ver kt-grid--root">
+        <div class="kt-grid kt-grid--hor kt-grid--root kt-login kt-login--v2 kt-login--signin" id="kt_login">
+            <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" style="background-image: url(assets/media//bg/bg-1.jpg);">
+                <div class="kt-grid__item kt-grid__item--fluid kt-login__wrapper">
+                    <div class="kt-login__container">
+                        <div class="kt-login__logo">
+                            <a href="#">
+                                <img src="assets/media/logos/logo-mini-2-md.png">
+                            </a>
+                        </div>
+                        <div class="kt-login__signin">
+                            <div class="kt-login__head">
+                                <h3 class="kt-login__title">Authentification</h3>
+                            </div>
+                            <form class="kt-form" action="{{ route('auth.login') }}" method="POST">
+                                <input type="hidden" name="{{ csrf.key }}" value="{{ csrf.token }}">
+                                <div class="form-group {{ errors.password ? ' is-invalid' : '' }}">
+                                    
+                                    <input type="text" name="email" id="email" placeholder="E-mail" autocomplete="off" class="form-control{{ errors.email ? ' is-invalid' : '' }}">
+                                    {% if errors.email %}
+                                        <div class="invalid-feedback">
+                                            {{ errors.email | first }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="form-group {{ errors.password ? ' is-invalid' : '' }}">
+                                    
+                                    <input type="password" name="password" id="password" placeholder="Mot de Passe" class="form-control {{ errors.password ? ' is-invalid' : '' }}">
+                                    {% if errors.password %}
+                                        <div class="invalid-feedback">
+                                            {{ errors.password | first }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="row kt-login__extra">
+                                    <div class="col">
+                                        <label class="kt-checkbox">
+                                            <input type="checkbox" name="remember" id="remember" class="form-check-input"> Souviens-toi de moi
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                    <div class="col kt-align-right">
+                                        <a href="javascript:;" id="kt_login_forgot" class="kt-link kt-login__link">Mot de passe oublié?</a>
+                                    </div>
+                                </div>
+                                <div class="kt-login__actions">
+                                    <button id="kt_login_signin_submit" class="btn btn-pill kt-login__btn-primary">Login</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="kt-login__forgot">
+                            <div class="kt-login__head">
+                                <h3 class="kt-login__title">Mot de passe oublié?</h3>
+                                <div class="kt-login__desc">Entrez votre e-mail pour réinitialiser votre mot de passe</div>
+                            </div>
+                            <form class="kt-form" action="">
+                                <div class="input-group">
+                                    <input class="form-control" type="text" placeholder="Email" name="email" id="kt_email" autocomplete="off">
+                                </div>
+                                <div class="kt-login__actions">
+                                    <button id="kt_login_forgot_submit" class="btn btn-pill kt-login__btn-primary">Demander</button>&nbsp;&nbsp;
+                                    <button id="kt_login_forgot_cancel" class="btn btn-pill kt-login__btn-secondary">Annuler</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> #}
+    <div class="kt-grid kt-grid--ver kt-grid--root kt-page">
+		<div class="kt-grid kt-grid--hor kt-grid--root  kt-login kt-login--v6 kt-login--signin" id="kt_login">
+    <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--desktop kt-grid--ver-desktop kt-grid--hor-tablet-and-mobile">
+        <div class="kt-grid__item  kt-grid__item--order-tablet-and-mobile-2  kt-grid kt-grid--hor kt-login__aside">
+            <div class="kt-login__wrapper">
+                <div class="kt-login__container">
+                    <div class="kt-login__body">
+                        <div class="kt-login__logo">
+                            <a href="#">
+                                <img with="150" height ="150" src="./assets/media/logo_mactura/Mactura_Logo_Square.png">      
+                            </a>
+                        </div>
+
+                        <div class="kt-login__signin">
+                            <div class="kt-login__head">
+                                <h3 class="kt-login__title">Se Connecter.</h3>
+                            </div>
+                            <div class="kt-login__form">
+                                <form class="kt-form" action="{{ route('auth.login') }}" method="POST" id="kt_dign_in" autocomplete="off">
+                                <input type="hidden" name="{{ csrf.key }}" value="{{ csrf.token }}">
+                                    <div class="form-group">
+                                        <input class="form-control" type="text" placeholder="Email" name="email" autocomplete="off">
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control form-control-last" type="password" placeholder="Mot de passe" name="password">
+                                    </div>
+                                    <div class="kt-login__extra">
+                                        <label class="kt-checkbox">
+                                            <input type="checkbox" name="remember"> Se souvenir de moi
+                                            <span></span>
+                                        </label>                        
+                                        <a href="javascript:;" id="kt_login_forgot">Mot de passe oublié ?</a>
+                                    </div>
+                                    <div class="kt-login__actions">
+                                        <button id="kt_login_signin_submit" class="btn btn-brand btn-pill btn-elevate">Se connecter</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="kt-login__signup">
+                            <div class="kt-login__head">
+                                <h3 class="kt-login__title">Inscription</h3>
+                                <div class="kt-login__desc">Entrez les détails de votre compte:</div>
+                            </div>
+                            <div class="kt-login__form">
+                                <form class="kt-form" action="{{ route('auth.register') }}" id="kt_sign_up" autocomplete="off">
+                                    <input type="hidden" name="{{ csrf.key }}" value="{{ csrf.token }}">
+                                    {# <div class="form-group">
+                                        <input class="form-control" type="text" placeholder="Entreprise" name="entreprise" id="entreprise">
+                                    </div> #}
+                                    <div class="form-group">
+                                        <input class="form-control" type="text" placeholder="Utilisateur" name="username" id="username">
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control" type="text" placeholder="Email" name="email" autocomplete="off">
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control" type="password" placeholder="Mot de passe" name="password">
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control form-control-last" type="password" placeholder="Confirmer Mot de passe" name="password_confirmation" id="password_confirmation">
+                                    </div>
+                                    <div class="kt-login__extra">
+                                        <label class="kt-checkbox">
+                                            <input type="checkbox" name="agree"> J'accepte  <a href="#">les termes et conditions</a>.
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                    <div class="kt-login__actions">
+                                        <button type="submit" id="kt_login_signup_submit" class="btn btn-brand btn-pill btn-elevate">S'enregistrer.</button>
+                                        <button id="kt_login_signup_cancel" class="btn btn-outline-brand btn-pill">Annuler</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="kt-login__forgot">
+                            <div class="kt-login__head">
+                                <h3 class="kt-login__title">Forgotten Password ?</h3>
+                                <div class="kt-login__desc">Enter your email to reset your password:</div>
+                            </div>
+                            <div class="kt-login__form">
+                                <form class="kt-form" action="">
+                                    <div class="form-group">
+                                        <input class="form-control" type="text" placeholder="Email" name="email" id="kt_email" autocomplete="off">
+                                    </div>
+                                    <div class="kt-login__actions">
+                                        <button id="kt_login_forgot_submit" class="btn btn-brand btn-pill btn-elevate">Request</button>
+                                        <button id="kt_login_forgot_cancel" class="btn btn-outline-brand btn-pill">Annuler</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="kt-login__account">
+                    <span class="kt-login__account-msg">
+                        Vous n'avez pas de compte ?
+                    </span>&nbsp;&nbsp;
+                    <a href="/auth/register" id="kt_login_signup" class="kt-login__account-link">S'enregistrer !</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="kt-grid__item kt-grid__item--fluid kt-grid__item--center kt-grid kt-grid--ver kt-login__content" style="background-image: url(./assets/media//bg/bg-4.jpg);">
+            <div class="kt-login__section">
+                <div class="kt-login__block">
+                    <h3 class="kt-login__title">Inscrivez-vous Gratuitement.</h3>
+                    <div class="kt-login__desc">
+                        <h5>Créez un Compte et  Profitez d'une période d'essai sans engagement.</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>         	</div>
+
+{% endblock %}

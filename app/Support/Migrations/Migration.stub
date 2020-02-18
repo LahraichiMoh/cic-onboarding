@@ -1,0 +1,38 @@
+<?php
+$namespaceDefinition
+use $useClassName;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Schema\Builder;
+
+/**
+ * PHPStorm helper
+ * @property Builder schema
+ * @property Blueprint table
+ */
+class $className extends $baseClassName
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        $this->schema->create('', function (Blueprint $table) {
+           $table->increments('id');
+            //
+            $table->timestamps();
+            $table->engine = 'InnoDB';
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        $this->schema->drop('');
+    }
+}
