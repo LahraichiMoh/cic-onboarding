@@ -5,20 +5,29 @@ namespace App\Controllers;
 use App\Views\View;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use App\Email\Mailer;
 use App\Models\EmailVerification;
 use App\Models\PhoneNumberVerification;
+
+use App\Email\SenderVerificationCode;
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 
 class VerificationController extends Controller
 {
     const EMAIL_SALT = '_cic_email_salt_grulog';
     const PHONE_NUMBER_SALT = '_cic_phone_number_salt_grulog';
 
+    private $mailer;
     protected $view;
     protected $defaultCodeLength = 4;
 
-    public function __construct(View $view)
+    public function __construct(View $view, Mailer $mailer)
     {
         $this->view = $view;
+        $this->mailer = $mailer;
     }
 
     public function phoneNumber(Request $request, Response $response)
@@ -57,7 +66,57 @@ class VerificationController extends Controller
 
     public function email(Request $request, Response $response)
     {
-        return $response->withJson(['success' => true]);
+        $email = $request->getParam('email');
+
+        // Get email in database
+        $emailVerification = EmailVerification::where('email', $email)->first();
+
+        // If email in db
+        if($emailVerification) {
+            // Email already in db
+            if(!$emailVerification->email_verified_at) return $response->withJson(['success' => true, 'message' => 'Entrez votre code dé vérification']);
+            else return $response->withJson(['success' => false, 'message' => 'Ce email a déjà été utilisé']);
+        } else {
+            // Number phone not in db
+            // Generate code and send code by email
+            $code = $this->generateEmailSaltCode();
+
+            $emailVerification = EmailVerification::create([
+                'email' => $email,
+                'code' => $code['complete'],
+            ]);
+
+            if($emailVerification) {
+                // Call method to send email at the user
+                // Send email
+                // $sendMail = $this->mailer->to($email, '')->send(new SenderVerificationCode(['name' => '', 'code' => $code['short']]));
+
+                $mail = new PHPMailer;
+                // $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      // Enable verbose debug output
+                // $mail->isSMTP();                                            // Send using SMTP
+                $mail->Host       = 'mail.maxmind.ma';                    // Set the SMTP server to send through
+                $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
+                $mail->Username   = 'verification-cic@maxmind.ma';                     // SMTP username
+                $mail->Password   = 'HHSkismalj88ç';                               // SMTP password
+                // $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
+                $mail->Port       = 465; 
+
+                $mail->setFrom('verification-cic@maxmind.ma', 'CIC - Onboarding');
+                $mail->addAddress($email, );
+                $mail->Subject  = 'CIC - Onboarding - Code de vérification';
+
+                // $mail->Body     = 'Votre code de validation est le : '.$code['short'];
+                $mail->Body = $this->view->render($response, 'emails/verification-code.twig', array('name' => '', 'code' => $code['short']));
+                $mail->IsHTML(true);
+
+                if( $mail->send() )
+                    return $response->withJson(['success' => true, 'message' => 'Le code de vérification a été envoyé']);
+                else
+                    return $response->withJson(['success' => false, 'message' => 'Le code de vérification n\'a pas pu être envoyé']);
+            }
+            else 
+                return $response->withJson(['success' => false, 'message' => 'Le code de vérification n\'a pas pu être envoyé']);
+        }
     }
 
     public function generateEmailSaltCode($length = null)
@@ -88,6 +147,8 @@ class VerificationController extends Controller
         if( (!$phoneNumber) || (strlen($phoneNumber) != 10) || (!$smsBody) ) return false;
     
         $result = null;
+
+        // You can save this in config 
         $ApiSmsConnectBaseUrl = 'http://www.sms.ma/mcms/sendsms/';
         $login = 'creditinfo';
         $password = 'Cd58-Aqm91';
@@ -140,6 +201,7 @@ class VerificationController extends Controller
             else {
                 if( sha1($code.self::PHONE_NUMBER_SALT) == $phoneNumberVerification->code){
                     $phoneNumberVerification->update(['phone_number_verified_at' => time()]);
+                    $_SESSION['phoneNumberIsValidate'] = true;
                     $status = true;
                     $message = 'Votre numéro de téléphone a été vérifié avec succès';
                 } else {
@@ -153,6 +215,34 @@ class VerificationController extends Controller
         return ['success' => $status, 'message' => $message];
     }
 
+    protected function checkIfEmailCodeMatch(Request $request)
+    {
+        $status = false;
+        $message = '';
+        $email = $request->getParam('email');
+        $code = $request->getParam('code');
+        $emailVerification = EmailVerification::where('email', $email)->first();
+
+        // If email present in email_verifications table - Database 
+        if($emailVerification) {
+            if($emailVerification->phone_number_verified_at) $message = 'Ce numero a déjà été validé';
+            else {
+                if( sha1($code.self::EMAIL_SALT) == $emailVerification->code){
+                    $emailVerification->update(['email_verified_at' => time()]);
+                    $_SESSION['emailIsValidate'] = true;
+                    $status = true;
+                    $message = 'Votre email a été vérifié avec succès';
+                } else {
+                    $message = 'Le code saisi est erroné';
+                }
+            }
+        } else {
+            $message = 'L\'adresse mail suivante '.$email.' ne correspond à aucun enregistrement';
+        }
+
+        return ['success' => $status, 'message' => $message];
+    }
+
     public function checkPhoneNumber(Request $request, Response $response)
     {
         return $response->withJson($this->checkIfPhoneNumberCodeMatch($request));
@@ -160,7 +250,7 @@ class VerificationController extends Controller
 
     public function checkEmail(Request $request, Response $response)
     {
-        
+        return $response->withJson($this->checkIfEmailCodeMatch($request));
     }
    
 }

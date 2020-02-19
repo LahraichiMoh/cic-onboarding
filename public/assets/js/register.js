@@ -540,24 +540,24 @@ jQuery(function($) {
         // If email is valid
         if (emailIsValid(email)) {
             $.ajax({
-                url : './OnBoarding/onboarding.treat.php',
+                url : '/verification/email',
                 type : 'POST',
                 data: {
-                    action: 'getEmailVerificationCode',
                     email: email
                 },
                 success : function(data) {
                     //  If code has been send with success
-                    data = JSON.parse(data);
                     if(data.success) {
                         // remove loader at the end
                         $button.closest('div.column.one-fourth').find('div.loader').remove();
                         $('label#checkEmailLabel').closest('div.column.one-fourth').hide();
                         $('div#checkEmailCode').css('display', 'flex');
+                        $.notify(data.message, "success");
                     } else {
                         $('span#emailError').text('Une erreur s\'est produite, rééssayez plus tard !');
                         $button.closest('div.column.one-fourth').find('div.loader').remove();
                         $button.show();
+                        $.notify(data.message, "error");
                     }
                 }
             });
@@ -585,16 +585,13 @@ jQuery(function($) {
 
         if($email.val() != '' && $verificationCode.val() != '') {
             $.ajax({
-                url : './OnBoarding/onboarding.treat.php',
+                url : '/verification/check-email',
                 type : 'POST',
                 data: {
-                    action: 'emailVerification',
                     email: $email.val(),
                     code: $verificationCode.val()
                 },
                 success : function(data) {
-                    data = JSON.parse(data);
-                    console.log(data);
                     if(data.success) {
                         $button.closest('div.column.one-third').hide();
                         $('div#checkEmailCode').fadeOut();
@@ -604,7 +601,6 @@ jQuery(function($) {
                     } else {
                         $('span#verificationEmailCodeError').text('Le code de vérification est erroné');
                         $('a#editEmail').closest('div.column.one-fourth').fadeIn();
-
                         $.notify('Le code de vérification est erroné', 'error');
                     }
                 }

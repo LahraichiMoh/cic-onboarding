@@ -2,6 +2,8 @@
 
 return [
     'swiftmailer' => [
+        'transport' => 'gmail',
+        'driver' => env('MAIL_DRIVER', 'smtp'),
         'host' => getenv('SMTP_HOST'),
         'port' => getenv('SMTP_PORT'),
         'from' => [
@@ -10,5 +12,9 @@ return [
         ],
         'username' => getenv('SMTP_USERNAME'),
         'password' => getenv('SMTP_PASSWORD'),
+
+        'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+        'sendmail' => '/usr/sbin/sendmail -bs',
+        'pretend' => false,
     ],
 ];

@@ -22,5 +22,12 @@ class HomeController extends Controller
         // return $this->view->render($response, 'templates/index.twig', array('user' => $user));
         return $this->view->render($response, 'layout.twig');
     }
+
+    public function test(Request $request, Response $response)
+    {
+        $name = 'Ulrich Grah';
+        $code = '0000';
+        return $this->view->render($response, 'emails/verification-code.twig', array('name' => $name, 'code' => $code));
+    }
    
 }

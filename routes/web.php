@@ -56,3 +56,9 @@ $app->group('', function () {
     $this->post('/verification/check-email', App\Controllers\VerificationController::class . ':checkEmail');
 
 })->add(new App\Middlewares\Guest($container->get(Cartalyst\Sentinel\Sentinel::class)));
+
+
+// Test route
+$app->group('', function () {
+    $this->get('/test', App\Controllers\HomeController::class . ':test')->setName('test');
+});

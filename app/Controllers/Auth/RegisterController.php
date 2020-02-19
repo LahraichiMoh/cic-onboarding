@@ -196,7 +196,10 @@ class RegisterController extends Controller
                 $phone = $_POST['phoneSubscribe'];
                 $email = $_POST['emailSubscribe'];
     
-                if((preg_match('/^[0-9]{10}+$/', $phone)) && (filter_var($email, FILTER_VALIDATE_EMAIL)) && (!empty($_SESSION['phoneNumberIsValidate'])) && (!empty($_SESSION['emailIsValidate']))) {
+                // For real
+                // if((preg_match('/^[0-9]{10}+$/', $phone)) && (filter_var($email, FILTER_VALIDATE_EMAIL)) && (!empty($_SESSION['phoneNumberIsValidate'])) && (!empty($_SESSION['emailIsValidate']))) {
+                // For test
+                if((preg_match('/^[0-9]{10}+$/', $phone)) && (filter_var($email, FILTER_VALIDATE_EMAIL)) ) {
                 // if((!empty($phone)) && (filter_var($email, FILTER_VALIDATE_EMAIL))) {
                     $_SESSION['phoneSubscribe'] = $phone;
                     $_SESSION['emailSubscribe'] = $email;
@@ -217,21 +220,27 @@ class RegisterController extends Controller
                     }
     
                     // Check if phone number has bees activate 
-                    if(empty($_SESSION['phoneNumberIsValidate'])) {
+                    // Use this for real
+                    // if(empty($_SESSION['phoneNumberIsValidate'])) {
+                    //     $items['phoneSubscribeError'] = 'Numéro de téléphone non activé';
+                    // }
+                    // Use this for test
+                    if(!preg_match('/^[0-9]{10}+$/', $phone)) {
                         $items['phoneSubscribeError'] = 'Numéro de téléphone non activé';
                     }
-    
+
                     // Check if phone number has bees activate 
-                    if(empty($_SESSION['emailIsValidate'])) {
+                    // Use this for real
+                    // if(empty($_SESSION['emailIsValidate'])) {
+                    //     $items['emailError'] = 'Email non activé';
+                    // }
+                    // Use this for test
+                    if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                         $items['emailError'] = 'Email non activé';
                     }
                 }
-                sleep(3);
-                // Prepare response 
-                $response['lastStep'] = false;
-                $response['status'] = $status;
-                $response['items'] = $items;
-                echo json_encode($response);
+                
+                return $response->withJson(['lastStep' => false, 'status' => $status, 'items' => $items]);
                 break;
             case 2:
                 // Get all input in the form
