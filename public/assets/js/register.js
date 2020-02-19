@@ -174,11 +174,11 @@ jQuery(function($) {
 
     previousStepAction = function() {
         if(step >= 1) {
-            $(`div#step-${step}`).slideUp({ duration: 1600, easing: 'swing' });
+            $(`div#step-${step}`).slideUp({ duration: 1600, easing: 'linear' });
             var body = $("html, body");
             var passedStep = `div#step-${step}`;
             var paddingScroll = $(passedStep).height() * (20/100);
-            body.stop().animate({scrollTop: ($(document).scrollTop() - $(passedStep).height() - paddingScroll) }, 1600, 'swing', function() { 
+            body.stop().animate({scrollTop: ($(document).scrollTop() - $(passedStep).height() - paddingScroll) }, 1600, 'linear', function() { 
             });
 
             $(`div#step-${step}`).find('div.loader').remove();
@@ -255,8 +255,7 @@ jQuery(function($) {
             complete: function() {
                 // Show finish modal when it was last step 
                 if(response.lastStep && response.status) {
-                    window.location.replace("./Onboarding/onboarding.payment.php");
-                    // window.location.replace("?page=payment");
+                    window.location.href = '/auth/payment';
                 } else {
                     if(response.status) {
                         $(`div#step-${step}`).find('div.step-pause').hide();
@@ -266,7 +265,7 @@ jQuery(function($) {
                         $(`div#step-${step}`).fadeIn('slow'); 
                         var body = $("html, body");
                         var paddingScroll = $(passedStep).height() * (20/100);
-                        body.stop().animate({scrollTop: ($(document).scrollTop() + $(passedStep).height() + paddingScroll) }, 2000, 'swing', function() { 
+                        body.stop().animate({scrollTop: ($(document).scrollTop() + $(passedStep).height() + paddingScroll) }, 2000, 'linear', function() { 
                         });
                         $(`a.next-step[href="#step-${step}"]`).trigger('click');
 
@@ -282,11 +281,11 @@ jQuery(function($) {
                             getTermsOfService( $(`div#step-${step}`) );
                         }
 
-                        if( (typeof $(`div#step-${step}`).attr('data-payment-summary') !== typeof undefined) && ($(`div#step-${step}`).attr('data-tpayment-summary') !== false) ) {
+                        if( (typeof $(`div#step-${step}`).attr('data-payment-summary') !== typeof undefined) && ($(`div#step-${step}`).attr('data-payment-summary') !== false) ) {
                             getPaymentSummary( $(`div#step-${step}`) );
                         }
 
-                        if( (typeof $(`div#step-${step}`).attr('data-payment') !== typeof undefined) && ($(`div#step-${step}`).attr('data-tpayment') !== false) ) {
+                        if( (typeof $(`div#step-${step}`).attr('data-payment') !== typeof undefined) && ($(`div#step-${step}`).attr('data-payment') !== false) ) {
                             getPayment( $(`div#step-${step}`) );
                         }
                     }
@@ -308,11 +307,8 @@ jQuery(function($) {
         var content;
 
         $.ajax({
-            url : './OnBoarding/onboarding.treat.php',
-            type : 'POST',
-            data: {
-                action: 'getSummaryInfos',
-            },
+            url : '/auth/summary-infos',
+            type : 'GET',
             success : function(data) {
                 content = data;
                 if(content) $('div#nextAndPreviousStepButtons').fadeOut();
@@ -335,11 +331,8 @@ jQuery(function($) {
         var content;
 
         $.ajax({
-            url : './OnBoarding/onboarding.treat.php',
-            type : 'POST',
-            data: {
-                action: 'getTermsOfService',
-            },
+            url : '/auth/service-terms',
+            type : 'GET',
             success : function(data) {
                 content = data;
                 if(content) $('div#nextAndPreviousStepButtons').fadeOut();
@@ -361,11 +354,8 @@ jQuery(function($) {
         var content;
 
         $.ajax({
-            url : './OnBoarding/onboarding.treat.php',
-            type : 'POST',
-            data: {
-                action: 'getPaymentSummary',
-            },
+            url : '/auth/payment-summary',
+            type : 'GET',
             success : function(data) {
                 content = data;
             },
@@ -386,11 +376,8 @@ jQuery(function($) {
         var content;
 
         $.ajax({
-            url : './OnBoarding/onboarding.treat.php',
-            type : 'POST',
-            data: {
-                action: 'getPayment',
-            },
+            url : '/auth/go-to-payment',
+            type : 'GET',
             success : function(data) {
                 content = data;
             },

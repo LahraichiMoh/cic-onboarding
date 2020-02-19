@@ -37,6 +37,11 @@ $app->group('/auth', function () {
     $this->get('/sectors', App\Controllers\Auth\RegisterController::class . ':sectors');
     $this->get('/branches', App\Controllers\Auth\RegisterController::class . ':branches');
     $this->get('/sub-branches', App\Controllers\Auth\RegisterController::class . ':subBranches');
+    $this->get('/summary-infos', App\Controllers\Auth\RegisterController::class . ':getSummaryInfos');
+    $this->get('/service-terms', App\Controllers\Auth\RegisterController::class . ':getServiceTerms');
+    $this->get('/payment-summary', App\Controllers\Auth\RegisterController::class . ':getPaymentSummary');
+    $this->get('/go-to-payment', App\Controllers\Auth\RegisterController::class . ':getPayment');
+    $this->get('/payment', App\Controllers\Auth\RegisterController::class . ':payment');
     
     // Send step
     $this->post('/send-step', App\Controllers\Auth\RegisterController::class . ':sendStep');

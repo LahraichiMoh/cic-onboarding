@@ -54,7 +54,7 @@ class VerificationController extends Controller
 
             if($phoneVerification) {
                 // Call method to send sms at the user
-                if($this->sendSMS($phone, 'Code de validation CIC : '.$code['short']))
+                if($this->sendSMS($phone, $code['short'].' est le code confidentiel pour compléter votre inscription. Attention! Ce code a valididté de 5 min. A ne communiquer à personne. CHECKINFO'))
                     return $response->withJson(['success' => true, 'message' => 'Le code de vérification a été envoyé']);
                 else
                     return $response->withJson(['success' => false, 'message' => 'Le code de vérification n\'a pas pu être envoyé']);
@@ -75,7 +75,7 @@ class VerificationController extends Controller
         if($emailVerification) {
             // Email already in db
             if(!$emailVerification->email_verified_at) return $response->withJson(['success' => true, 'message' => 'Entrez votre code dé vérification']);
-            else return $response->withJson(['success' => false, 'message' => 'Ce email a déjà été utilisé']);
+            else return $response->withJson(['success' => false, 'message' => 'Cet email a déjà été utilisé !']);
         } else {
             // Number phone not in db
             // Generate code and send code by email

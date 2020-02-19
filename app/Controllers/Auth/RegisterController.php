@@ -111,6 +111,261 @@ class RegisterController extends Controller
         return $response->withJson(['status' => 'success', 'data' => $subBranch]);
     }
 
+    public function getSummaryInfos(Request $request, Response $response)
+    {
+        $content = '<form id="step-form-4" action="" method="POST" enctype="multipart/form-data" autocomplete="off">
+                        <input type="hidden" name="step" value="4">
+                        <input type="hidden" name="cityID" value="'.$_SESSION['city']['id'].'">
+                        <input type="hidden" name="regionID" value="'.$_SESSION['region']['id'].'">
+
+                        <div class="credit__input">
+                            <label for="summaryIce">ICE <sup><i class="icofont-star-alt-2"></i></sup></label>
+                            <input class="input" id="summaryIce" name="summaryIce" type="text" placeholder="Numéro ICE" required maxlength="15" autocomplete="off" value="'.$_SESSION['ice'].'" readonly>
+                            <i class=" input__load"></i>
+                            <span id="summaryIceError" class="msg-info"></span>
+                        </div>
+
+                        <div class="both_input">
+                            <div class="credit__input column one-third" style="margin-left: 0;">
+                                <label for="summaryName">Nom <sup><i class="icofont-star-alt-2"></i></sup></label>
+                                <input class="input" id="summaryName" name="summaryName" type="text" placeholder="Nom" required autocomplete="off" value="'.$_SESSION['name'].'" readonly>
+                                <i class=" input__load"></i>
+                                <span id="summaryNameError" class="msg-info"></span>
+                            </div>
+                            <div class="credit__input column one-third">
+                                <label for="summaryFirstName">Prénom(s) <sup><i class="icofont-star-alt-2"></i></sup></label>
+                                <input class="input" id="summaryFirstName" name="summaryFirstName" type="text" placeholder="Prénom(s)" required autocomplete="off" value="'.$_SESSION['firstName'].'" readonly>
+                                <i class=" input__load"></i>
+                                <span id="summaryFirstNameError" class="msg-info"></span>
+                            </div>
+                            <div class="credit__input column one-third">
+                                <label for="summaryPhone">Téléphone mobile <sup><i class="icofont-star-alt-2"></i></sup></label>
+                                <input class="input" id="summaryPhone" name="summaryPhone" type="text" placeholder="06XXXXXXXX" required autocomplete="off" value="'.$_SESSION['phoneSubscribe'].'" readonly>
+                                <i class=" input__load"></i>
+                                <span id="summaryPhoneError" class="msg-info"></span>
+                            </div>
+                        </div>
+
+                        <div class="both_input">
+                            <div class="credit__input column one-second" style="margin-left: 0;">
+                                <label for="summaryAddress">Adresse <sup><i class="icofont-star-alt-2"></i></sup></label>
+                                <input class="input" id="summaryAddress" name="summaryAddress" type="text" placeholder="Adresse" required autocomplete="off" value="'.$_SESSION['address'].'" readonly>
+                                <i class=" input__load"></i>
+                                <span id="summaryAddressError" class="msg-info"></span>
+                            </div>
+                            <div class="credit__input column one-second">
+                                <label for="summaryEmail">Email <sup><i class="icofont-star-alt-2"></i></sup></label>
+                                <input class="input" id="summaryEmail" name="summaryEmail" type="text" placeholder="Email" required autocomplete="off" value="'.$_SESSION['emailSubscribe'].'" readonly>
+                                <i class=" input__load"></i>
+                                <span id="summaryEmailError" class="msg-info"></span>
+                            </div>
+                        </div>
+
+                        <div class="both_input">
+                            <div class="credit__input column one-second">
+                                <label for="summaryCity">Ville<sup><i class="icofont-star-alt-2"></i></sup></label>
+                                <input class="input" id="summaryCity" name="summaryCity" type="text" placeholder="" required autocomplete="off" value="'.$_SESSION['city']['name'].'" readonly>
+                                <i class=" input__load"></i>
+                                <span id="summaryCityError" class="msg-info"></span>
+                            </div>
+                            <div class="credit__input column one-second">
+                                <label for="summaryRegion">Region<sup><i class="icofont-star-alt-2"></i></sup></label>
+                                <input class="input" id="summaryRegion" name="summaryRegion" type="text" placeholder="" required autocomplete="off" value="'.$_SESSION['region']['name'].'" readonly>
+                                <i class=" input__load"></i>
+                                <span id="summaryRegionError" class="msg-info"></span>
+                            </div>
+                        </div>
+
+                        <p>Vous êtes : <span id="summaryCompanyStatus">'.$_SESSION['companyStatus'].'</span></p>
+                        <br>
+                        <p>Votre secteur d\'activité: <span id="summaryActivity">'.$_SESSION['sector']['name'].'</span></p>
+
+                        <br><br>
+
+                        <div class="column_attr clearfix align_center step-pause">
+                            <a id="back-step" class="button button_left button_size_2 button_js trigger-previous-step" href="#">
+                                <span class="button_icon"><i class="icon-left" style="color: white !important"></i></span>
+                                <span class="button_label">Revenir</span>
+                            </a>
+                            <a id="validate-step" class="button button_right button_size_2 button_js kill_the_icon trigger-next-step" href="#">
+                                <span class="button_icon"><i class="icon-right" style="color: white !important"></i></span>
+                                <span class="button_label">Valider</span>
+                            </a>
+                        </div>
+                    </form>';
+
+        return $response->withJson($content);
+    }
+
+    public function getServiceTerms(Request $request, Response $response)
+    {
+        $content = '<form id="step-form-5" action="" method="POST" enctype="multipart/form-data" autocomplete="off" data-stay-display="1">
+                        <input type="hidden" name="step" value="5">
+                        <input id="acceptedTermsOfService" type="hidden" name="accepted" value="0">
+
+                        <div class="credit__input">
+                            <label>Condition d\'utilisation du service</label>
+                            <textarea id="termsOfService" name="termsOfService" rows="8" style="width: 100%" readonly>
+                                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
+                            </textarea>
+                            <span id="termsOfServiceError" class="msg-info"></span>
+                        </div>
+
+                        <div class="column_attr clearfix align_center step-pause">
+                            <a class="button button_left button_size_2 button_js trigger-next-step" href="#" onclick="setAccepted(\'0\')">
+                                <span class="button_icon"><i class="icon-left" style="color: white !important"></i></span>
+                                <span class="button_label">Refuser</span>
+                            </a>
+                            <a class="button button_right button_size_2 button_js kill_the_icon trigger-next-step" href="#" onclick="setAccepted(\'1\')">
+                                <span class="button_icon"><i class="icon-right" style="color: white !important"></i></span>
+                                <span class="button_label">Accepter</span>
+                            </a>
+                        </div>
+
+                        <script>
+                            function setAccepted(value) {
+                                document.getElementById("acceptedTermsOfService").value = value;
+                            }
+                        </script>
+                    </form>';
+        return $response->withJson($content);
+    }
+
+    public function getPaymentSummary(Request $request, Response $response)
+    {
+        $abonnement = '';
+
+        foreach($_SESSION['subscriptionChoice'] as $subscriptionChoise) {
+            $abonnement .= '<tr>
+                                <td>'.$subscriptionChoise['id'].'</td>
+                                <td>'.$subscriptionChoise['volume'].'</td>
+                                <td>'.$subscriptionChoise['amount'].'</td>
+                                <td>'.$subscriptionChoise['managementFees'].'</td>
+                                <td>'.$subscriptionChoise['canal'].'</td>
+                                <td>
+                                    <i class="icon-pocket"></i>
+                                </td>
+                            </tr>';
+        }
+
+        $littleTable = '<table>
+                            <thead>
+                                <tr>
+                                    <th colspan="2">Récapitulatif du paiement</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td align="left">Abonnement</td>
+                                    <td>S</td>
+                                </tr>
+                                <tr>
+                                    <td align="left">Montant HT</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td align="left">Frais de gestion</td>
+                                    <td>250</td>
+                                </tr>
+                                <tr>
+                                    <td align="left">Total HT</td>
+                                    <td>250</td>
+                                </tr>
+                                <tr>
+                                    <td align="left">TVA (20%)</td>
+                                    <td>50</td>
+                                </tr>
+                                <tr>
+                                    <td align="left">Montant total TTC</td>
+                                    <td>300</td>
+                                </tr>
+                            </tbody>
+                        </table>';
+
+        $content = '<form id="step-form-7" action="" method="POST" enctype="multipart/form-data" autocomplete="off" data-stay-display="1">
+                        <input type="hidden" name="step" value="7">
+
+                        <div class="both__input">
+                            <div>
+                                <label>Nous vous remercions pour le choix d\'abonnement de la formule suivante :</label>
+                                <table>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Volume</th>
+                                        <th>Montant HT</th>
+                                        <th>Frais de gestion</th>
+                                        <th>Canal</th>
+                                        <th>Choix</th>
+                                    </tr>
+                                    '.$abonnement.'
+                                </table>
+                            </div>
+                        </div>
+                    </form>';
+
+            $content .= $littleTable;
+
+        return $response->withJson($content);
+    }
+
+    public function getPayment(Request $request, Response $response)
+    {
+        $littleTable = '<table>
+                            <thead>
+                                <tr>
+                                    <th colspan="2">Récapitulatif du paiement</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td align="left">Abonnement</td>
+                                    <td>S</td>
+                                </tr>
+                                <tr>
+                                    <td align="left">Montant HT</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td align="left">Frais de gestion</td>
+                                    <td>250</td>
+                                </tr>
+                                <tr>
+                                    <td align="left">Total HT</td>
+                                    <td>250</td>
+                                </tr>
+                                <tr>
+                                    <td align="left">TVA (20%)</td>
+                                    <td>50</td>
+                                </tr>
+                                <tr>
+                                    <td align="left">Montant total TTC</td>
+                                    <td>300</td>
+                                </tr>
+                            </tbody>
+                        </table>';
+        
+        $paymentOptions = '<div class="flex-container">
+                                <div class="option-payment">
+                                    <img src="./assets/img/media/visa-mastercard-logo.png" />
+                                </div>
+                                <div class="option-payment">
+                                    <img src="./assets/img/media/fatourati_2.jpg" />
+                                </div>
+                            </div>';
+
+        $content = '<form id="step-form-8" action="" method="POST" enctype="multipart/form-data" autocomplete="off" data-stay-display="1">
+                        <input type="hidden" name="step" value="8">
+
+                        <div>
+                            '.$littleTable.'
+                            <label>Merci de choisir le mode de paiement</label><br>
+                            '.$paymentOptions.'
+                        </div>
+                    </form>';
+
+        return $response->withJson($content);
+    }
+
     public function sendStep(Request $request, Response $response)
     {
         $this->initializeUploadsFolder();
@@ -244,11 +499,12 @@ class RegisterController extends Controller
                 break;
             case 2:
                 // Get all input in the form
-                $name = $_POST['name'];
-                $firstName = $_POST['firstName'];
-                $address = $_POST['address'];
-                $city = getSingleData( intval($_POST['city']), $cities );
-                $region = getSingleData( intval($_POST['region']), $regions );
+                $name = $request->getParam('name');
+                $firstName = $request->getParam('firstName');
+                $address = $request->getParam('address');
+
+                $city = $this->dummyData->getCityById( $request->getParam('city') );
+                $region = $this->dummyData->getRegionById( $request->getParam('region') );
     
                 $items = [];
                 
@@ -286,20 +542,16 @@ class RegisterController extends Controller
                         $items['regionError'] = 'Veuillez renseigner la région';
                     }
                 }
-    
-                sleep(3);
-                // Prepare response 
-                $response['lastStep'] = false;
-                $response['status'] = $status;
-                $response['items'] = $items;
-                echo json_encode($response);
+
+                return $response->withJson(['lastStep' => false, 'status' => $status, 'items' => $items]);
                 break;
             case 3:
                 // Get all input in the form
-                $companyStatus = $_POST['companyStatus'];
-                $sector = getSingleData( intval($_POST['activityArea']), $sectors );
-                $branch = getSingleData( intval($_POST['branch']), $branches );
-                $subBranch = getSingleData( intval($_POST['subBranch']), $subBranches );
+                $companyStatus = $request->getParam('companyStatus');
+
+                $sector = $this->dummyData->getSectorById( $request->getParam('activityArea') );
+                $branch = $this->dummyData->getBranchById( $request->getParam('branch') );
+                $subBranch = $this->dummyData->getSubBranchById( $request->getParam('subBranch') );
     
                 $items = [];
                 
@@ -333,23 +585,29 @@ class RegisterController extends Controller
                     }
                 }
     
-                sleep(3);
-                // Prepare response 
-                $response['lastStep'] = false;
-                $response['status'] = $status;
-                $response['items'] = $items;
-                echo json_encode($response);
+                sleep(1);
+                return $response->withJson(['lastStep' => false, 'status' => $status, 'items' => $items]);
                 break;
             case 4:
                 // Get all input in the form
-                $ice = $_POST['summaryIce'];
-                $cityID = $_POST['cityID'];
-                $regionID = $_POST['regionID'];
-                $name = $_POST['summaryName'];
-                $firstName = $_POST['summaryFirstName'];
-                $phoneNumber = $_POST['summaryPhone'];
-                $address = $_POST['summaryAddress'];
-                $email = $_POST['summaryEmail'];
+                // $ice = $_POST['summaryIce'];
+                // $cityID = $_POST['cityID'];
+                // $regionID = $_POST['regionID'];
+                // $name = $_POST['summaryName'];
+                // $firstName = $_POST['summaryFirstName'];
+                // $phoneNumber = $_POST['summaryPhone'];
+                // $address = $_POST['summaryAddress'];
+                // $email = $_POST['summaryEmail'];
+
+                $ice = $request->getParam('summaryIce');
+                $cityID = $request->getParam('cityID');
+                $regionID = $request->getParam('regionID');
+                $name = $request->getParam('summaryName');
+                $firstName = $request->getParam('summaryFirstName');
+                $phoneNumber = $request->getParam('summaryPhone');
+                $address = $request->getParam('summaryAddress');
+                $email = $request->getParam('summaryEmail');
+
     
                 $items = [];
                 
@@ -378,16 +636,12 @@ class RegisterController extends Controller
                     if($email != $_SESSION['emailSubscribe']) $items['summaryIceError'] = 'L\'email renseigné ne correspond pas aux enregistrements';
                 }
                 
-                sleep(3);
-                // Prepare response 
-                $response['lastStep'] = false;
-                $response['status'] = $status;
-                $response['items'] = $items;
-                echo json_encode($response);
+                sleep(1);
+                return $response->withJson(['lastStep' => false, 'status' => $status, 'items' => $items]);
                 break;
             case 5:
                 // Get all input in the form
-                $termsOfService = intval($_POST['accepted']);
+                $termsOfService = intval( $request->getParam('accepted') );
     
                 $items = [];
                 
@@ -398,22 +652,24 @@ class RegisterController extends Controller
                 } else {
                     $status = false;
                     $items['termsOfServiceError'] = 'Veuillez lire et accepter les conditions d\'utilisation pour profiter de nos services';
-                    $response['hideStep'] = true;
+                    $hideStep = true;
                 }
     
-                sleep(3);
-                // Prepare response 
-                $response['lastStep'] = false;
-                $response['status'] = $status;
-                $response['items'] = $items;
-                echo json_encode($response);
+                sleep(1);
+                return $response->withJson(['lastStep' => false, 'status' => $status, 'items' => $items, 'hideStep' => $hideStep ? $hideStep : null]);
                 break;
             case 6:
                 // Get all input in the form
-                $choiceA = intval($_POST['choiceACheck']);
-                $choiceB = intval($_POST['choiceBCheck']);
-                $choiceC = intval($_POST['choiceCCheck']);
-                $choiceS = intval($_POST['choiceSCheck']);
+                // $choiceA = intval($_POST['choiceACheck']);
+                // $choiceB = intval($_POST['choiceBCheck']);
+                // $choiceC = intval($_POST['choiceCCheck']);
+                // $choiceS = intval($_POST['choiceSCheck']);
+
+                $choiceA = intval( $request->getParam('choiceACheck') );
+                $choiceB = intval( $request->getParam('choiceBCheck') );
+                $choiceC = intval( $request->getParam('choiceCCheck') );
+                $choiceS = intval( $request->getParam('choiceSCheck') );
+
     
                 $items = [];
                 $_SESSION['subscriptionChoice'] = [];
@@ -428,35 +684,29 @@ class RegisterController extends Controller
                 } else {
                     $status = false;
                     $items['subscriptionChoiceError'] = 'Veuillez choisir au moins une des offres de la liste';
-                    $response['hideStep'] = true;
+                    $hideStep = true;
                 }
     
-                sleep(3);
-                // Prepare response 
-                $response['lastStep'] = false;
-                $response['status'] = $status;
-                $response['items'] = $items;
-                echo json_encode($response);
+                sleep(1);
+                return $response->withJson(['lastStep' => false, 'status' => $status, 'items' => $items, 'hideStep' => $hideStep ? $hideStep : null]);
                 break;
             case 7:
     
-                sleep(3);
-                // Prepare response 
-                $response['lastStep'] = false;
-                $response['status'] = true;
-                $response['items'] = [];
-                echo json_encode($response);
+                sleep(2);
+
+                return $response->withJson(['lastStep' => false, 'status' => true, 'items' => array()]);
                 break;
             case 8:
     
                 sleep(2);
-                // Prepare response 
-                $response['lastStep'] = true;
-                $response['status'] = true;
-                $response['items'] = [];
-                echo json_encode($response);
+                return $response->withJson(['lastStep' => true, 'status' => true, 'items' => array()]);
                 break;
         }
+    }
+
+    public function payment(Request $request, Response $response)
+    {
+        return $this->view->render($response, 'auth/payment.twig');
     }
 
     private function initializeUploadsFolder()

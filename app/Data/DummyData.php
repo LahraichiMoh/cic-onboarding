@@ -32,18 +32,18 @@ class DummyData
         ['id' => 10, 'name' => 'Khouribga', 'region_id' => 5],
         ['id' => 11, 'name' => 'Casablanca', 'region_id' => 6],
         ['id' => 12, 'name' => 'Settat', 'region_id' => 6],
-        ['id' => 10, 'name' => 'Marrakech', 'region_id' => 7],
-        ['id' => 10, 'name' => 'Safi', 'region_id' => 7],
-        ['id' => 10, 'name' => 'Ouarzazate', 'region_id' => 8],
-        ['id' => 10, 'name' => 'Errachidia', 'region_id' => 8],
-        ['id' => 10, 'name' => 'Agadir Ida-Outanane', 'region_id' => 9],
-        ['id' => 10, 'name' => 'Taroudant', 'region_id' => 9],
-        ['id' => 10, 'name' => 'Guelmim', 'region_id' => 10],
-        ['id' => 10, 'name' => 'Assa-Zag', 'region_id' => 10],
-        ['id' => 10, 'name' => 'Laâyoune', 'region_id' => 11],
-        ['id' => 10, 'name' => 'Tarfaya', 'region_id' => 11],
-        ['id' => 10, 'name' => 'Oued Ed Dahab', 'region_id' => 12],
-        ['id' => 10, 'name' => 'Aousserd', 'region_id' => 12],
+        ['id' => 13, 'name' => 'Marrakech', 'region_id' => 7],
+        ['id' => 14, 'name' => 'Safi', 'region_id' => 7],
+        ['id' => 15, 'name' => 'Ouarzazate', 'region_id' => 8],
+        ['id' => 16, 'name' => 'Errachidia', 'region_id' => 8],
+        ['id' => 17, 'name' => 'Agadir Ida-Outanane', 'region_id' => 9],
+        ['id' => 18, 'name' => 'Taroudant', 'region_id' => 9],
+        ['id' => 19, 'name' => 'Guelmim', 'region_id' => 10],
+        ['id' => 20, 'name' => 'Assa-Zag', 'region_id' => 10],
+        ['id' => 21, 'name' => 'Laâyoune', 'region_id' => 11],
+        ['id' => 22, 'name' => 'Tarfaya', 'region_id' => 11],
+        ['id' => 23, 'name' => 'Oued Ed Dahab', 'region_id' => 12],
+        ['id' => 24, 'name' => 'Aousserd', 'region_id' => 12],
     ];
     
     protected $sectors = [
@@ -132,5 +132,40 @@ class DummyData
     public function getSubBranches($value)
     {
         return $this->getDataList($this->subBranches, 'banch_id', $value);
+    }
+
+    function getRegionById($id) {
+        return $this->getSingleElmtById($id, $this->regions);
+    }
+
+    function getCityById($id) {
+        return $this->getSingleElmtById($id, $this->cities);
+    }
+
+    function getSectorById($id) {
+        return $this->getSingleElmtById($id, $this->sectors);
+    }
+
+    function getBranchById($id) {
+        return $this->getSingleElmtById($id, $this->branches);
+    }
+
+    function getSubBranchById($id) {
+        return $this->getSingleElmtById($id, $this->subBranches);
+    }
+
+    function getSingleElmtById($id, $array) {
+        if ( !is_array($array) ) return false;
+
+        $result = false;
+
+        foreach ($array as $elmt) {
+            if($elmt['id'] == intval($id)) {
+                $result = $elmt;
+                break;
+            }
+        }
+
+        return $result;
     }
 }
