@@ -119,6 +119,7 @@ class VerificationController extends Controller
                 // $htmlMailContent = $this->view->render($response, 'emails/verification-code.twig', array('name' => '', 'code' => $code['short']));
                 $htmlMailContent = $this->view->make('emails/verification-code.twig', array('name' => '', 'code' => $code['short']));
                 $mail->Body = $htmlMailContent;
+                $mail->CharSet = 'UTF-8';
                 $mail->IsHTML(true);
 
                 if( $mail->send() )
