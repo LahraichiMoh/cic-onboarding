@@ -237,7 +237,7 @@ jQuery(function($) {
                                 //     $dl.append( $(file.imageBlock) );
                                 // }
 
-                                $tbody.append( $(`<tr><th>${file.name}</th><td>${(file.ext == 'pdf') ? file.completePath : file.imageBlock }</td></tr>`) );
+                                $tbody.append( $(`<tr><th>${file.name}</th><td>${(file.ext == 'pdf') ? (`<object width="400" height="240" data="${file.completePath}"></object>`) : file.imageBlock }</td></tr>`) );
                             });
                         } else {
                             // $dl.append( $(`<dt>${title}</dt>`) );
