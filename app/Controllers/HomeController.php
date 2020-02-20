@@ -27,7 +27,7 @@ class HomeController extends Controller
     {
         $name = 'Ulrich Grah';
         $code = '0000';
-        return $this->view->render($response, 'emails/verification-code.twig', array('name' => $name, 'code' => $code));
+        return $this->view->make('emails/verification-code.twig', array('name' => $name, 'code' => $code));
     }
    
 }

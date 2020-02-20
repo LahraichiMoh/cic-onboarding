@@ -178,7 +178,7 @@ jQuery(function($) {
             var body = $("html, body");
             var passedStep = `div#step-${step}`;
             var paddingScroll = $(passedStep).height() * (20/100);
-            body.stop().animate({scrollTop: ($(document).scrollTop() - $(passedStep).height() - paddingScroll) }, 1600, 'linear', function() { 
+            body.stop().animate({scrollTop: ($(document).scrollTop() - $(passedStep).height() - paddingScroll) }, 1200, 'linear', function() { 
             });
 
             $(`div#step-${step}`).find('div.loader').remove();
@@ -203,7 +203,7 @@ jQuery(function($) {
         form.find('span.msg-info').text('');
 
         // Display loader
-        form.closest('div.desc').append('<div class="loader" style="text-align: center; padding: "><img src="images/loader/symbol-check-info.svg" style="display: block; margin-left: auto; margin-right: auto; width: 15%;" /></div>');
+        form.closest('div.desc').append('<div class="loader" style="text-align: center; padding: "><img src="./assets/img/loader/symbol-check-info.svg" style="display: block; margin-left: auto; margin-right: auto; width: 15%;" /></div>');
         
         // Hide the current form
         if( (typeof form.attr('data-stay-display') === typeof undefined) || (form.attr('data-stay-display') === false) ) {
@@ -264,10 +264,11 @@ jQuery(function($) {
                         step ++;
                         $(`div#step-${step}`).fadeIn('slow'); 
                         var body = $("html, body");
-                        var paddingScroll = $(passedStep).height() * (20/100);
-                        body.stop().animate({scrollTop: ($(document).scrollTop() + $(passedStep).height() + paddingScroll) }, 2000, 'linear', function() { 
+                        var paddingScroll = $(passedStep).height() * (30/100);
+                        console.log( paddingScroll );
+                        body.stop().animate({scrollTop: ($(document).scrollTop() + $(passedStep).height() - 50) }, 1200, 'linear', function() { 
                         });
-                        $(`a.next-step[href="#step-${step}"]`).trigger('click');
+                        // $(`a.next-step[href="#step-${step}"]`).trigger('click');
 
                         if( (typeof $(`div#step-${step}`).attr('data-summary') !== typeof undefined) && ($(`div#step-${step}`).attr('data-summary') !== false) ) {
                             getAndDisplaySummaryInformations( $(`div#step-${step}`) );
@@ -302,7 +303,7 @@ jQuery(function($) {
     getAndDisplaySummaryInformations = function($divStepElmt){
         if(!$divStepElmt) return false;
 
-        $divStepElmt.append('<div class="loader" style="text-align: center; padding: "><img src="images/loader/symbol-check-info.svg" style="display: block; margin-left: auto; margin-right: auto; width: 15%;" /></div>');
+        $divStepElmt.append('<div class="loader" style="text-align: center; padding: "><img src="./assets/img/loader/symbol-check-info.svg" style="display: block; margin-left: auto; margin-right: auto; width: 15%;" /></div>');
 
         var content;
 
@@ -326,7 +327,7 @@ jQuery(function($) {
     getTermsOfService = function($divStepElmt) {
         if(!$divStepElmt) return false;
 
-        $divStepElmt.append('<div class="loader" style="text-align: center; padding: "><img src="images/loader/symbol-check-info.svg" style="display: block; margin-left: auto; margin-right: auto; width: 15%;" /></div>');
+        $divStepElmt.append('<div class="loader" style="text-align: center; padding: "><img src="./assets/img/loader/symbol-check-info.svg" style="display: block; margin-left: auto; margin-right: auto; width: 15%;" /></div>');
 
         var content;
 
@@ -349,7 +350,7 @@ jQuery(function($) {
     getPaymentSummary = function($divStepElmt) {
         if(!$divStepElmt) return false;
 
-        $divStepElmt.append('<div class="loader" style="text-align: center; padding: "><img src="images/loader/symbol-check-info.svg" style="display: block; margin-left: auto; margin-right: auto; width: 15%;" /></div>');
+        $divStepElmt.append('<div class="loader" style="text-align: center; padding: "><img src="./assets/img/loader/symbol-check-info.svg" style="display: block; margin-left: auto; margin-right: auto; width: 15%;" /></div>');
 
         var content;
 
@@ -371,7 +372,7 @@ jQuery(function($) {
     getPayment = function($divStepElmt) {
         if(!$divStepElmt) return false;
 
-        $divStepElmt.append('<div class="loader" style="text-align: center; padding: "><img src="images/loader/symbol-check-info.svg" style="display: block; margin-left: auto; margin-right: auto; width: 15%;" /></div>');
+        $divStepElmt.append('<div class="loader" style="text-align: center; padding: "><img src="./assets/img/loader/symbol-check-info.svg" style="display: block; margin-left: auto; margin-right: auto; width: 15%;" /></div>');
 
         var content;
 
@@ -412,7 +413,7 @@ jQuery(function($) {
         var $button = $(this);
         // Display loader here
         // $button.hide();
-        // $button.closest('div.column.one-fourth').append('<div class="loader" style="text-align: center; display: flex;"><img src="images/loader/symbol-check-info.svg" style="display: block; margin-left: auto; margin-right: auto; width: 2em;" /></div>');
+        // $button.closest('div.column.one-fourth').append('<div class="loader" style="text-align: center; display: flex;"><img src="./assets/img/loader/symbol-check-info.svg" style="display: block; margin-left: auto; margin-right: auto; width: 2em;" /></div>');
 
         // Remove old status message
         $('span#phoneSubscribeError').text('');
@@ -515,7 +516,7 @@ jQuery(function($) {
         var $button = $(this);
         // Display loader here
         $button.hide();
-        $button.closest('div.column.one-fourth').append('<div class="loader" style="text-align: center; display: flex;"><img src="images/loader/symbol-check-info.svg" style="display: block; margin-left: auto; margin-right: auto; width: 2em;" /></div>');
+        $button.closest('div.column.one-fourth').append('<div class="loader" style="text-align: center; display: flex;"><img src="./assets/img/loader/symbol-check-info.svg" style="display: block; margin-left: auto; margin-right: auto; width: 2em;" /></div>');
 
         // Remove old status message
         $('span#emailError').text('');

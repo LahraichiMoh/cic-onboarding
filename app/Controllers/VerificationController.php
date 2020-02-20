@@ -91,22 +91,34 @@ class VerificationController extends Controller
                 // Send email
                 // $sendMail = $this->mailer->to($email, '')->send(new SenderVerificationCode(['name' => '', 'code' => $code['short']]));
 
-                $mail = new PHPMailer;
+                $mail = new PHPMailer(true);
                 // $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      // Enable verbose debug output
-                // $mail->isSMTP();                                            // Send using SMTP
-                $mail->Host       = 'mail.maxmind.ma';                    // Set the SMTP server to send through
+                $mail->isSMTP();                                            // Send using SMTP
+                $mail->Host       = 'smtp.gmail.com';                    // Set the SMTP server to send through
                 $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-                $mail->Username   = 'verification-cic@maxmind.ma';                     // SMTP username
-                $mail->Password   = 'HHSkismalj88ç';                               // SMTP password
+                $mail->Username   = 'maxmind.ulrich@gmail.com';                     // SMTP username
+                $mail->Password   = 'MaxmindUlrich2019*';                               // SMTP password
+
+                // Server
+                // $mail->Host       = 'mail.maxmind.ma';                    // Set the SMTP server to send through
+                // $mail->Username   = 'verification-cic@maxmind.ma';                     // SMTP username
+                // $mail->Password   = 'HHSkismalj88ç';                               // SMTP password
+
                 // $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
+                $mail->SMTPSecure = 'ssl';
                 $mail->Port       = 465; 
 
-                $mail->setFrom('verification-cic@maxmind.ma', 'CIC - Onboarding');
-                $mail->addAddress($email, );
-                $mail->Subject  = 'CIC - Onboarding - Code de vérification';
+                $mail->setFrom('maxmind.ulrich@gmail.com', 'Code de Validation CheckInfo');
 
-                // $mail->Body     = 'Votre code de validation est le : '.$code['short'];
-                $mail->Body = $this->view->render($response, 'emails/verification-code.twig', array('name' => '', 'code' => $code['short']));
+                // Server
+                // $mail->setFrom('verification-cic@maxmind.ma', 'Code de Validation CheckInfo');
+                $mail->addAddress($email, '');
+                $mail->Subject  = 'Code de Validation CheckInfo';
+
+                // $mail->Body = 'Votre code de validation est le : '.$code['short'];
+                // $htmlMailContent = $this->view->render($response, 'emails/verification-code.twig', array('name' => '', 'code' => $code['short']));
+                $htmlMailContent = $this->view->make('emails/verification-code.twig', array('name' => '', 'code' => $code['short']));
+                $mail->Body = $htmlMailContent;
                 $mail->IsHTML(true);
 
                 if( $mail->send() )

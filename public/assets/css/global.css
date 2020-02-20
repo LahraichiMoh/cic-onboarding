@@ -2944,7 +2944,8 @@ textarea {
 label, legend {
 	display: block;
 	margin-bottom: 5px;
-	font-weight: 700
+	font-weight: 700 !important;
+	color: #868D95 !important;
 }
 input[type="checkbox"] {
 	display: inline

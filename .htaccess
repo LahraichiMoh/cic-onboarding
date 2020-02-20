@@ -1,0 +1,5 @@
+RewriteEngine on
+RewriteCond %{HTTP_HOST} ^https://cic.maxmind.ma/onboarding_v2$ [NC,OR]
+RewriteCond %{HTTP_HOST} ^https://cic.maxmind.ma/onboarding_v2$
+RewriteCond %{REQUEST_URI} !public/
+RewriteRule (.*) /public/$1 [L]

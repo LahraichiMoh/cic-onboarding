@@ -81,6 +81,10 @@
     border-bottom: 1px solid #dcdcdc;
 }
 
+#OnBoarding_Process label {
+    margin-bottom: 1em !important;
+}
+
 .credit__ {
     position: fixed;
     width: 1090px;
@@ -159,7 +163,7 @@
 
 #OnBoarding_Process .credit__input label {
     font-size: 12px;
-    font-weight: 200;
+    font-weight: 300;
     color: #000;
     margin: 0;
 }

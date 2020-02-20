@@ -54,7 +54,7 @@
                                                             </div>
                                                             <div class="credit__input attach__ice">
                                                                 <label for="ice-file">Veuillez Attacher votre attestation ICE <sup><i class="icofont-star-alt-2"></i></sup></label>
-                                                                <input class="file-input" type="file" id="ice-file" name="ice-file" required accept="application/pdf,image/x-png,image/jpeg">
+                                                                <input class="file-input" type="file" id="ice-file" name="ice-file" required accept="application/pdf,image/x-png,image/jpeg" style="display: none;">
                                                                 <i class="icofont-cloud-upload icon__upload"></i>
                                                                 <span id="iceFileError" class="msg-info"></span>
                                                                 <span style="font-size: 0.8em">Formats acceptés : Images (.jpeg, .jpg, .png) ou PDF (.pdf); Taille maximale : 2Mo</span>
@@ -66,7 +66,7 @@
                                         </div>
 
                                         <!-- Block form step 1 -->
-                                        <div id="step-1" class="team team_list clearfix flex-container" style="display: none">
+                                        <div id="step-1" class="team team_list clearfix flex-container" style="display: flex">
                                             <div class="column one-third col" style="flex: 1; background: url(./assets/img/media/contactez-nous.jpg) no-repeat center center;  -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
                                             </div>
                                             <div class="column two-third col" style="flex: 2;">
@@ -92,13 +92,13 @@
                                                                     <span id="phoneSubscribeError" class="msg-info"></span>
                                                                 </div>
                                                                 <div id="phoneCheckBloc" class="column one-fourth col" style="flex: 1">
-                                                                    <label id="checkPhoneNumberLabel" style="color:white">X</label>
+                                                                    <label id="checkPhoneNumberLabel" style="color:white !important">X</label>
                                                                     <a id="checkPhoneNumber" class="button button_left button_size_2 button_js" href="#" disabled>
                                                                         <span class="button_label">Vérifier</span>
                                                                     </a>
                                                                 </div>
                                                                 <div id="editPhoneBloc" class="column one-fourth col" style="display: none; flex: 1">
-                                                                    <label id="editPhoneNumberLabel" style="color:white">X</label>
+                                                                    <label id="editPhoneNumberLabel" style="color:white !important">X</label>
                                                                     <a id="editPhoneNumber" class="button button_size_2 button_js kill_the_icon" href="#">
                                                                         <span class="button_label">Modifier</span>
                                                                     </a>
@@ -126,13 +126,13 @@
                                                                     <span id="emailError" class="msg-info"></span>
                                                                 </div>
                                                                 <div id="emailCheckBloc" class="column one-fourth col" style="flex: 1">
-                                                                    <label id="checkEmailLabel" style="color:white">X</label>
+                                                                    <label id="checkEmailLabel" style="color:white !important">X</label>
                                                                     <a id="checkEmail" class="button  button_size_2 button_js" href="#" disabled>   
                                                                         <span class="button_label">Vérifier</span>
                                                                     </a>
                                                                 </div>
                                                                 <div id="editEmailBloc" class="column one-fourth col" style="display: none; flex: 1">
-                                                                    <label id="editEmailLabel" style="color:white">X</label>
+                                                                    <label id="editEmailLabel" style="color:white !important">X</label>
                                                                     <a id="editEmail" class="button button_size_2 button_js kill_the_icon" href="#">
                                                                         <span class="button_label">Modifier</span>
                                                                     </a>
