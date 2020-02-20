@@ -186,7 +186,7 @@ jQuery(function($) {
 
             step --;
             $('div#step-block-section').find(`form#step-form-${step}`).show();
-            $('div#step-block-section').find(`form#step-form-${step}`).closest('div.desc').find(`dl`).remove();
+            $('div#step-block-section').find(`form#step-form-${step}`).closest('div.desc').find(`table`).remove();
             // $('div#step-block-section').find(`dl#step-info-${step}`).remove();
 
             if( (typeof $(`div#step-${step}`).attr('data-hidden-step') !== typeof undefined) && ($(`div#step-${step}`).attr('data-hidden-step') !== false) ) {
@@ -223,26 +223,35 @@ jQuery(function($) {
                 // Treat response
                 response = data;
                 if(response.status) {
+                    $table = $(`<table id="step-${step}-rapport"></table>`);
+                    $tbody = $(`<tbody></table>`);
                     $dl = $(`<dl id="step-info-${step}"></dl>`);
 
                     $.each(response.items, function (title, content) {
                         if(title == 'files') {
                             $.each(response.items.files, function (i, file) {
-                                $dl.append( $(`<dt>${file.name}</dt>`) );
-                                if(file.ext == 'pdf') {
-                                    $dl.append(`<object width="400" height="240" data="${file.completePath}"></object>`);
-                                } else {
-                                    $dl.append( $(file.imageBlock) );
-                                }
+                                // $dl.append( $(`<dt>${file.name}</dt>`) );
+                                // if(file.ext == 'pdf') {
+                                //     $dl.append(`<object width="400" height="240" data="${file.completePath}"></object>`);
+                                // } else {
+                                //     $dl.append( $(file.imageBlock) );
+                                // }
+
+                                $tbody.append( $(`<tr><th>${file.name}</th><td>${(file.ext == 'pdf') ? file.completePath : file.imageBlock }</td></tr>`) );
                             });
                         } else {
-                            $dl.append( $(`<dt>${title}</dt>`) );
-                            $dl.append( $(`<dd>${content}</dd>`) );
+                            // $dl.append( $(`<dt>${title}</dt>`) );
+                            // $dl.append( $(`<dd>${content}</dd>`) );
+                            
+                            $tbody.append( $(`<tr><th>${title}</th><td>${content}</td></tr>`) );
                         }
                     });
 
+                    $table.append($tbody);
+                    form.closest('div.desc').append($table);
+
                     form.closest('div.desc').find('div.loader').remove();
-                    form.closest('div.desc').append($dl);
+                    // form.closest('div.desc').append($dl);
                 } else {
                     form.closest('div.desc').find('div.loader').remove();
                     form.fadeIn('slow');
