@@ -2,7 +2,6 @@
 
 return [
     'swiftmailer' => [
-        'transport' => 'gmail',
         'driver' => env('MAIL_DRIVER', 'smtp'),
         'host' => getenv('SMTP_HOST'),
         'port' => getenv('SMTP_PORT'),
