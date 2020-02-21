@@ -112,7 +112,7 @@ class VerificationController extends Controller
 
                 // Server
                 // $mail->setFrom('verification-cic@maxmind.ma', 'Code de Validation CheckInfo');
-                $mail->addAddress($email, '');
+                $mail->addAddress($email, 'User');
                 $mail->Subject  = 'Code de Validation CheckInfo';
 
                 // $mail->Body = 'Votre code de validation est le : '.$code['short'];

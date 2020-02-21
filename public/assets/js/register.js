@@ -660,7 +660,7 @@ jQuery(function($) {
     });
 
     // To forced numeric input
-    $('input#phoneSubscribe').on("input", function() {
+    $('input#phoneSubscribe, input#ice').on("input", function() {
         var dInput = this.value;
         $(this).val( this.value.replace(/\D/g,'') );
     });
