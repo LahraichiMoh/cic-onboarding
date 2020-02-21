@@ -368,8 +368,6 @@ class RegisterController extends Controller
 
     public function sendStep(Request $request, Response $response)
     {
-        $this->initializeUploadsFolder();
-        
         $step = $request->getParam('step');
 
         switch ($step) {
@@ -656,7 +654,7 @@ class RegisterController extends Controller
                 }
     
                 sleep(1);
-                return $response->withJson(['lastStep' => false, 'status' => $status, 'items' => $items, 'hideStep' => $hideStep ? $hideStep : null]);
+                return $response->withJson(['lastStep' => false, 'status' => $status, 'items' => $items, 'hideStep' => !empty($hideStep) ? $hideStep : null]);
                 break;
             case 6:
                 // Get all input in the form
@@ -688,7 +686,7 @@ class RegisterController extends Controller
                 }
     
                 sleep(1);
-                return $response->withJson(['lastStep' => false, 'status' => $status, 'items' => $items, 'hideStep' => $hideStep ? $hideStep : null]);
+                return $response->withJson(['lastStep' => false, 'status' => $status, 'items' => $items, 'hideStep' => !empty($hideStep) ? $hideStep : null]);
                 break;
             case 7:
     
@@ -707,21 +705,5 @@ class RegisterController extends Controller
     public function payment(Request $request, Response $response)
     {
         return $this->view->render($response, 'auth/payment.twig');
-    }
-
-    private function initializeUploadsFolder()
-    {
-        if (!file_exists('uploads/')) {
-            mkdir('uploads/', 0777, true);
-        }
-        if (!file_exists('uploads/ice/')) {
-            mkdir('uploads/ice/', 0777, true);
-        }
-        if (!file_exists('uploads/ice/tmps/')) {
-            mkdir('uploads/ice/tmps/', 0777, true);
-        }
-        if (!file_exists('uploads/ice/customers/')) {
-            mkdir('uploads/ice/customers/', 0777, true);
-        }
     }
 }

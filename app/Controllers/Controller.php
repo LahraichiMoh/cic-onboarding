@@ -31,7 +31,10 @@ abstract class Controller
         $basename = bin2hex(random_bytes(8));
         $filename = sprintf('%s.%0.8s', $basename, $extension);
         $uploadPath = 'uploads' . DS . $directory;
+        // For localhost
         $fullPath = base_path('public' . DS . $uploadPath);
+        // For Server
+        // $fullPath = base_path('..' . DS . 'cic.maxmind.ma' . DS . 'onboarding_v2' . DS . $uploadPath);
 
         if (!file_exists($fullPath)) {
             mkdir($fullPath, 0777, true);

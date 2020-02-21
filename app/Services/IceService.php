@@ -20,7 +20,7 @@ class IceService
      */
     public function getICEInformations()
     {
-        // if(!$this->ice || !$this->apiUrl) return false;
+        if(!$this->ice || !$this->apiUrl) return false;
 
         $curl = curl_init();
 
@@ -46,7 +46,7 @@ class IceService
 	
         $statusResponse = $pq->query('span.font-weight-semibold')[0]->textContent;
 
-        if($statusResponse !== 'Aucun') {
+        if($statusResponse != 'Aucun') {
             // Company name
             $company[] = ['name' => 'Nom de la compagnie', 'value' => trim($pq->query('h3.card-title a')[0]->textContent)];
 
