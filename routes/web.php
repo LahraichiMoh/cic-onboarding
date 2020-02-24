@@ -46,6 +46,8 @@ $app->group('/auth', function () {
     // Send step
     $this->post('/send-step', App\Controllers\Auth\RegisterController::class . ':sendStep');
 
+    $this->post('/payment-back', App\Controllers\Auth\RegisterController::class . ':paymentCallback');
+
 })->add(new App\Middlewares\Guest($container->get(Cartalyst\Sentinel\Sentinel::class)));
 
 /*

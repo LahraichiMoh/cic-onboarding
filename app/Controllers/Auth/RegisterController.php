@@ -13,6 +13,7 @@ use App\Session\Flash;
 use App\Views\View;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use Noodlehaus\Config;
 
 use App\Data\DummyData;
 
@@ -30,8 +31,9 @@ class RegisterController extends Controller
     private $mailer;
     protected $dummyData;
     protected $iceService;
+    protected $config;
 
-    public function __construct(View $view, Auth $auth, Flash $flash, Mailer $mailer, DummyData $dummyData)
+    public function __construct(View $view, Auth $auth, Flash $flash, Mailer $mailer, DummyData $dummyData, Config $config)
     {
         $this->view = $view;
         // $this->hasher = $hasher;
@@ -39,6 +41,7 @@ class RegisterController extends Controller
         $this->flash = $flash;
         $this->mailer = $mailer;
         $this->dummyData = $dummyData;
+        $this->config = $config;
     }
 
     public function index(Request $request, Response $response)
@@ -310,58 +313,80 @@ class RegisterController extends Controller
 
     public function getPayment(Request $request, Response $response)
     {
-        $littleTable = '<table>
-                            <thead>
-                                <tr>
-                                    <th colspan="2">Récapitulatif du paiement</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td align="left">Abonnement</td>
-                                    <td>S</td>
-                                </tr>
-                                <tr>
-                                    <td align="left">Montant HT</td>
-                                    <td>-</td>
-                                </tr>
-                                <tr>
-                                    <td align="left">Frais de gestion</td>
-                                    <td>250</td>
-                                </tr>
-                                <tr>
-                                    <td align="left">Total HT</td>
-                                    <td>250</td>
-                                </tr>
-                                <tr>
-                                    <td align="left">TVA (20%)</td>
-                                    <td>50</td>
-                                </tr>
-                                <tr>
-                                    <td align="left">Montant total TTC</td>
-                                    <td>300</td>
-                                </tr>
-                            </tbody>
-                        </table>';
+		$storeKey = $this->config->get('cmi.storeKey');
+
+        $data = [
+            'clientid' => $this->config->get('cmi.clientID'),
+            'amount' => '18.05',
+            'okUrl' => 'val',
+            'failUrl' => 'val',
+            'TranType' => $this->config->get('cmi.transactionType'),
+            'callbackUrl' => 'val',
+            'shopurl' => env('APP_URL'),
+            'currency' => '504',
+            'rnd' => microtime(),
+            'storetype' => '3D_PAY_HOSTING',
+            'hashAlgorithm' => 'ver3',
+            'lang' => 'fr',
+            'refreshtime' => '5',
+            'BillToName' => 'name',
+            'BillToCompany' => 'billToCompany',
+            'BillToStreet1' => '100 rue adress',
+            'BillToCity' => 'casablanca',
+            'BillToStateProv' => 'Maarif Casablanca',
+            'BillToPostalCode' => '20230',
+            'BillToCountry' => '504',
+            'email' => 'email@domaine.com',
+            'tel' => '00212645717187',
+            'encoding' => 'UTF-8',
+            'oid' => 'GRULOG_TEST_0013',
+        ];
+
+        $postParams = array();
+        $dataToForm = '';
+        foreach ($data as $key => $value){
+            array_push($postParams, $key);
+            $dataToForm .= "<input type=\"hidden\" name=\"" .$key ."\" value=\"" .trim($value)."\" /><br />";
+        }
+        
+        natcasesort($postParams);		
+
+        $hashval = '';					
+        foreach ($postParams as $param){				
+            $paramValue = trim($data[$param]);
+            $escapedParamValue = str_replace("|", "\\|", str_replace("\\", "\\\\", $paramValue));	
+                
+            $lowerParam = strtolower($param);
+            if($lowerParam != "hash" && $lowerParam != "encoding" )	{
+                $hashval = $hashval . $escapedParamValue . "|";
+            }
+        }
+        
+        
+        $escapedStoreKey = str_replace("|", "\\|", str_replace("\\", "\\\\", $storeKey));	
+        $hashval = $hashval . $escapedStoreKey;
+        
+        $calculatedHashValue = hash('sha512', $hashval);  
+        $hash = base64_encode (pack('H*',$calculatedHashValue));
+        
+        $dataToForm .= "<input type=\"hidden\" name=\"HASH\" value=\"" .$hash."\" /><br />";	
+
+        $paymentForm = '<form id="cardPaymentForm" method="post" action="'.$this->config->get('cmi.paymentUrl').'" style="display:none;">'.$dataToForm.'</form>';
         
         $paymentOptions = '<div class="flex-container">
-                                <div class="option-payment">
-                                    <img src="./assets/img/media/visa-mastercard-logo.png" />
+                                <div class="option-payment__">
+                                    '.$paymentForm.'
+                                    <a href="javascript:{}" onclick="document.getElementById(\'cardPaymentForm\').submit();"><img src="./assets/img/media/visa-mastercard-logo.png" /></a>
                                 </div>
                                 <div class="option-payment">
                                     <img src="./assets/img/media/fatourati_2.jpg" />
                                 </div>
                             </div>';
 
-        $content = '<form id="step-form-8" action="" method="POST" enctype="multipart/form-data" autocomplete="off" data-stay-display="1">
-                        <input type="hidden" name="step" value="8">
-
-                        <div>
-                            '.$littleTable.'
-                            <label>Merci de choisir le mode de paiement</label><br>
-                            '.$paymentOptions.'
-                        </div>
-                    </form>';
+        $content = '<div>
+                        <label>Merci de choisir le mode de paiement</label><br>
+                        '.$paymentOptions.'
+                    </div>';
 
         return $response->withJson($content);
     }
@@ -694,16 +719,21 @@ class RegisterController extends Controller
 
                 return $response->withJson(['lastStep' => false, 'status' => true, 'items' => array()]);
                 break;
-            case 8:
+            // case 8:
     
-                sleep(2);
-                return $response->withJson(['lastStep' => true, 'status' => true, 'items' => array()]);
-                break;
+            //     sleep(2);
+            //     return $response->withJson(['lastStep' => true, 'status' => true, 'items' => array()]);
+            //     break;
         }
     }
 
     public function payment(Request $request, Response $response)
     {
         return $this->view->render($response, 'auth/payment.twig');
+    }
+
+    public function paymentCallback(Request $request, Response $response)
+    {
+        
     }
 }

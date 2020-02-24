@@ -28,5 +28,13 @@ return [
         'App\Providers\ViewShareServiceProvider',
         'App\Providers\PaginationServiceProvider',
         'App\Providers\MailServiceProvider',
-    ]
+    ],
+
+    'cmi' => [
+        'clientID' => '600001404',
+        'storeKey' => 'Cicpayment2020',
+        'transactionType' => 'PreAuth',
+        'currency' => '504',
+        'paymentUrl' => 'https://testpayment.cmi.co.ma/fim/est3Dgate'
+    ],
 ];

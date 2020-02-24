@@ -264,7 +264,8 @@ jQuery(function($) {
             complete: function() {
                 // Show finish modal when it was last step 
                 if(response.lastStep && response.status) {
-                    window.location.href = '/auth/payment';
+                    // console.log('Now do something');
+                    // window.location.href = '/auth/payment';
                 } else {
                     if(response.status) {
                         $(`div#step-${step}`).find('div.step-pause').hide();
@@ -274,7 +275,7 @@ jQuery(function($) {
                         $(`div#step-${step}`).fadeIn('slow'); 
                         var body = $("html, body");
                         var paddingScroll = $(passedStep).height() * (30/100);
-                        console.log( paddingScroll );
+                        // console.log( paddingScroll );
                         body.stop().animate({scrollTop: ($(document).scrollTop() + $(passedStep).height() - 50) }, 1200, 'linear', function() { 
                         });
                         // $(`a.next-step[href="#step-${step}"]`).trigger('click');
@@ -390,6 +391,7 @@ jQuery(function($) {
             type : 'GET',
             success : function(data) {
                 content = data;
+                $('div#nextAndPreviousStepButtons').fadeOut();
             },
             error: function() {
             },
