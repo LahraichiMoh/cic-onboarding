@@ -317,12 +317,12 @@ class RegisterController extends Controller
 
         $data = [
             'clientid' => $this->config->get('cmi.clientID'),
-            'amount' => '18.05',
-            'okUrl' => 'val',
-            'failUrl' => 'val',
+            'amount' => '699.00',
+            'okUrl' => env('APP_URL').'/auth/payment-done',
+            'failUrl' => env('APP_URL').'/auth/payment-failure',
             'TranType' => $this->config->get('cmi.transactionType'),
             'callbackUrl' => 'val',
-            'shopurl' => env('APP_URL'),
+            'shopurl' => env('APP_URL').'/auth/register',
             'currency' => '504',
             'rnd' => microtime(),
             'storetype' => '3D_PAY_HOSTING',
@@ -339,7 +339,7 @@ class RegisterController extends Controller
             'email' => 'email@domaine.com',
             'tel' => '00212645717187',
             'encoding' => 'UTF-8',
-            'oid' => 'GRULOG_TEST_0013',
+            'oid' => $_SESSION['orderNumber'],
         ];
 
         $postParams = array();
@@ -400,6 +400,9 @@ class RegisterController extends Controller
                 // Unset session variable
                 unset($_SESSION['emailIsValidate']);
                 unset($_SESSION['phoneNumberIsValidate']);
+                unset($_SESSION['orderNumber']);
+
+                $_SESSION['orderNumber'] = rand(100000,999999); 
     
                 $ice = $request->getParam('ice');
     
@@ -734,6 +737,57 @@ class RegisterController extends Controller
 
     public function paymentCallback(Request $request, Response $response)
     {
+		$storeKey = $this->config->get('cmi.storeKey');
+    
+        $allPost = $request->getParsedBody();
         
+        $postParams = array();
+        foreach ($allPost as $key => $value){
+            array_push($postParams, $key);				
+        }
+        
+        
+        natcasesort($postParams);		
+        $hach = "";
+        $hashval = "";					
+        foreach ($postParams as $param){				
+            $paramValue = html_entity_decode(preg_replace("/\n$/","",$allPost[$param]), ENT_QUOTES, 'UTF-8'); 
+
+            $hach = $hach . "(!".$param."!:!".$allPost[$param]."!)";
+            $escapedParamValue = str_replace("|", "\\|", str_replace("\\", "\\\\", $paramValue));	
+                
+            $lowerParam = strtolower($param);
+            if($lowerParam != "hash" && $lowerParam != "encoding" )	{
+                $hashval = $hashval . $escapedParamValue . "|";
+            }
+        }
+        
+        $escapedStoreKey = str_replace("|", "\\|", str_replace("\\", "\\\\", $storeKey));	
+        $hashval = $hashval . $escapedStoreKey;
+        
+        $calculatedHashValue = hash('sha512', $hashval);  
+        $actualHash = base64_encode (pack('H*',$calculatedHashValue));
+        
+        $retrievedHash = $allPost["HASH"];
+
+        if($retrievedHash == $actualHash)	{
+            if($_POST["ProcReturnCode"] == "00") {
+                echo "ACTION=POSTAUTH";	
+            } else {
+                echo "APPROVED";
+            }
+        } else {
+               echo "FAILURE";
+        }	
+    }
+
+    public function paymentDone(Request $request, Response $response)
+    {
+        return $this->view->make('auth/payment-done.twig');
+    }
+
+    public function paymentFailure(Request $request, Response $response)
+    {
+        return $this->view->make('auth/payment-failure.twig');
     }
 }
