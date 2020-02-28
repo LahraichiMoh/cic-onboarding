@@ -36,6 +36,7 @@ class VerificationController extends Controller
     public function phoneNumber(Request $request, Response $response)
     {
         $phone = $request->getParam('phone');
+        sleep(2);
 
         // Get phone number in database
         $phoneNumberVerification = PhoneNumberVerification::where('phone_number', $phone)->first();
@@ -55,17 +56,14 @@ class VerificationController extends Controller
                 'code' => $code['complete'],
             ]);
 
-            sleep(1);
 
             if($phoneVerification) {
-                // For success test
-                return $response->withJson(['success' => true, 'message' => 'Le code de vérification a été envoyé']);
 
                 // Call method to send sms at the user
-                // if($this->sendSMS($phone, $code['short'].' est le code confidentiel pour compléter votre inscription. Attention! Ce code a valididté de 5 min. A ne communiquer à personne. CHECKINFO'))
-                //     return $response->withJson(['success' => true, 'message' => 'Le code de vérification a été envoyé']);
-                // else
-                //     return $response->withJson(['success' => false, 'message' => 'Le code de vérification n\'a pas pu être envoyé']);
+                if($this->sendSMS($phone, $code['short'].' est le code confidentiel pour compléter votre inscription. Attention! Ce code a valididté de 5 min. A ne communiquer à personne. CHECKINFO'))
+                    return $response->withJson(['success' => true, 'message' => 'Le code de vérification a été envoyé']);
+                else
+                    return $response->withJson(['success' => false, 'message' => 'Le code de vérification n\'a pas pu être envoyé']);
             }
             else 
                 return $response->withJson(['success' => false, 'message' => 'Le code de vérification n\'a pas pu être envoyé']);
@@ -215,8 +213,6 @@ class VerificationController extends Controller
 
     protected function checkIfPhoneNumberCodeMatch(Request $request)
     {
-        // For test - Simulator - Code match
-        return ['success' => true, 'message' => 'Votre numéro de téléphone a été vérifié avec succès'];
 
         $status = false;
         $message = '';

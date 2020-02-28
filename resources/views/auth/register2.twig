@@ -43,15 +43,20 @@
                         <form id="step-form-0" action="" method="POST" enctype="multipart/form-data" autocomplete="off">
                             <input type="hidden" name="step" value="0">
 
-                             <div class="form-group">
+                            <div class="form-group">
                                 <label for="ice">Veuillez saisir votre Identifiant Commun de l'Entreprise (ICE)</label>
-                                <input type="text" class="form-control" id="ice" name="ice" aria-describedby="iceHelp" placeholder="Numéro ICE" maxlength="15" minlength="15" autocomplete="off" required>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span id="inputGroupIce" class="input-group-text"><i class="icofont icofont-id fa-lg mx-2"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control" id="ice" name="ice" aria-describedby="iceHelp" placeholder="Numéro ICE" maxlength="15" minlength="15" autocomplete="off" aria-describedby="inputGroupIce" required>
+                                </div>
                                 <small id="iceHelp" class="form-text text-muted"></small>
                                 <span id="iceError" class="msg-info text-primary-red"></span>
                             </div>
 
                             <div class="form-group">
-                                <label class="d-block" for="ice">Veuillez attacher votre attestation ICE</label>
+                                <label class="d-block" for="ice-file">Veuillez attacher votre attestation ICE</label>
                                 <input type="file" class="form-control d-none" id="ice-file" name="ice-file" aria-describedby="iceFileHelp" placeholder="Enter email" required>
                                 <label id="upload-icon" class="d-inline-block text-center" style="border: 1px dashed #999; border-radius: 5px; cursor: pointer; padding: 0 5em">
                                     <i class="icofont-cloud-upload fa-3x text-primary-gray py-0 my-1" ></i>
@@ -74,7 +79,7 @@
                         <form id="step-form-0" action="" method="POST" enctype="multipart/form-data" autocomplete="off">
                             <input type="hidden" name="step" value="0">
 
-                            <label for="ice" class="d-block">Téléphone Mobile</label>
+                            <label for="phoneSubscribe" class="d-block">Téléphone Mobile</label>
                             <div class="form-row">
 
                                 <div class="col form-group">
@@ -88,12 +93,18 @@
                                 </div>
                             </div>
 
+                            <label for="emailSubscribe" class="d-block">Adresse E-mail</label>
                             <div class="form-row">
-                                <div class="col">
-                                    <input type="text" class="form-control" placeholder="City">
+                                <div class="col form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span id="inputGroupEmail" class="input-group-text"><i class="icofont icofont-email fa-lg mx-2"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" id="emailSubscribe" name="emailSubscribe" placeholder="john@email.com" aria-describedby="inputGroupEmail" required>
+                                    </div>
+                                    <span id="emailError" class="msg-info text-primary-red"></span>
                                 </div>
                             </div>
-                            
                         </form>
                     </div>
                 </div>
@@ -310,8 +321,9 @@
                 $(this).val( this.value.replace(/\D/g,'') );
             });
 
+            // PHONE NUMBER
             /**
-             * Event - Detected the entry of a keyboard key
+             * Event - Detected the entry of a keyboard key - for input phone number
              * Create to display or remove a button to send the verification code by SMS for activate phone number
              */
             $('input#phoneSubscribe').on("input", function() {
@@ -364,9 +376,11 @@
                 // Detect if phone number is valid and execute this script
                 if (phoneNumberReg.test( phoneNumber )) {
                     $checkButton = $('input#phoneSubscribe').parents('div.form-row').find('div.col-1');
-                    $checkButton.find('a').removeClass('bg-primary-red').addClass('bg-secondary-orange');
+                    $checkButton.find('a').removeClass('bg-primary-red');
 
-                    $checkButton.find('a i.icofont-ui-messaging').removeClass('icofont-ui-messaging').addClass('fa fa-spinner fa-spin');
+                    // $checkButton.find('a i.icofont-ui-messaging').removeClass('icofont-ui-messaging').addClass('fa fa-spinner fa-spin');
+                    $checkButton.find('a#checkPhoneNumber i.icofont-ui-messaging').remove();
+                    $checkButton.find('a#checkPhoneNumber').append( $('<img class="img-fluid w-100" src="./assets/img/loader/symbol-check-info.svg" />') );
 
                     $.ajax({
                         url : '/verification/phone-number',
@@ -457,13 +471,165 @@
                             } else {
                                 console.log(data.message);
                                 $('span#phoneSubscribeError').text('Le code de vérification est erroné');
-                                $('a#editPhoneNumber').closest('div.column.one-fourth').fadeIn();
+                                // $('a#editPhoneNumber').closest('div.column.one-fourth').fadeIn();
                                 $.notify(data.message, 'error');
                             }
                         }
                     });
                 } else {
                     $('span#verificationCodeError').text('Veuillez saisir le bon code de vérification');
+                }
+            });
+
+            // ADDRESS EMAIL
+            /**
+             * Event - Detected the entry of a keyboard key - for input email
+             * Create to display or remove a button to send the verification code by email for activate email address
+             */
+            $('input#emailSubscribe').on("input", function() {
+                var email = this.value;
+
+                if (emailIsValid(email)) {
+                    if( $('body').find('div#step-1 a#checkEmail').length <= 0){
+                        $(this).parents('div.form-row').append( $('<div class="col-1" data-toggle="tooltip" data-placement="bottom" title="Envoyer le code de vérification"><a id="checkEmail" class="btn bg-primary-red text-light" href="#" role="button"><i class="icofont icofont-send-mail fa-lg"></i></a></div>') );
+                    }
+                } else {
+                    $(this).parents('div.form-row').find('div.col-1').remove();
+                }
+            });
+
+            /** 
+             * Detecte if input email verification code has a good length
+             * to create and display a button that will verify the code entered is valid
+             */
+            $('body').on('input', 'div#step-1 input#verificationEmailCode', function(e) {
+                var input = this.value;
+                if( input.length >= 4 ) {
+                    $('input#emailSubscribe').parents('div.form-row').append( $('<div class="col-1 send-email-code" data-toggle="tooltip" data-placement="bottom" title="Vérifier le numéro"><a id="sendEmailCode" class="btn bg-primary-red text-light" href="#" role="button"><i class="icofont icofont-check-circled fa-lg"></i></a></div>') );
+
+                } else if (input.length < 4) {
+                    $(this).parents('div.form-row').find('div.col-1.send-email-code').remove();
+                }
+            });
+
+            /** 
+             * Event when user clic to send code by SMS
+             * Generate code and send SMS
+             */
+            $('body').on('click', 'div#step-1 a#checkEmail', function(e) {
+                e.preventDefault();
+                $('input#emailSubscribe').attr("disabled", true);
+                var $button = $(this);
+
+                // Remove old status message
+                $('span#emailError').text('');
+                // $('span#verificationCodeError').text('');
+
+                var email = $('input#emailSubscribe').val();
+
+                // Detect if email is valid and execute this script
+                if (emailIsValid(email)) {
+                    $checkButton = $('input#emailSubscribe').parents('div.form-row').find('div.col-1');
+                    $checkButton.find('a').removeClass('bg-primary-red');
+
+                    // $checkButton.find('a i.icofont-ui-messaging').removeClass('icofont-ui-messaging').addClass('fa fa-spinner fa-spin');
+                    $checkButton.find('a#checkEmail i.icofont-send-mail').remove();
+                    $checkButton.find('a#checkEmail').append( $('<img class="img-fluid w-100" src="./assets/img/loader/symbol-check-info.svg" />') );
+
+                    $.ajax({
+                        url : '/verification/email',
+                        type : 'POST',
+                        data: {
+                            email: email
+                        },
+                        success : function(data) {
+                            //  If code has been send with success
+                            if(data.success) {
+                                // remove loader at the end
+                                $checkButton.remove();
+                                // Block to the edit email button
+                                $('input#emailSubscribe').parents('div.form-row').append( $('<div id="edit-email-block" class="col-1" data-toggle="tooltip" data-placement="bottom" title="Modifier l\'adresse email"><a id="editEmail" class="btn bg-primary-red text-light" href="#" role="button"><i class="icofont icofont-edit-alt fa-lg"></i></a></div>') );
+                                // Block to the input code email
+                                $('input#emailSubscribe').parents('div.form-row').append( $('<div class="col-2"><input class="form-control" id="verificationEmailCode" maxlength="4" name="verificationEmailCode" type="text" placeholder="Code" autocomplete="off"></div>') );
+                                $.notify(data.message, "success");
+                            } else {
+                                $('span#emailError').text('Une erreur s\'est produite, rééssayez plus tard !');
+                                $button.show();
+                                $.notify(data.message, "error");
+                            }
+                        }
+                    });
+                } else {
+                    // email is incorrect stop the script and display error
+                    $('span#emailError').text('Veuillez renseigner une adresse email valide');
+                    // remove loader at the end
+                    $button.show();
+                    $('input#emailSubscribe').val('');
+                    $('input#emailSubscribe').parents('div.form-row').find('div.col-1').remove();
+                }
+            });
+
+            /** 
+             * Event - Click on button to edit email address
+             * Reset state of the input email address
+             */
+            $('body').on('click', 'div#step-1 a#editEmail', function(e) {
+                e.preventDefault();
+                // Remove error message email address
+                $('body').find('span#emailError').text('');
+                // Remove input email address code
+                $('body').find('input#verificationEmailCode').closest('div.col-2').remove();
+                // Remove button to send SMS
+                $('body').find('a#checkEmail').closest('div.col-1').remove();
+                // Remove button to check if code match
+                $('body').find('a#sendEmailCode').closest('div.col-1.send-email-code').remove();
+                // Remove button to edit email address
+                $('body').find('div#edit-email-block').remove();
+                // Remove disabled attribute for email address input
+                $('input#emailSubscribe').attr("disabled", false).trigger('input').focus();
+            });
+
+            /** 
+             * Event - Click on button to edit email address
+             * Reset state of the input email address
+             */
+            $('body').on('click', 'div#step-1 a#sendEmailCode', function(e) {
+                e.preventDefault();
+                console.log('Send code email input to check if code match');
+
+                $('span#emailError').text('');
+                $('span#verificationCodeError').text('');
+                var $button = $(this);
+
+                var $email = $('input#emailSubscribe');
+                var $verificationCode = $('input#verificationEmailCode');
+
+                if($email.val() != '' && $verificationCode.val() != '') {
+                    $.ajax({
+                        url : '/verification/check-email',
+                        type : 'POST',
+                        data: {
+                            email: $email.val(),
+                            code: $verificationCode.val()
+                        },
+                        success : function(data) {
+                            data = data;
+                            if(data.success) {
+                                console.log(data.message);
+                                $button.closest('div.form-row').children('div').not('.col.form-group').remove();
+                                // Add indicator to the number and code status
+                                $.notify(data.message, 'success');
+                            } else {
+                                console.log(data.message);
+                                $('span#emailError').text('Le code de vérification est erroné');
+                                // $('a#editEmail').closest('div.column.one-fourth').fadeIn();
+                                $.notify(data.message, 'error');
+                            }
+                        }
+                    });
+                } else {
+                    // Check error and display alert message
+                    // $('span#emailError').text('Veuillez saisir le bon code de vérification');
                 }
             });
 
