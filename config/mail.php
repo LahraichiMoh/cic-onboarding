@@ -16,4 +16,10 @@ return [
         'sendmail' => '/usr/sbin/sendmail -bs',
         'pretend' => false,
     ],
+    
+    'smtp' => [
+        'host' => env('SMTP_HOST'),
+        'username' => env('SMTP_USERNAME'),
+        'password' => env('SMTP_PASSWORD'),
+    ]
 ];

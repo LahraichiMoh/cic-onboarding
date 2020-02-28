@@ -30,6 +30,10 @@ return [
         'App\Providers\MailServiceProvider',
     ],
 
+    'api' => [
+        'url' => env('API_URL'),
+    ],
+
     'cmi' => [
         'clientID' => '600001404',
         'storeKey' => 'Cicpayment2020',

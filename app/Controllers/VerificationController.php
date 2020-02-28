@@ -14,6 +14,8 @@ use App\Email\SenderVerificationCode;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
+use Noodlehaus\Config;
+
 
 class VerificationController extends Controller
 {
@@ -24,10 +26,11 @@ class VerificationController extends Controller
     protected $view;
     protected $defaultCodeLength = 4;
 
-    public function __construct(View $view, Mailer $mailer)
+    public function __construct(View $view, Mailer $mailer, Config $config)
     {
         $this->view = $view;
         $this->mailer = $mailer;
+        $this->config = $config;
     }
 
     public function phoneNumber(Request $request, Response $response)
@@ -52,12 +55,17 @@ class VerificationController extends Controller
                 'code' => $code['complete'],
             ]);
 
+            sleep(1);
+
             if($phoneVerification) {
+                // For success test
+                return $response->withJson(['success' => true, 'message' => 'Le code de vérification a été envoyé']);
+
                 // Call method to send sms at the user
-                if($this->sendSMS($phone, $code['short'].' est le code confidentiel pour compléter votre inscription. Attention! Ce code a valididté de 5 min. A ne communiquer à personne. CHECKINFO'))
-                    return $response->withJson(['success' => true, 'message' => 'Le code de vérification a été envoyé']);
-                else
-                    return $response->withJson(['success' => false, 'message' => 'Le code de vérification n\'a pas pu être envoyé']);
+                // if($this->sendSMS($phone, $code['short'].' est le code confidentiel pour compléter votre inscription. Attention! Ce code a valididté de 5 min. A ne communiquer à personne. CHECKINFO'))
+                //     return $response->withJson(['success' => true, 'message' => 'Le code de vérification a été envoyé']);
+                // else
+                //     return $response->withJson(['success' => false, 'message' => 'Le code de vérification n\'a pas pu être envoyé']);
             }
             else 
                 return $response->withJson(['success' => false, 'message' => 'Le code de vérification n\'a pas pu être envoyé']);
@@ -94,10 +102,15 @@ class VerificationController extends Controller
                 $mail = new PHPMailer(true);
                 // $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      // Enable verbose debug output
                 $mail->isSMTP();                                            // Send using SMTP
-                $mail->Host       = 'smtp.gmail.com';                    // Set the SMTP server to send through
+                // $mail->Host       = 'smtp.gmail.com';                    // Set the SMTP server to send through
                 $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-                $mail->Username   = 'maxmind.ulrich@gmail.com';                     // SMTP username
-                $mail->Password   = 'MaxmindUlrich2019*';                               // SMTP password
+                // $mail->Username   = 'maxmind.ulrich@gmail.com';                     // SMTP username
+                // $mail->Password   = 'MaxmindUlrich2019*';                               // SMTP password
+
+		        $mail->Host = $this->config->get('smtp.host');
+		        $mail->Username = $this->config->get('smtp.username');
+		        $mail->Password = $this->config->get('smtp.password');
+
 
                 // Server
                 // $mail->Host       = 'mail.maxmind.ma';                    // Set the SMTP server to send through
@@ -108,7 +121,7 @@ class VerificationController extends Controller
                 $mail->SMTPSecure = 'ssl';
                 $mail->Port       = 465; 
 
-                $mail->setFrom('maxmind.ulrich@gmail.com', 'Code de Validation CheckInfo');
+                $mail->setFrom($this->config->get('smtp.username'), 'CheckInfo Validation');
 
                 // Server
                 // $mail->setFrom('verification-cic@maxmind.ma', 'Code de Validation CheckInfo');
@@ -202,6 +215,9 @@ class VerificationController extends Controller
 
     protected function checkIfPhoneNumberCodeMatch(Request $request)
     {
+        // For test - Simulator - Code match
+        return ['success' => true, 'message' => 'Votre numéro de téléphone a été vérifié avec succès'];
+
         $status = false;
         $message = '';
         $phoneNumber = $request->getParam('phoneNumber');
