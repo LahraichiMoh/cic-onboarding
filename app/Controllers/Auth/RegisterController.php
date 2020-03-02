@@ -321,7 +321,7 @@ class RegisterController extends Controller
             'okUrl' => env('APP_URL').'/auth/payment-done',
             'failUrl' => env('APP_URL').'/auth/payment-failure',
             'TranType' => $this->config->get('cmi.transactionType'),
-            'callbackUrl' => 'val',
+            'callbackUrl' => env('APP_URL').'/auth/payment-back',
             'shopurl' => env('APP_URL').'/auth/register',
             'currency' => '504',
             'rnd' => microtime(),

@@ -1,445 +1,437 @@
 {% extends 'layout.twig' %}
 
+{% block stylesheets %}
+    <style>
+        h4 { display: inline-block; padding-right: 2em; font-size: 1.1em; border-bottom: 1px solid #c40f11; }
+
+        div.step{ min-height: 10em; }
+
+        div.company-status-item{cursor: pointer; color: #999}
+        div.company-status-item.active{color: #0c9cb2 !important; border: 1px solid #0c9cb2; border-radius: 5px}
+
+        .sweep-to-right-primary-red {
+            background: linear-gradient(to right, #b5070a, #b5070a);
+            background-repeat: no-repeat;
+            background-size: 0 100%;
+            transition: background-size 0.5s 0s;
+        }
+
+        .sweep-to-right-primary-red:hover {
+            background-size: 100% 100%;
+        }
+
+        {# TYPOGRAPHIE #}
+        .msg-info {
+            font-size: 0.8em;
+        }
+    </style>
+{% endblock %}
+
 {% block contentTitle %}
-    Procédure entrée en relation digitale
+    <span class="text-primary-black">Procédure entrée en relation digitale</span>
 {% endblock %}
 
 {% block content %}
-    <div id="Content">
-        <div class="content_wrapper clearfix">
-            <div class="sections_group">
-                <div class="entry-content">
-                    <div class="section mcb-section" style="padding-top:0px; padding-bottom:0px; background-color:#f9faff">
-                        <div class="section_wrapper mcb-section-inner">
-                            <div class="wrap mcb-wrap one valign-top clearfix">
-                                <div class="mcb-wrap-inner">
-                                    <div class="column mcb-column one column_divider">
-                                        <hr class="no_line" style="margin: 0 auto 200px">
+    <div class="p-0 p-md-5 w-100" style="margin-top: 10em; background-color: #303945">
+        <div class="shadow bg-light p-4 mx-5" style="margin-top: -120px">
+            <div class="logo text-center">
+                <img src="./assets/img/logo/check-info.png" alt="Logo Check Info" style="max-width: 14em; margin-bottom: 1.2em">
+            </div>
+
+            <div class="spinner-border text-primary" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            
+            <section id="step-block-section">
+                <!-- Block form step 0 -->
+                <div id="step-0" class="step row text-center m-4">
+                    <div class="col col-md-4 d-none d-md-block" style="background: url(./assets/img/media/bienvenue.jpg) no-repeat center center;  -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;"></div>
+                    <div class="col col-md-8 text-left">
+                        <h4>Identification de l'entreprise</h4>
+
+                        <div class="desc">
+                            <form id="step-form-0" action="" method="POST" enctype="multipart/form-data" autocomplete="off">
+                                <input type="hidden" name="step" value="0">
+
+                                <div class="form-group">
+                                    <label for="ice">Veuillez saisir votre Identifiant Commun de l'Entreprise (ICE)</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span id="inputGroupIce" class="input-group-text"><i class="icofont icofont-id fa-lg mx-2"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" id="ice" name="ice" aria-describedby="iceHelp" placeholder="Numéro ICE" maxlength="15" minlength="15" autocomplete="off" aria-describedby="inputGroupIce" required>
                                     </div>
+                                    <small id="iceHelp" class="form-text text-muted"></small>
+                                    <span id="iceError" class="msg-info text-primary-red"></span>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="step-block-section" class="section mcb-section" style="padding-top:0px; padding-bottom:0px; background-color:#303945">
-                        <div id="OnBoarding_Process" class="section_wrapper mcb-section-inner">
-                            <div id="subscribeStep" class="wrap mcb-wrap one employment-shadow column-margin-20px valign-top clearfix" style="padding:60px 50px 40px; background-color:#fff; margin-top:-120px;">
-                                <div class="mcb-wrap-inner">
-                                    <div class="items_group clearfix">
-                                        <!-- Page Title-->
-                                        <!-- One full width row-->
-                                        <div class="column_attr clearfix align_center">
-                                            <div class="logo">
-                                                <img src="./assets/img/logo/check-info.png" alt="" style="max-height: 5em; margin-bottom: 1.2em">
-                                            </div>
-                                        </div>
 
-                                        <!-- Block form step 0 -->
-                                        <div id="step-0" class="team team_list clearfix flex-container">
-                                            <div class="column one-third col" style="flex: 1; background: url(./assets/img/media/bienvenue.jpg) no-repeat center center;  -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
-                                            </div>
-                                            <div class="column two-third col" style="flex: 2;">
-                                                <div class="desc_wrapper">
-                                                    <h4 class="subtitle">Identification de l'entreprise</h4>
-                                                    <hr class="hr_color">
-                                                    <div class="desc">
-                                                        <form id="step-form-0" action="" method="POST" enctype="multipart/form-data" autocomplete="off">
-                                                            <input type="hidden" name="step" value="0">
-
-                                                            <div class="credit__input">
-                                                                <label for="ice">Veuillez saisir votre Identifiant Commun de l'Entreprise (ICE) <sup><i class="icofont-star-alt-2"></i></sup></label>
-                                                                <input class="input" id="ice" name="ice" type="text" placeholder="Numéro ICE" required maxlength="15" autocomplete="off">
-                                                                <i class=" input__load"></i>
-                                                                <span id="iceError" class="msg-info"></span>
-                                                            </div>
-                                                            <div class="credit__input attach__ice">
-                                                                <label for="ice-file">Veuillez Attacher votre attestation ICE <sup><i class="icofont-star-alt-2"></i></sup></label>
-                                                                <input class="file-input" type="file" id="ice-file" name="ice-file" required accept="application/pdf,image/x-png,image/jpeg" style="display: none;">
-                                                                <i class="icofont-cloud-upload icon__upload"></i>
-                                                                <span id="iceFileError" class="msg-info"></span>
-                                                                <span style="font-size: 0.8em">Formats acceptés : Images (.jpeg, .jpg, .png) ou PDF (.pdf); Taille maximale : 2Mo</span>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Block form step 1 -->
-                                        <div id="step-1" class="team team_list clearfix flex-container" style="display: none">
-                                            <div class="column one-third col" style="flex: 1; background: url(./assets/img/media/contactez-nous.jpg) no-repeat center center;  -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
-                                            </div>
-                                            <div class="column two-third col" style="flex: 2;">
-                                                <div class="desc_wrapper">
-                                                    <h4 class="subtitle">Numéro de téléphone et adresse email</h4>
-                                                    <hr class="hr_color">
-                                                    <p>Merci de renseigner votre téléphone mobile et votre adresse email</p>
-                                                    <div class="desc">
-                                                        <form id="step-form-1" action="" method="POST" enctype="multipart/form-data" autocomplete="off">
-                                                            <input type="hidden" name="step" value="1">
-
-                                                            <div class="clearfix flex-container">
-                                                                <div class="column three-fourth col" style="padding-left: 0; margin-left:0; flex: 5">
-                                                                    <label for="phoneSubscribe" style="text-align: left !important;">Téléphone Mobile<sup><i class="icofont-star-alt-2"></i></sup></label>
-                                                                    <div class="clearfix flex-container">
-
-                                                                        <input style="width:10%" class="input" id="phoneSubscribePrefix" name="phoneSubscribePrefix" type="text" autocomplete="off" value="+212" readonly>
-
-                                                                        <input style="width:100%; margin-left: 0.5em" class="input" id="phoneSubscribe" name="phoneSubscribe" type="text" placeholder="0600000000" autocomplete="off" maxlength="10" required>
-
-                                                                    </div>
-                                                                    <i class=" input__load"></i>
-                                                                    <span id="phoneSubscribeError" class="msg-info"></span>
-                                                                </div>
-                                                                <div id="phoneCheckBloc" class="column one-fourth col" style="flex: 1">
-                                                                    <label id="checkPhoneNumberLabel" style="color:white !important">X</label>
-                                                                    <a id="checkPhoneNumber" class="button button_left button_size_2 button_js kill_the_icon" href="#" disabled>
-                                                                        {# <span class="button_icon">
-                                                                            <i class="icofont-ui-rotation" style="color: white !important"></i>
-                                                                        </span> #}
-                                                                        <span class="button_label">Vérifier</span>
-                                                                    </a>
-                                                                </div>
-                                                                <div id="editPhoneBloc" class="column one-fourth col" style="display: none; flex: 1">
-                                                                    <label id="editPhoneNumberLabel" style="color:white !important">X</label>
-                                                                    <a id="editPhoneNumber" class="button button_size_2 button_js kill_the_icon" href="#">
-                                                                        <span class="button_label">Modifier</span>
-                                                                    </a>
-                                                                </div>
-                                                                <div id="checkPhoneCode" class="clearfix column one-fourth col" style="display: none; flex: 1">
-                                                                    <div class="column two-third">
-                                                                        <label for="verificationCode">Code<sup><i class="icofont-star-alt-2"></i></sup></label>
-                                                                        <input class="input" id="verificationCode" name="verificationCode" type="text" placeholder="Code dé vérification" autocomplete="off">
-                                                                        <i class=" input__load"></i>
-                                                                        <span id="verificationCodeError" class="msg-info"></span>
-                                                                    </div>
-                                                                    <div class="column one-third" style="padding: 2.1em 0 0 0;">
-                                                                        <a id="checkPhoneNumberCode" class="button button_right button_size_2 button_js kill_the_icon" href="#">
-                                                                            <span class="button_icon"><i class="icon-right" style="color: white"></i></span>
-                                                                        </a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="clearfix flex-container">
-                                                                <div class="column three-fourth col" style="padding-left: 0; margin-left:0; flex: 5">
-                                                                    <label for="emailSubscribe">Adresse email<sup><i class="icofont-star-alt-2"></i></sup></label>
-                                                                    <input style="width:100%" class="input" id="emailSubscribe" name="emailSubscribe" type="email" placeholder="Adresse email" autocomplete="off" required>
-                                                                    <i class=" input__load"></i>
-                                                                    <span id="emailError" class="msg-info"></span>
-                                                                </div>
-                                                                <div id="emailCheckBloc" class="column one-fourth col" style="flex: 1">
-                                                                    <label id="checkEmailLabel" style="color:white !important">X</label>
-                                                                    <a id="checkEmail" class="button  button_size_2 button_js" href="#" disabled>   
-                                                                        <span class="button_label">Vérifier</span>
-                                                                    </a>
-                                                                </div>
-                                                                <div id="editEmailBloc" class="column one-fourth col" style="display: none; flex: 1">
-                                                                    <label id="editEmailLabel" style="color:white !important">X</label>
-                                                                    <a id="editEmail" class="button button_size_2 button_js kill_the_icon" href="#">
-                                                                        <span class="button_label">Modifier</span>
-                                                                    </a>
-                                                                </div>
-                                                                <div id="checkEmailCode" class="clearfix column one-fourth col" style="display: none; flex: 1">
-                                                                    <div class="column two-third">
-                                                                        <label for="verificationEmailCode">Code<sup><i class="icofont-star-alt-2"></i></sup></label>
-                                                                        <input class="input" id="verificationEmailCode" name="verificationEmailCode" type="text" placeholder="Code dé vérification" autocomplete="off">
-                                                                        <i class=" input__load"></i>
-                                                                        <span id="verificationEmailCodeError" class="msg-info"></span>
-                                                                    </div>
-                                                                    <div class="column one-third" style="padding: 2.1em 0 0 0;">
-                                                                        <a id="checkEmailCodeButton" class="button button_right button_size_2 button_js kill_the_icon" href="#">
-                                                                            <span class="button_icon"><i class="icon-right" style="color: white"></i></span>
-                                                                        </a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Block form step 2 -->
-                                        <div id="step-2" class="team team_list clearfix flex-container" style="display: none;">
-                                            <div class="column one-third col" style="flex: 1; background: url(./assets/img/media/gros-plan-femme-affaires.jpg) no-repeat center center;  -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
-                                            </div>
-                                            <div class="column two-third col" style="flex: 2;">
-                                                <div class="desc_wrapper">
-                                                    <h4 class="subtitle">Information du contact principal</h4>
-                                                    <hr class="hr_color">
-                                                    <div class="desc">
-                                                        <form id="step-form-2" action="" method="POST" enctype="multipart/form-data" autocomplete="off">
-                                                            <input type="hidden" name="step" value="2">
-
-                                                            <div class="clearfix">
-                                                                <div class="column one-second" style="padding-left: 0; margin-left:0">
-                                                                    <label for="name">Nom<sup><i class="icofont-star-alt-2"></i></sup></label>
-                                                                    <input style="width:100%" class="input" id="name" name="name" type="text" placeholder="Nom" autocomplete="off" required>
-                                                                    <i class=" input__load"></i>
-                                                                    <span id="nameError" class="msg-info"></span>
-                                                                </div>
-                                                                <div class="column one-second">
-                                                                    <label for="firstName">Prénom(s)<sup><i class="icofont-star-alt-2"></i></sup></label>
-                                                                    <input style="width:100%" class="input" id="firstName" name="firstName" type="text" placeholder="Prénom(s)" autocomplete="off" required>
-                                                                    <i class=" input__load"></i>
-                                                                    <span id="firstNameError" class="msg-info"></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="clearfix">
-                                                                <div class="column one" style="padding-left: 0; margin-left:0">
-                                                                    <label for="address">Adresse<sup><i class="icofont-star-alt-2"></i></sup></label>
-                                                                    <input style="width:100%" class="input" id="address" name="address" type="text" placeholder="Adresse" autocomplete="off" required>
-                                                                    <i class=" input__load"></i>
-                                                                    <span id="addressError" class="msg-info"></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="clearfix">
-                                                                <div class="credit__input credit__select column one-second">
-                                                                    <label for="region">Region<sup><i class="icofont-star-alt-2"></i></sup></label>
-                                                                    <select name="region" id="region" style="width:100%" required></select>
-                                                                    <i class=" input__load"></i>
-                                                                    <span id="regionError" class="msg-info"></span>
-                                                                </div>
-                                                                <div class="credit__input credit__select column one-second" style="padding-left: 0; margin-left:0">
-                                                                    <label for="city">Ville<sup><i class="icofont-star-alt-2"></i></sup></label>
-                                                                    <select name="city" id="city" style="width:100%" required></select>
-                                                                    <i class=" input__load"></i>
-                                                                    <span id="cityError" class="msg-info"></span>
-                                                                </div>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Block form step 3 -->
-                                        <div id="step-3" class="team team_list clearfix flex-container" style="display: none">
-                                            <div class="column one-third col" style="flex: 1; background:  url(./assets/img/media/conseiller-commercial.jpg) no-repeat center center;  -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
-                                            </div>
-                                            <div class="column two-third col" style="flex: 2;">
-                                                <div class="desc_wrapper">
-                                                    <h4 class="subtitle">Statut de l'entreprise</h4>
-                                                    <hr class="hr_color">
-                                                    <div class="desc">
-                                                        <form id="step-form-3" action="" method="POST" enctype="multipart/form-data" autocomplete="off">
-                                                            <input type="hidden" name="step" value="3">
-                                                            <input type="hidden" name="companyStatus" value="company">
-
-                                                            <div class="vous__">
-                                                                <div class="vous__stat vous__ste active" data-company="company">
-                                                                    <i class="icofont-building-alt"></i>
-                                                                    <p>Societe</p>
-                                                                </div>
-                                                                <div class="vous__stat vous__libre" data-company="liberal">
-                                                                    <i class="icofont-bag-alt"></i>
-                                                                    <p>Profession liberale</p>
-                                                                </div>
-                                                                <div class="vous__stat vous__auto" data-company="selfEmployed">
-                                                                    <i class="icofont-businessman"></i>
-                                                                    <p>Auto-entrepreneur</p>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="both__input">
-                                                                <div class="credit__input credit__select">
-                                                                    <label for="activityArea">Secteur d'activité</label>
-                                                                    <select name="activityArea" id="activityArea">
-                                                                    </select>
-                                                                    <span id="activityAreaError" class="msg-info"></span>
-                                                                </div>
-                                                                <div class="credit__input credit__select">
-                                                                    <label for="branch">Branche</label>
-                                                                    <select name="branch" id="branch">
-                                                                    </select>
-                                                                    <span id="branchError" class="msg-info"></span>
-                                                                </div>
-                                                                <div class="credit__input credit__select">
-                                                                    <label for="subBranch">Sous-branche</label>
-                                                                    <select name="subBranch" id="sub-branch">
-                                                                    </select>
-                                                                    <span id="subBranchError" class="msg-info"></span>
-                                                                </div>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Block form step 4 -->
-                                        <div id="step-4" class="team team_list clearfix flex-container" style="display: none" data-summary="1">
-                                            <div class="column one-third col" style="flex: 1; background: url(./assets/img/media/analyse-donnees.jpg) no-repeat center center;  -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
-                                            </div>
-                                            <div class="column two-third col" style="flex: 2;">
-                                                <div class="desc_wrapper">
-                                                    <h4 class="subtitle">Récapitulatif des données saisies</h4>
-                                                    <hr class="hr_color">
-                                                    <div class="desc">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Block form step 5 -->
-                                        <div id="step-5" class="team team_list clearfix flex-container" style="display: none" data-hidden-step="1" data-terms-service="1">
-                                            <div class="column one-third col" style="flex: 1; background: url(./assets/img/media/gros-plan-documents-contractuels.jpg) no-repeat center center;  -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
-                                            </div>
-                                            <div class="column two-third col" style="flex: 2">
-                                                <div class="desc_wrapper">
-                                                    <h4 class="subtitle">Conditions d'utilisation du service</h4>
-                                                    <hr class="hr_color">
-                                                    <div class="desc">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Block form step 6 -->
-                                        <div id="step-6" class="team team_list clearfix flex-container" style="display: none" data-hidden-step="1">
-                                            <div class="column one-third col" style="flex: 1; background: url(./assets/img/media/equipe-architectes-urbains.jpg) no-repeat center center;  -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
-                                            </div>
-                                            <div class="column two-third col" style="flex: 2">
-                                                <div class="desc_wrapper">
-                                                    <h4 class="subtitle">Choix de l'abonnement</h4>
-                                                    <hr class="hr_color">
-                                                    <div class="desc">
-                                                        <form id="step-form-6" action="" method="POST" enctype="multipart/form-data" autocomplete="off" data-stay-display="1">
-                                                            <input type="hidden" name="step" value="6">
-                                                            <input type="hidden" name="choiceACheck" value="0">
-                                                            <input type="hidden" name="choiceBCheck" value="0">
-                                                            <input type="hidden" name="choiceCCheck" value="0">
-                                                            <input type="hidden" name="choiceSCheck" value="1">
-
-
-                                                            <div class="both__input">
-                                                                <div class="credit__input credit__select">
-                                                                    <label>Merci de procéder au choix de votre abonnement</label>
-                                                                    <table>
-                                                                        <tr>
-                                                                            <th>#</th>
-                                                                            <th>Volume</th>
-                                                                            <th>Montant HT</th>
-                                                                            <th>Frais de gestion</th>
-                                                                            <th>Canal</th>
-                                                                            <th>Choix</th>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>A</td>
-                                                                            <td>100</td>
-                                                                            <td>1.250</td>
-                                                                            <td>250</td>
-                                                                            <td>Multicanal</td>
-                                                                            <td>
-                                                                                <input type="checkbox" id="choiceA" class="choice" name="choiceA">
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>B</td>
-                                                                            <td>500</td>
-                                                                            <td>4.750</td>
-                                                                            <td>250</td>
-                                                                            <td>Multicanal</td>
-                                                                            <td>
-                                                                                <input type="checkbox" id="choiceB" class="choice" name="choiceB">
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>C</td>
-                                                                            <td>1000</td>
-                                                                            <td>8.250</td>
-                                                                            <td>250</td>
-                                                                            <td>Multicanal</td>
-                                                                            <td>
-                                                                                <input type="checkbox" id="choiceC" class="choice" name="choiceC">
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>S</td>
-                                                                            <td>-</td>
-                                                                            <td>PO<sup style="color: red">(2)</sup></td>
-                                                                            <td>250</td>
-                                                                            <td>SVI</td>
-                                                                            <td>
-                                                                                <input type="checkbox" id="choiceS" class="choice" name="choiceS" checked>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </table>
-                                                                    <span id="subscriptionChoiceError" class="msg-info"></span>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="column_attr clearfix align_center step-pause">
-                                                                <a class="button button_right button_size_2 button_js kill_the_icon trigger-next-step" href="#">
-                                                                    <span class="button_icon"><i class="icon-right" style="color: white !important"></i></span>
-                                                                    <span class="button_label">Valider</span>
-                                                                </a>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Block form step 7 -->
-                                        <div id="step-7" class="team team_list clearfix flex-container" style="display: none" data-payment-summary="1">
-                                            <div class="column one-third col" style="flex: 1; background:  url(./assets/img/media/main-homme-tenant-stylo.jpg) no-repeat center center;  -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
-                                            </div>
-                                            <div class="column two-third col" style="flex: 2">
-                                                <div class="desc_wrapper">
-                                                    <h4 class="subtitle">Récapitulatif de l'abonnement</h4>
-                                                    <hr class="hr_color">
-                                                    <div class="desc">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Block form step 8 -->
-                                        <div id="step-8" class="team team_list clearfix flex-container" style="display: none" data-payment="1">
-                                            <div class="column one-third col" style="flex: 1; background: url(./assets/img/media/paiement-par-carte-credit.jpg) no-repeat center center;  -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
-                                            </div>
-                                            <div class="column two-third col" style="flex: 2">
-                                                <div class="desc_wrapper">
-                                                    <h4 class="subtitle">Paiement</h4>
-                                                    <hr class="hr_color">
-                                                    <div class="desc">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div id="nextAndPreviousStepButtons" class="column_attr clearfix align_center">
-                                            <a id="previous-step" class="button button_left button_size_2 button_js" href="#">
-                                                <span class="button_icon"><i class="icon-left" style="color: white !important"></i></span>
-                                                <span class="button_label">Previous</span>
-                                            </a>
-                                            <a id="next-step" class="button button_right button_size_2 button_js kill_the_icon" href="#">
-                                                <span class="button_icon"><i class="icon-right" style="color: white !important"></i></span>
-                                                <span class="button_label">Next</span>
-                                            </a>
-                                        </div>
-                                    </div>
+                                <div class="form-group">
+                                    <label class="d-block" for="ice-file">Veuillez attacher votre attestation ICE</label>
+                                    <input type="file" class="form-control d-none" id="ice-file" name="ice-file" aria-describedby="iceFileHelp" placeholder="Enter email" required>
+                                    <label id="upload-icon" class="d-inline-block text-center" style="border: 1px dashed #999; border-radius: 5px; cursor: pointer; padding: 0 5em">
+                                        <i class="icofont-cloud-upload fa-3x text-primary-gray py-0 my-1" ></i>
+                                    </label>
+                                    <small id="iceFileHelp" class="form-text text-muted">Formats acceptés : Images (.jpeg, .jpg, .png) ou PDF (.pdf); Taille maximale : 2Mo</small>
+                                    <span id="iceFileError" class="msg-info text-primary-red"></span>
                                 </div>
-                            </div>
-                            <div class="wrap mcb-wrap one valign-top clearfix">
-                                <div class="mcb-wrap-inner">
-                                    <div class="column mcb-column one column_divider">
-                                        <hr class="no_line" style="margin: 0 auto 50px">
-                                    </div>
-                                </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
-            </div>
+
+                <!-- Block form step 1 -->
+                <div id="step-1" class="step row text-center m-4" style="display: none">
+                    <div class="col col-md-4 d-none d-md-block" style="background: url(./assets/img/media/contactez-nous.jpg) no-repeat center center;  -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;"></div>
+                    <div class="col col-md-8 text-left">
+                        <h4>Numéro de téléphone et adresse email</h4>
+
+                        <div class="desc">
+                            <form id="step-form-1" action="" method="POST" enctype="multipart/form-data" autocomplete="off">
+                                <input type="hidden" name="step" value="1">
+
+                                <label for="phoneSubscribe" class="d-block">Téléphone Mobile</label>
+                                <div class="form-row">
+
+                                    <div class="col form-group">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span id="inputGroupPhoneNumber" class="input-group-text">+212</span>
+                                            </div>
+                                            <input type="text" class="form-control" id="phoneSubscribe" name="phoneSubscribe" placeholder="0600000000" aria-describedby="inputGroupPhoneNumber" maxlength="10" required>
+                                        </div>
+                                        <span id="phoneSubscribeError" class="msg-info text-primary-red"></span>
+                                    </div>
+                                </div>
+
+                                <label for="emailSubscribe" class="d-block">Adresse E-mail</label>
+                                <div class="form-row">
+                                    <div class="col form-group">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span id="inputGroupEmail" class="input-group-text"><i class="icofont icofont-email fa-lg mx-2"></i></span>
+                                            </div>
+                                            <input type="email" class="form-control" id="emailSubscribe" name="emailSubscribe" placeholder="john@email.com" aria-describedby="inputGroupEmail" required>
+                                        </div>
+                                        <span id="emailError" class="msg-info text-primary-red"></span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Block form step 2 -->
+                <div id="step-2" class="step row text-center m-4" style="display: none;">
+                    <div class="col col-md-4 d-none d-md-block" style="background: url(./assets/img/media/gros-plan-femme-affaires.jpg) no-repeat center center;  -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;"></div>
+                    <div class="col col-md-8 text-left">
+                        <h4>Information du contact principal</h4>
+
+                        <div class="desc">
+                            <form id="step-form-2" action="" method="POST" enctype="multipart/form-data" autocomplete="off">
+                                <input type="hidden" name="step" value="2">
+
+                                <div class="form-row">
+
+                                    <div class="col-sm-12 col-md-6 form-group">
+                                        <label for="name" class="d-block">Nom</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span id="inputGroupName" class="input-group-text"><i class="icofont icofont-business-man fa-lg mx-2"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" id="name" name="name" placeholder="Nom" aria-describedby="inputGroupName" autocomplete="off" required>
+                                        </div>
+                                        <span id="nameError" class="msg-info text-primary-red"></span>
+                                    </div>
+
+                                    <div class="col-sm-12 col-md-6 form-group">
+                                        <label for="firstName" class="d-block">Prénom(s)</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span id="inputGroupFirstName" class="input-group-text"><i class="icofont icofont-business-man fa-lg mx-2"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" id="firstName" name="firstName" aria-describedby="inputGroupFirstName" placeholder="Prénom(s)" autocomplete="off" required>
+                                        </div>
+                                        <span id="firstNameError" class="msg-info text-primary-red"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="col form-group">
+                                        <label for="address" class="d-block">Adresse</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span id="inputAddress" class="input-group-text"><i class="icofont icofont-location-pin fa-lg mx-2"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" id="address" name="address" placeholder="Entrer votre adresse" aria-describedby="inputAddress" required>
+                                        </div>
+                                        <span id="addressError" class="msg-info text-primary-red"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+
+                                    <div class="col-sm-12 col-md-6 form-group">
+                                        <label for="region" class="d-block">Région</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span id="inputGroupRegion" class="input-group-text"><i class="icofont icofont-institution fa-lg mx-2"></i></span>
+                                            </div>
+                                            <select class="form-control" id="region" name="region" aria-describedby="inputGroupRegion" required>
+                                            </select>
+                                        </div>
+                                        <span id="regionError" class="msg-info text-primary-red"></span>
+                                    </div>
+
+                                    <div class="col-sm-12 col-md-6 form-group">
+                                        <label for="city" class="d-block">Ville</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span id="inputGroupCity" class="input-group-text"><i class="icofont icofont-building-alt fa-lg mx-2"></i></span>
+                                            </div>
+                                            <select class="form-control" id="city" name="city" aria-describedby="inputGroupCity" required>
+                                            </select>
+                                        </div>
+                                        <span id="cityError" class="msg-info text-primary-red"></span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Block form step 3 -->
+                <div id="step-3" class="step row text-center m-4" style="display: none">
+                    <div class="col col-md-4 d-none d-md-block" style="background: url(./assets/img/media/conseiller-commercial.jpg) no-repeat center center;  -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;"></div>
+                    <div class="col col-md-8 text-left">
+                        <h4>Statut de l'entreprise</h4>
+
+                        <div class="desc">
+                            <form id="step-form-3" action="" method="POST" enctype="multipart/form-data" autocomplete="off">
+                                <input type="hidden" name="step" value="3">
+                                <input type="hidden" name="companyStatus" value="company">
+
+                                <div class="row text-center company-status m-2">
+                                    <div class="col company-status-item p-2 active" data-company="company">
+                                        <i class="icofont-building-alt fa-2x"></i>
+                                        <span>Societe</span>
+                                    </div>
+                                    <div class="col company-status-item p-2" data-company="liberal">
+                                        <i class="icofont-bag-alt fa-2x"></i>
+                                        <span>Profession liberale</span>
+                                    </div>
+                                    <div class="col company-status-item p-2" data-company="selfEmployed">
+                                        <i class="icofont-businessman fa-2x"></i>
+                                        <span>Auto-entrepreneur</span>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-row">
+
+                                    <div class="col-sm-12 col-lg-4 form-group">
+                                        <label for="activityArea" class="d-block">Secteur d'activité</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span id="inputGroupActivityArea" class="input-group-text"><i class="icofont icofont-institution fa-lg mx-2"></i></span>
+                                            </div>
+                                            <select class="form-control" id="activityArea" name="activityArea" aria-describedby="inputGroupActivityArea" required>
+                                            </select>
+                                        </div>
+                                        <span id="activityAreaError" class="msg-info text-primary-red"></span>
+                                    </div>
+
+                                    <div class="col-sm-12 col-lg-4 form-group">
+                                        <label for="branch" class="d-block">Branche</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span id="inputGroupBranch" class="input-group-text"><i class="icofont icofont-building-alt fa-lg mx-2"></i></span>
+                                            </div>
+                                            <select class="form-control" id="branch" name="branch" aria-describedby="inputGroupBranch" required>
+                                            </select>
+                                        </div>
+                                        <span id="branchError" class="msg-info text-primary-red"></span>
+                                    </div>
+
+                                    <div class="col-sm-12 col-lg-4 form-group">
+                                        <label for="subBranch" class="d-block">Sous-branche</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span id="inputGroupSubBranch" class="input-group-text"><i class="icofont icofont-building-alt fa-lg mx-2"></i></span>
+                                            </div>
+                                            <select class="form-control" id="sub-branch" name="subBranch" aria-describedby="inputGroupSubBranch" required>
+                                            </select>
+                                        </div>
+                                        <span id="subBranchError" class="msg-info text-primary-red"></span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Block form step 4 -->
+                <div id="step-4" class="step row text-center m-4" style="display: none" data-summary="1">
+                    <div class="col col-md-4 d-none d-md-block" style="background: url(./assets/img/media/analyse-donnees.jpg) no-repeat center center;  -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;"></div>
+                    <div class="col col-md-8 text-left">
+                        <h4>Récapitulatif des données saisies</h4>
+                        <div class="desc">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Block form step 5 -->
+                <div id="step-5" class="step row text-center m-4" style="display: none" data-hidden-step="1" data-terms-service="1">
+                    <div class="col col-md-4 d-none d-md-block" style="background: url(./assets/img/media/signez-ici-s-il-vous-plait.jpg) no-repeat center center;  -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;"></div>
+                    <div class="col col-md-8 text-left">
+                        <h4>Conditions d'utilisation du service</h4>
+                        <div class="desc">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Block form step 6 -->
+                <div id="step-6" class="step row text-center m-4" style="display: none" data-hidden-step="1">
+                    <div class="col col-md-4 d-none d-md-block" style="background: url(./assets/img/media/factures.jpg) no-repeat center center;  -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;"></div>
+                    <div class="col col-md-8 text-left">
+                        <h4>Choix de l'abonnement</h4>
+                        <div class="desc">
+                            <form id="step-form-6" action="" method="POST" enctype="multipart/form-data" autocomplete="off" data-stay-display="1">
+                                <input type="hidden" name="step" value="6">
+                                {# <input type="hidden" name="choiceACheck" value="0">
+                                <input type="hidden" name="choiceBCheck" value="0">
+                                <input type="hidden" name="choiceCCheck" value="0">
+                                <input type="hidden" name="choiceSCheck" value="1"> #}
+
+                                <fieldset class="form-group">
+                                    <label>Merci de procéder au choix de votre abonnement</label>
+                                    <div class="row text-center d-none">
+                                        <div class="col">
+                                            <div class="form-check d-inline mx-2">
+                                            <input class="form-check-input" type="radio" name="subscriptionFormulaRadios" id="free" value="free" checked>
+                                            <label class="form-check-label" for="subscriptionFormula1">
+                                                Free
+                                            </label>
+                                            </div>
+                                            <div class="form-check d-inline mx-2">
+                                            <input class="form-check-input" type="radio" name="subscriptionFormulaRadios" id="pro" value="pro">
+                                            <label class="form-check-label" for="subscriptionFormula2">
+                                                Pro
+                                            </label>
+                                            </div>
+                                            <div class="form-check d-inline mx-2">
+                                            <input class="form-check-input" type="radio" name="subscriptionFormulaRadios" id="entreprise" value="entreprise">
+                                            <label class="form-check-label" for="subscriptionFormula3">
+                                                Entreprise
+                                            </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <div class="card-deck mb-3 text-center">
+                                    <div class="card mb-4 box-shadow">
+                                    <div class="card-header">
+                                        <h4 class="my-0 font-weight-normal">Free</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <h1 class="card-title pricing-card-title">$0 <small class="text-muted">/ mo</small></h1>
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item">Cras justo odio</li>
+                                            <li class="list-group-item">Morbi leo risus</li>
+                                            <li class="list-group-item">Vestibulum at eros</li>
+                                        </ul>
+                                    </div>
+                                    <div class="card-footer">
+                                        <button type="button" class="btn btn-lg btn-block btn-danger check-button check-free">Choisir</button>
+                                    </div>
+                                    </div>
+                                    <div class="card mb-4 box-shadow">
+                                    <div class="card-header">
+                                        <h4 class="my-0 font-weight-normal">Pro</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <h1 class="card-title pricing-card-title">$15 <small class="text-muted">/ mo</small></h1>
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item">Cras justo odio</li>
+                                            <li class="list-group-item">Morbi leo risus</li>
+                                            <li class="list-group-item">Vestibulum at eros</li>
+                                        </ul>
+                                    </div>
+                                    <div class="card-footer">
+                                        <button type="button" class="btn btn-lg btn-block btn-light check-button check-pro">Choisir</button>
+                                    </div>
+                                    </div>
+                                    <div class="card mb-4 box-shadow">
+                                    <div class="card-header">
+                                        <h4 class="my-0 font-weight-normal">Enterprise</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <h1 class="card-title pricing-card-title">$29 <small class="text-muted">/ mo</small></h1>
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item">Cras justo odio</li>
+                                            <li class="list-group-item">Morbi leo risus</li>
+                                            <li class="list-group-item">Vestibulum at eros</li>
+                                        </ul>
+                                    </div>
+                                    <div class="card-footer">
+                                        <button type="button" class="btn btn-lg btn-block btn-light check-button check-entreprise">Choisir</button>
+                                    </div>
+                                    </div>
+                                </div>
+                                <span id="subscriptionChoiceError" class="msg-info text-primary-red"></span>
+
+
+                                <div class="column_attr clearfix align_center step-pause">
+                                    <a class="btn text-light sweep-to-right-primary-red ml-1 trigger-next-step" style="background-color: #c40f11" href="#">
+                                        <span>Valider</span>
+                                        <i class="icofont icofont-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Block form step 7 -->
+                <div id="step-7" class="step row text-center m-4" style="display: none" data-payment-summary="1">
+                    <div class="col col-md-4 d-none d-md-block" style="background: url(./assets/img/media/main-homme-tenant-stylo.jpg) no-repeat center center;  -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;"></div>
+                    <div class="col col-md-8 text-left">
+                        <h4>Récapitulatif de l'abonnement</h4>
+                        <div class="desc">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Block form step 8 -->
+                <div id="step-8" class="step row text-center m-4" style="display: none" data-payment="1">
+                    <div class="col col-md-4 d-none d-md-block" style="background: url(./assets/img/media/paiement-par-carte-credit.jpg) no-repeat center center;  -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;"></div>
+                    <div class="col col-md-8 text-left">
+                        <h4>Paiement</h4>
+                        <div class="desc">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Block Buttons -->
+                <div class="row text-center mt-3">
+                    <div class="col">
+                        <div id="nextAndPreviousStepButtons">
+                            <button id="previous-step" class="btn text-light sweep-to-right-primary-red mr-1" style="background-color: #c40f11">
+                                <i class="icofont icofont-arrow-left"></i>
+                                <span>Précédent</span>
+                            </button>
+                            <button id="next-step" class="btn text-light sweep-to-right-primary-red ml-1" style="background-color: #c40f11">
+                                <span>Suivant</span>
+                                <i class="icofont icofont-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
 {% endblock %}
 
 {% block javascripts %}
-
-	<script type="text/javascript" src="./assets/js/register.js"></script>
-
+	<script type="text/javascript" src="./assets/js/register2.js"></script>
 {% endblock %}
