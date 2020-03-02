@@ -125,7 +125,7 @@ class RegisterController extends Controller
                             <label for="summaryIce">ICE <sup><i class="icofont-star-alt-2"></i></sup></label>
                             <input class="input" id="summaryIce" name="summaryIce" type="text" placeholder="Numéro ICE" required maxlength="15" autocomplete="off" value="'.$_SESSION['ice'].'" readonly>
                             <i class=" input__load"></i>
-                            <span id="summaryIceError" class="msg-info"></span>
+                            <span id="summaryIceError" class="msg-info text-primary-red"></span>
                         </div>
 
                         <div class="both_input">
@@ -133,19 +133,19 @@ class RegisterController extends Controller
                                 <label for="summaryName">Nom <sup><i class="icofont-star-alt-2"></i></sup></label>
                                 <input class="input" id="summaryName" name="summaryName" type="text" placeholder="Nom" required autocomplete="off" value="'.$_SESSION['name'].'" readonly>
                                 <i class=" input__load"></i>
-                                <span id="summaryNameError" class="msg-info"></span>
+                                <span id="summaryNameError" class="msg-info text-primary-red"></span>
                             </div>
                             <div class="credit__input column one-third">
                                 <label for="summaryFirstName">Prénom(s) <sup><i class="icofont-star-alt-2"></i></sup></label>
                                 <input class="input" id="summaryFirstName" name="summaryFirstName" type="text" placeholder="Prénom(s)" required autocomplete="off" value="'.$_SESSION['firstName'].'" readonly>
                                 <i class=" input__load"></i>
-                                <span id="summaryFirstNameError" class="msg-info"></span>
+                                <span id="summaryFirstNameError" class="msg-info text-primary-red"></span>
                             </div>
                             <div class="credit__input column one-third">
                                 <label for="summaryPhone">Téléphone mobile <sup><i class="icofont-star-alt-2"></i></sup></label>
                                 <input class="input" id="summaryPhone" name="summaryPhone" type="text" placeholder="06XXXXXXXX" required autocomplete="off" value="'.$_SESSION['phoneSubscribe'].'" readonly>
                                 <i class=" input__load"></i>
-                                <span id="summaryPhoneError" class="msg-info"></span>
+                                <span id="summaryPhoneError" class="msg-info text-primary-red"></span>
                             </div>
                         </div>
 
@@ -154,13 +154,13 @@ class RegisterController extends Controller
                                 <label for="summaryAddress">Adresse <sup><i class="icofont-star-alt-2"></i></sup></label>
                                 <input class="input" id="summaryAddress" name="summaryAddress" type="text" placeholder="Adresse" required autocomplete="off" value="'.$_SESSION['address'].'" readonly>
                                 <i class=" input__load"></i>
-                                <span id="summaryAddressError" class="msg-info"></span>
+                                <span id="summaryAddressError" class="msg-info text-primary-red"></span>
                             </div>
                             <div class="credit__input column one-second">
                                 <label for="summaryEmail">Email <sup><i class="icofont-star-alt-2"></i></sup></label>
                                 <input class="input" id="summaryEmail" name="summaryEmail" type="text" placeholder="Email" required autocomplete="off" value="'.$_SESSION['emailSubscribe'].'" readonly>
                                 <i class=" input__load"></i>
-                                <span id="summaryEmailError" class="msg-info"></span>
+                                <span id="summaryEmailError" class="msg-info text-primary-red"></span>
                             </div>
                         </div>
 
@@ -169,13 +169,13 @@ class RegisterController extends Controller
                                 <label for="summaryCity">Ville<sup><i class="icofont-star-alt-2"></i></sup></label>
                                 <input class="input" id="summaryCity" name="summaryCity" type="text" placeholder="" required autocomplete="off" value="'.$_SESSION['city']['name'].'" readonly>
                                 <i class=" input__load"></i>
-                                <span id="summaryCityError" class="msg-info"></span>
+                                <span id="summaryCityError" class="msg-info text-primary-red"></span>
                             </div>
                             <div class="credit__input column one-second">
                                 <label for="summaryRegion">Region<sup><i class="icofont-star-alt-2"></i></sup></label>
                                 <input class="input" id="summaryRegion" name="summaryRegion" type="text" placeholder="" required autocomplete="off" value="'.$_SESSION['region']['name'].'" readonly>
                                 <i class=" input__load"></i>
-                                <span id="summaryRegionError" class="msg-info"></span>
+                                <span id="summaryRegionError" class="msg-info text-primary-red"></span>
                             </div>
                         </div>
 
@@ -186,13 +186,13 @@ class RegisterController extends Controller
                         <br><br>
 
                         <div class="column_attr clearfix align_center step-pause">
-                            <a id="back-step" class="button button_left button_size_2 button_js trigger-previous-step" href="#">
-                                <span class="button_icon"><i class="icon-left" style="color: white !important"></i></span>
-                                <span class="button_label">Revenir</span>
+                            <a id="back-step" class="btn text-light sweep-to-right-primary-red ml-1 trigger-previous-step" href="#" style="background-color: #c40f11">
+                                <i class="icofont icofont-arrow-left"></i>
+                                <span>Revenir</span>
                             </a>
-                            <a id="validate-step" class="button button_right button_size_2 button_js kill_the_icon trigger-next-step" href="#">
-                                <span class="button_icon"><i class="icon-right" style="color: white !important"></i></span>
-                                <span class="button_label">Valider</span>
+                            <a id="validate-step" class="btn text-light sweep-to-right-primary-red ml-1 trigger-next-step" href="#" style="background-color: #c40f11">
+                                <span>Valider</span>
+                                <i class="icofont icofont-arrow-right"></i>
                             </a>
                         </div>
                     </form>';
@@ -211,17 +211,17 @@ class RegisterController extends Controller
                             <textarea id="termsOfService" name="termsOfService" rows="8" style="width: 100%" readonly>
                                 Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
                             </textarea>
-                            <span id="termsOfServiceError" class="msg-info"></span>
+                            <span id="termsOfServiceError" class="msg-info text-primary-red"></span>
                         </div>
 
                         <div class="column_attr clearfix align_center step-pause">
-                            <a class="button button_left button_size_2 button_js trigger-next-step" href="#" onclick="setAccepted(\'0\')">
-                                <span class="button_icon"><i class="icon-left" style="color: white !important"></i></span>
-                                <span class="button_label">Refuser</span>
+                            <a class="btn text-light sweep-to-right-primary-red ml-1 trigger-next-step" style="background-color: #c40f11" href="#" onclick="setAccepted(\'0\')">
+                                <i class="icofont icofont-arrow-left"></i>
+                                <span>Refuser</span>
                             </a>
-                            <a class="button button_right button_size_2 button_js kill_the_icon trigger-next-step" href="#" onclick="setAccepted(\'1\')">
-                                <span class="button_icon"><i class="icon-right" style="color: white !important"></i></span>
-                                <span class="button_label">Accepter</span>
+                            <a class="btn text-light sweep-to-right-primary-red ml-1 trigger-next-step" style="background-color: #c40f11" href="#" onclick="setAccepted(\'1\')">
+                                <span>Accepter</span>
+                                <i class="icofont icofont-arrow-right"></i>
                             </a>
                         </div>
 
@@ -373,13 +373,13 @@ class RegisterController extends Controller
 
         $paymentForm = '<form id="cardPaymentForm" method="post" action="'.$this->config->get('cmi.paymentUrl').'" style="display:none;">'.$dataToForm.'</form>';
         
-        $paymentOptions = '<div class="flex-container">
-                                <div class="option-payment__">
+        $paymentOptions = '<div class="row">
+                                <div class="col">
                                     '.$paymentForm.'
-                                    <a href="javascript:{}" onclick="document.getElementById(\'cardPaymentForm\').submit();"><img src="./assets/img/media/visa-mastercard-logo.png" /></a>
+                                    <a href="javascript:{}" onclick="document.getElementById(\'cardPaymentForm\').submit();"><img class="img-fluid" src="./assets/img/media/visa-mastercard-logo.png" /></a>
                                 </div>
-                                <div class="option-payment">
-                                    <img src="./assets/img/media/fatourati_2.jpg" />
+                                <div class="col">
+                                    <img class="img-fluid" src="./assets/img/media/fatourati_2.jpg" />
                                 </div>
                             </div>';
 
@@ -513,11 +513,11 @@ class RegisterController extends Controller
                     // Check if phone number has bees activate 
                     // Use this for real
                     // if(empty($_SESSION['emailIsValidate'])) {
-                    //     $items['emailError'] = 'Email non activé';
+                    //     $items['emailError'] = 'Adresse Email non activé';
                     // }
                     // Use this for test
                     if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                        $items['emailError'] = 'Email non activé';
+                        $items['emailError'] = 'Adresse Email non activé';
                     }
                 }
                 
@@ -685,33 +685,40 @@ class RegisterController extends Controller
                 return $response->withJson(['lastStep' => false, 'status' => $status, 'items' => $items, 'hideStep' => !empty($hideStep) ? $hideStep : null]);
                 break;
             case 6:
-                // Get all input in the form
-                // $choiceA = intval($_POST['choiceACheck']);
-                // $choiceB = intval($_POST['choiceBCheck']);
-                // $choiceC = intval($_POST['choiceCCheck']);
-                // $choiceS = intval($_POST['choiceSCheck']);
+                $formula = $request->getParam('subscriptionFormulaRadios');
 
-                $choiceA = intval( $request->getParam('choiceACheck') );
-                $choiceB = intval( $request->getParam('choiceBCheck') );
-                $choiceC = intval( $request->getParam('choiceCCheck') );
-                $choiceS = intval( $request->getParam('choiceSCheck') );
+                // // OLD CODE
+                // $choiceA = intval( $request->getParam('choiceACheck') );
+                // $choiceB = intval( $request->getParam('choiceBCheck') );
+                // $choiceC = intval( $request->getParam('choiceCCheck') );
+                // $choiceS = intval( $request->getParam('choiceSCheck') );
+                // // END OLD CODE
 
-    
                 $items = [];
                 $_SESSION['subscriptionChoice'] = [];
                 
-                // Check input value status and build response
-                if($choiceA || $choiceB || $choiceC || $choiceS) {
+                // // OLD CODE
+                // // Check input value status and build response
+                // if($choiceA || $choiceB || $choiceC || $choiceS) {
+                //     $status = true;
+                //     if(!empty($choiceA)) $_SESSION['subscriptionChoice'][] = ['id' => 'A', 'name' => 'Choise A', 'amount' => 1250, 'managementFees' => 250, 'canal' => 'Multicanal', 'volume' => 100];
+                //     if(!empty($choiceB)) $_SESSION['subscriptionChoice'][] = ['id' => 'B', 'name' => 'Choise B', 'amount' => 4750, 'managementFees' => 250, 'canal' => 'Multicanal', 'volume' => 500];
+                //     if(!empty($choiceC)) $_SESSION['subscriptionChoice'][] = ['id' => 'C', 'name' => 'Choise C', 'amount' => 8250, 'managementFees' => 250, 'canal' => 'Multicanal', 'volume' => 1000];
+                //     if(!empty($choiceS)) $_SESSION['subscriptionChoice'][] = ['id' => 'S', 'name' => 'Choise S', 'amount' => 'PO(2)', 'managementFees' => 250, 'canal' => 'SVI', 'volume' => '-'];
+                // } else {
+                //     $status = false;
+                //     $items['subscriptionChoiceError'] = 'Veuillez choisir au moins une des offres de la liste';
+                //     $hideStep = true;
+                // }
+                // // END OLD CODE
+                if(!empty($formula)) {
                     $status = true;
-                    if(!empty($choiceA)) $_SESSION['subscriptionChoice'][] = ['id' => 'A', 'name' => 'Choise A', 'amount' => 1250, 'managementFees' => 250, 'canal' => 'Multicanal', 'volume' => 100];
-                    if(!empty($choiceB)) $_SESSION['subscriptionChoice'][] = ['id' => 'B', 'name' => 'Choise B', 'amount' => 4750, 'managementFees' => 250, 'canal' => 'Multicanal', 'volume' => 500];
-                    if(!empty($choiceC)) $_SESSION['subscriptionChoice'][] = ['id' => 'C', 'name' => 'Choise C', 'amount' => 8250, 'managementFees' => 250, 'canal' => 'Multicanal', 'volume' => 1000];
-                    if(!empty($choiceS)) $_SESSION['subscriptionChoice'][] = ['id' => 'S', 'name' => 'Choise S', 'amount' => 'PO(2)', 'managementFees' => 250, 'canal' => 'SVI', 'volume' => '-'];
                 } else {
                     $status = false;
                     $items['subscriptionChoiceError'] = 'Veuillez choisir au moins une des offres de la liste';
                     $hideStep = true;
                 }
+
     
                 sleep(1);
                 return $response->withJson(['lastStep' => false, 'status' => $status, 'items' => $items, 'hideStep' => !empty($hideStep) ? $hideStep : null]);

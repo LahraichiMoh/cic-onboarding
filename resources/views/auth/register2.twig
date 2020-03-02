@@ -4,6 +4,11 @@
     <style>
         h4 { display: inline-block; padding-right: 2em; font-size: 1.1em; border-bottom: 1px solid #c40f11; }
 
+        div.step{ min-height: 10em; }
+
+        div.company-status-item{cursor: pointer; color: #999}
+        div.company-status-item.active{color: #0c9cb2 !important; border: 1px solid #0c9cb2; border-radius: 5px}
+
         .sweep-to-right-primary-red {
             background: linear-gradient(to right, #b5070a, #b5070a);
             background-repeat: no-repeat;
@@ -32,612 +37,401 @@
             <div class="logo text-center">
                 <img src="./assets/img/logo/check-info.png" alt="Logo Check Info" style="max-width: 14em; margin-bottom: 1.2em">
             </div>
+
+            <div class="spinner-border text-primary" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
             
-            <!-- Block form step 0 -->
-            <div id="step-0" class="row text-center m-4">
-                <div class="col col-md-4 d-none d-md-block" style="background: url(./assets/img/media/bienvenue.jpg) no-repeat center center;  -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;"></div>
-                <div class="col col-md-8 text-left">
-                    <h4>Identification de l'entreprise</h4>
+            <section id="step-block-section">
+                <!-- Block form step 0 -->
+                <div id="step-0" class="step row text-center m-4">
+                    <div class="col col-md-4 d-none d-md-block" style="background: url(./assets/img/media/bienvenue.jpg) no-repeat center center;  -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;"></div>
+                    <div class="col col-md-8 text-left">
+                        <h4>Identification de l'entreprise</h4>
 
-                    <div class="desc">
-                        <form id="step-form-0" action="" method="POST" enctype="multipart/form-data" autocomplete="off">
-                            <input type="hidden" name="step" value="0">
+                        <div class="desc">
+                            <form id="step-form-0" action="" method="POST" enctype="multipart/form-data" autocomplete="off">
+                                <input type="hidden" name="step" value="0">
 
-                            <div class="form-group">
-                                <label for="ice">Veuillez saisir votre Identifiant Commun de l'Entreprise (ICE)</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span id="inputGroupIce" class="input-group-text"><i class="icofont icofont-id fa-lg mx-2"></i></span>
-                                    </div>
-                                    <input type="text" class="form-control" id="ice" name="ice" aria-describedby="iceHelp" placeholder="Numéro ICE" maxlength="15" minlength="15" autocomplete="off" aria-describedby="inputGroupIce" required>
-                                </div>
-                                <small id="iceHelp" class="form-text text-muted"></small>
-                                <span id="iceError" class="msg-info text-primary-red"></span>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="d-block" for="ice-file">Veuillez attacher votre attestation ICE</label>
-                                <input type="file" class="form-control d-none" id="ice-file" name="ice-file" aria-describedby="iceFileHelp" placeholder="Enter email" required>
-                                <label id="upload-icon" class="d-inline-block text-center" style="border: 1px dashed #999; border-radius: 5px; cursor: pointer; padding: 0 5em">
-                                    <i class="icofont-cloud-upload fa-3x text-primary-gray py-0 my-1" ></i>
-                                </label>
-                                <small id="iceFileHelp" class="form-text text-muted">Formats acceptés : Images (.jpeg, .jpg, .png) ou PDF (.pdf); Taille maximale : 2Mo</small>
-                                <span id="iceFileError" class="msg-info text-primary-red"></span>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Block form step 1 -->
-            <div id="step-1" class="row text-center m-4">
-                <div class="col col-md-4 d-none d-md-block" style="background: url(./assets/img/media/contactez-nous.jpg) no-repeat center center;  -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;"></div>
-                <div class="col col-md-8 text-left">
-                    <h4>Numéro de téléphone et adresse email</h4>
-
-                    <div class="desc">
-                        <form id="step-form-0" action="" method="POST" enctype="multipart/form-data" autocomplete="off">
-                            <input type="hidden" name="step" value="0">
-
-                            <label for="phoneSubscribe" class="d-block">Téléphone Mobile</label>
-                            <div class="form-row">
-
-                                <div class="col form-group">
+                                <div class="form-group">
+                                    <label for="ice">Veuillez saisir votre Identifiant Commun de l'Entreprise (ICE)</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span id="inputGroupPhoneNumber" class="input-group-text">+212</span>
+                                            <span id="inputGroupIce" class="input-group-text"><i class="icofont icofont-id fa-lg mx-2"></i></span>
                                         </div>
-                                        <input type="text" class="form-control" id="phoneSubscribe" name="phoneSubscribe" placeholder="0600000000" aria-describedby="inputGroupPhoneNumber" maxlength="10" required>
+                                        <input type="text" class="form-control" id="ice" name="ice" aria-describedby="iceHelp" placeholder="Numéro ICE" maxlength="15" minlength="15" autocomplete="off" aria-describedby="inputGroupIce" required>
                                     </div>
-                                    <span id="phoneSubscribeError" class="msg-info text-primary-red"></span>
+                                    <small id="iceHelp" class="form-text text-muted"></small>
+                                    <span id="iceError" class="msg-info text-primary-red"></span>
                                 </div>
-                            </div>
 
-                            <label for="emailSubscribe" class="d-block">Adresse E-mail</label>
-                            <div class="form-row">
-                                <div class="col form-group">
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span id="inputGroupEmail" class="input-group-text"><i class="icofont icofont-email fa-lg mx-2"></i></span>
-                                        </div>
-                                        <input type="text" class="form-control" id="emailSubscribe" name="emailSubscribe" placeholder="john@email.com" aria-describedby="inputGroupEmail" required>
-                                    </div>
-                                    <span id="emailError" class="msg-info text-primary-red"></span>
+                                <div class="form-group">
+                                    <label class="d-block" for="ice-file">Veuillez attacher votre attestation ICE</label>
+                                    <input type="file" class="form-control d-none" id="ice-file" name="ice-file" aria-describedby="iceFileHelp" placeholder="Enter email" required>
+                                    <label id="upload-icon" class="d-inline-block text-center" style="border: 1px dashed #999; border-radius: 5px; cursor: pointer; padding: 0 5em">
+                                        <i class="icofont-cloud-upload fa-3x text-primary-gray py-0 my-1" ></i>
+                                    </label>
+                                    <small id="iceFileHelp" class="form-text text-muted">Formats acceptés : Images (.jpeg, .jpg, .png) ou PDF (.pdf); Taille maximale : 2Mo</small>
+                                    <span id="iceFileError" class="msg-info text-primary-red"></span>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Block Buttons -->
-            <div class="row text-center mt-3">
-                <div class="col">
-                    <div id="nextAndPreviousStepButtons">
-                        <button id="previous-step" class="btn text-light sweep-to-right-primary-red mr-1" style="background-color: #c40f11">
-                            <i class="icofont icofont-arrow-left"></i>
-                            <span>Previous</span>
-                        </button>
-                        <button id="next-step" class="btn text-light sweep-to-right-primary-red ml-1" style="background-color: #c40f11">
-                            <span>Next</span>
-                            <i class="icofont icofont-arrow-right"></i>
-                        </button>
+                <!-- Block form step 1 -->
+                <div id="step-1" class="step row text-center m-4" style="display: none">
+                    <div class="col col-md-4 d-none d-md-block" style="background: url(./assets/img/media/contactez-nous.jpg) no-repeat center center;  -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;"></div>
+                    <div class="col col-md-8 text-left">
+                        <h4>Numéro de téléphone et adresse email</h4>
+
+                        <div class="desc">
+                            <form id="step-form-1" action="" method="POST" enctype="multipart/form-data" autocomplete="off">
+                                <input type="hidden" name="step" value="1">
+
+                                <label for="phoneSubscribe" class="d-block">Téléphone Mobile</label>
+                                <div class="form-row">
+
+                                    <div class="col form-group">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span id="inputGroupPhoneNumber" class="input-group-text">+212</span>
+                                            </div>
+                                            <input type="text" class="form-control" id="phoneSubscribe" name="phoneSubscribe" placeholder="0600000000" aria-describedby="inputGroupPhoneNumber" maxlength="10" required>
+                                        </div>
+                                        <span id="phoneSubscribeError" class="msg-info text-primary-red"></span>
+                                    </div>
+                                </div>
+
+                                <label for="emailSubscribe" class="d-block">Adresse E-mail</label>
+                                <div class="form-row">
+                                    <div class="col form-group">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span id="inputGroupEmail" class="input-group-text"><i class="icofont icofont-email fa-lg mx-2"></i></span>
+                                            </div>
+                                            <input type="email" class="form-control" id="emailSubscribe" name="emailSubscribe" placeholder="john@email.com" aria-describedby="inputGroupEmail" required>
+                                        </div>
+                                        <span id="emailError" class="msg-info text-primary-red"></span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
+
+                <!-- Block form step 2 -->
+                <div id="step-2" class="step row text-center m-4" style="display: none;">
+                    <div class="col col-md-4 d-none d-md-block" style="background: url(./assets/img/media/gros-plan-femme-affaires.jpg) no-repeat center center;  -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;"></div>
+                    <div class="col col-md-8 text-left">
+                        <h4>Information du contact principal</h4>
+
+                        <div class="desc">
+                            <form id="step-form-2" action="" method="POST" enctype="multipart/form-data" autocomplete="off">
+                                <input type="hidden" name="step" value="2">
+
+                                <div class="form-row">
+
+                                    <div class="col-sm-12 col-md-6 form-group">
+                                        <label for="name" class="d-block">Nom</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span id="inputGroupName" class="input-group-text"><i class="icofont icofont-business-man fa-lg mx-2"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" id="name" name="name" placeholder="Nom" aria-describedby="inputGroupName" autocomplete="off" required>
+                                        </div>
+                                        <span id="nameError" class="msg-info text-primary-red"></span>
+                                    </div>
+
+                                    <div class="col-sm-12 col-md-6 form-group">
+                                        <label for="firstName" class="d-block">Prénom(s)</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span id="inputGroupFirstName" class="input-group-text"><i class="icofont icofont-business-man fa-lg mx-2"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" id="firstName" name="firstName" aria-describedby="inputGroupFirstName" placeholder="Prénom(s)" autocomplete="off" required>
+                                        </div>
+                                        <span id="firstNameError" class="msg-info text-primary-red"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="col form-group">
+                                        <label for="address" class="d-block">Adresse</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span id="inputAddress" class="input-group-text"><i class="icofont icofont-location-pin fa-lg mx-2"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" id="address" name="address" placeholder="Entrer votre adresse" aria-describedby="inputAddress" required>
+                                        </div>
+                                        <span id="addressError" class="msg-info text-primary-red"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+
+                                    <div class="col-sm-12 col-md-6 form-group">
+                                        <label for="region" class="d-block">Région</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span id="inputGroupRegion" class="input-group-text"><i class="icofont icofont-institution fa-lg mx-2"></i></span>
+                                            </div>
+                                            <select class="form-control" id="region" name="region" aria-describedby="inputGroupRegion" required>
+                                            </select>
+                                        </div>
+                                        <span id="regionError" class="msg-info text-primary-red"></span>
+                                    </div>
+
+                                    <div class="col-sm-12 col-md-6 form-group">
+                                        <label for="city" class="d-block">Ville</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span id="inputGroupCity" class="input-group-text"><i class="icofont icofont-building-alt fa-lg mx-2"></i></span>
+                                            </div>
+                                            <select class="form-control" id="city" name="city" aria-describedby="inputGroupCity" required>
+                                            </select>
+                                        </div>
+                                        <span id="cityError" class="msg-info text-primary-red"></span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Block form step 3 -->
+                <div id="step-3" class="step row text-center m-4" style="display: none">
+                    <div class="col col-md-4 d-none d-md-block" style="background: url(./assets/img/media/conseiller-commercial.jpg) no-repeat center center;  -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;"></div>
+                    <div class="col col-md-8 text-left">
+                        <h4>Statut de l'entreprise</h4>
+
+                        <div class="desc">
+                            <form id="step-form-3" action="" method="POST" enctype="multipart/form-data" autocomplete="off">
+                                <input type="hidden" name="step" value="3">
+                                <input type="hidden" name="companyStatus" value="company">
+
+                                <div class="row text-center company-status m-2">
+                                    <div class="col company-status-item p-2 active" data-company="company">
+                                        <i class="icofont-building-alt fa-2x"></i>
+                                        <span>Societe</span>
+                                    </div>
+                                    <div class="col company-status-item p-2" data-company="liberal">
+                                        <i class="icofont-bag-alt fa-2x"></i>
+                                        <span>Profession liberale</span>
+                                    </div>
+                                    <div class="col company-status-item p-2" data-company="selfEmployed">
+                                        <i class="icofont-businessman fa-2x"></i>
+                                        <span>Auto-entrepreneur</span>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-row">
+
+                                    <div class="col-sm-12 col-lg-4 form-group">
+                                        <label for="activityArea" class="d-block">Secteur d'activité</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span id="inputGroupActivityArea" class="input-group-text"><i class="icofont icofont-institution fa-lg mx-2"></i></span>
+                                            </div>
+                                            <select class="form-control" id="activityArea" name="activityArea" aria-describedby="inputGroupActivityArea" required>
+                                            </select>
+                                        </div>
+                                        <span id="activityAreaError" class="msg-info text-primary-red"></span>
+                                    </div>
+
+                                    <div class="col-sm-12 col-lg-4 form-group">
+                                        <label for="branch" class="d-block">Branche</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span id="inputGroupBranch" class="input-group-text"><i class="icofont icofont-building-alt fa-lg mx-2"></i></span>
+                                            </div>
+                                            <select class="form-control" id="branch" name="branch" aria-describedby="inputGroupBranch" required>
+                                            </select>
+                                        </div>
+                                        <span id="branchError" class="msg-info text-primary-red"></span>
+                                    </div>
+
+                                    <div class="col-sm-12 col-lg-4 form-group">
+                                        <label for="subBranch" class="d-block">Sous-branche</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span id="inputGroupSubBranch" class="input-group-text"><i class="icofont icofont-building-alt fa-lg mx-2"></i></span>
+                                            </div>
+                                            <select class="form-control" id="sub-branch" name="subBranch" aria-describedby="inputGroupSubBranch" required>
+                                            </select>
+                                        </div>
+                                        <span id="subBranchError" class="msg-info text-primary-red"></span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Block form step 4 -->
+                <div id="step-4" class="step row text-center m-4" style="display: none" data-summary="1">
+                    <div class="col col-md-4 d-none d-md-block" style="background: url(./assets/img/media/analyse-donnees.jpg) no-repeat center center;  -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;"></div>
+                    <div class="col col-md-8 text-left">
+                        <h4>Récapitulatif des données saisies</h4>
+                        <div class="desc">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Block form step 5 -->
+                <div id="step-5" class="step row text-center m-4" style="display: none" data-hidden-step="1" data-terms-service="1">
+                    <div class="col col-md-4 d-none d-md-block" style="background: url(./assets/img/media/signez-ici-s-il-vous-plait.jpg) no-repeat center center;  -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;"></div>
+                    <div class="col col-md-8 text-left">
+                        <h4>Conditions d'utilisation du service</h4>
+                        <div class="desc">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Block form step 6 -->
+                <div id="step-6" class="step row text-center m-4" style="display: none" data-hidden-step="1">
+                    <div class="col col-md-4 d-none d-md-block" style="background: url(./assets/img/media/factures.jpg) no-repeat center center;  -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;"></div>
+                    <div class="col col-md-8 text-left">
+                        <h4>Choix de l'abonnement</h4>
+                        <div class="desc">
+                            <form id="step-form-6" action="" method="POST" enctype="multipart/form-data" autocomplete="off" data-stay-display="1">
+                                <input type="hidden" name="step" value="6">
+                                {# <input type="hidden" name="choiceACheck" value="0">
+                                <input type="hidden" name="choiceBCheck" value="0">
+                                <input type="hidden" name="choiceCCheck" value="0">
+                                <input type="hidden" name="choiceSCheck" value="1"> #}
+
+                                <fieldset class="form-group">
+                                    <label>Merci de procéder au choix de votre abonnement</label>
+                                    <div class="row text-center d-none">
+                                        <div class="col">
+                                            <div class="form-check d-inline mx-2">
+                                            <input class="form-check-input" type="radio" name="subscriptionFormulaRadios" id="free" value="free" checked>
+                                            <label class="form-check-label" for="subscriptionFormula1">
+                                                Free
+                                            </label>
+                                            </div>
+                                            <div class="form-check d-inline mx-2">
+                                            <input class="form-check-input" type="radio" name="subscriptionFormulaRadios" id="pro" value="pro">
+                                            <label class="form-check-label" for="subscriptionFormula2">
+                                                Pro
+                                            </label>
+                                            </div>
+                                            <div class="form-check d-inline mx-2">
+                                            <input class="form-check-input" type="radio" name="subscriptionFormulaRadios" id="entreprise" value="entreprise">
+                                            <label class="form-check-label" for="subscriptionFormula3">
+                                                Entreprise
+                                            </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <div class="card-deck mb-3 text-center">
+                                    <div class="card mb-4 box-shadow">
+                                    <div class="card-header">
+                                        <h4 class="my-0 font-weight-normal">Free</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <h1 class="card-title pricing-card-title">$0 <small class="text-muted">/ mo</small></h1>
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item">Cras justo odio</li>
+                                            <li class="list-group-item">Morbi leo risus</li>
+                                            <li class="list-group-item">Vestibulum at eros</li>
+                                        </ul>
+                                    </div>
+                                    <div class="card-footer">
+                                        <button type="button" class="btn btn-lg btn-block btn-danger check-button check-free">Choisir</button>
+                                    </div>
+                                    </div>
+                                    <div class="card mb-4 box-shadow">
+                                    <div class="card-header">
+                                        <h4 class="my-0 font-weight-normal">Pro</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <h1 class="card-title pricing-card-title">$15 <small class="text-muted">/ mo</small></h1>
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item">Cras justo odio</li>
+                                            <li class="list-group-item">Morbi leo risus</li>
+                                            <li class="list-group-item">Vestibulum at eros</li>
+                                        </ul>
+                                    </div>
+                                    <div class="card-footer">
+                                        <button type="button" class="btn btn-lg btn-block btn-light check-button check-pro">Choisir</button>
+                                    </div>
+                                    </div>
+                                    <div class="card mb-4 box-shadow">
+                                    <div class="card-header">
+                                        <h4 class="my-0 font-weight-normal">Enterprise</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <h1 class="card-title pricing-card-title">$29 <small class="text-muted">/ mo</small></h1>
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item">Cras justo odio</li>
+                                            <li class="list-group-item">Morbi leo risus</li>
+                                            <li class="list-group-item">Vestibulum at eros</li>
+                                        </ul>
+                                    </div>
+                                    <div class="card-footer">
+                                        <button type="button" class="btn btn-lg btn-block btn-light check-button check-entreprise">Choisir</button>
+                                    </div>
+                                    </div>
+                                </div>
+                                <span id="subscriptionChoiceError" class="msg-info text-primary-red"></span>
+
+
+                                <div class="column_attr clearfix align_center step-pause">
+                                    <a class="btn text-light sweep-to-right-primary-red ml-1 trigger-next-step" style="background-color: #c40f11" href="#">
+                                        <span>Valider</span>
+                                        <i class="icofont icofont-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Block form step 7 -->
+                <div id="step-7" class="step row text-center m-4" style="display: none" data-payment-summary="1">
+                    <div class="col col-md-4 d-none d-md-block" style="background: url(./assets/img/media/main-homme-tenant-stylo.jpg) no-repeat center center;  -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;"></div>
+                    <div class="col col-md-8 text-left">
+                        <h4>Récapitulatif de l'abonnement</h4>
+                        <div class="desc">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Block form step 8 -->
+                <div id="step-8" class="step row text-center m-4" style="display: none" data-payment="1">
+                    <div class="col col-md-4 d-none d-md-block" style="background: url(./assets/img/media/paiement-par-carte-credit.jpg) no-repeat center center;  -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;"></div>
+                    <div class="col col-md-8 text-left">
+                        <h4>Paiement</h4>
+                        <div class="desc">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Block Buttons -->
+                <div class="row text-center mt-3">
+                    <div class="col">
+                        <div id="nextAndPreviousStepButtons">
+                            <button id="previous-step" class="btn text-light sweep-to-right-primary-red mr-1" style="background-color: #c40f11">
+                                <i class="icofont icofont-arrow-left"></i>
+                                <span>Précédent</span>
+                            </button>
+                            <button id="next-step" class="btn text-light sweep-to-right-primary-red ml-1" style="background-color: #c40f11">
+                                <span>Suivant</span>
+                                <i class="icofont icofont-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
 {% endblock %}
 
 {% block javascripts %}
-	{# <script type="text/javascript" src="./assets/js/register.js"></script> #}
-     <script> 
-        $(function() {
-            // Init variables 
-            var step = 0;
-            var maxStep = 7;
-
-            // Click on icon upload 
-            $('#upload-icon').click(function(e){
-                $('#ice-file').trigger('click');
-            });
-            
-            $('#previous-step').hide();
-            
-            // FUNCTIONS
-            function emailIsValid(emailAddress) {
-                var pattern = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
-                return pattern.test(emailAddress);
-            }
-
-
-            // Step 0
-            // Input file ice event change
-            $('input#ice-file').on('change', function(e) { 
-                var fileName = e.target.files[0].name;
-                $('#upload-icon span.filename').remove();
-                $('#upload-icon').append( $(`<span class="text-muted filename" style="font-size: 0.8em; display:block">${fileName}</span>`) );
-            });
-
-
-            // GENERAL STEP
-            sendStepForm = function(form) {
-                var response;
-
-                // Remove all error message 
-                form.find('span.msg-info').text('');
-
-                // Display loader
-                form.closest('div.desc').append('<div class="loader text-center"><img src="./assets/img/loader/symbol-check-info.svg" style="display: block; margin-left: auto; margin-right: auto; width: 15%;" /></div>');
-                
-                // Hide the current form
-                if( (typeof form.attr('data-stay-display') === typeof undefined) || (form.attr('data-stay-display') === false) ) {
-                    form.hide();
-                }
-
-                //Send Ajax request to save information 
-                var formData = new FormData(form[0]);
-                $.ajax({
-                    url : '/auth/send-step',
-                    type : 'POST',
-                    data : formData,
-                    cache: false,
-                    processData: false,
-                    contentType: false,
-                    success : function(data) {
-                        // Treat response
-                        response = data;
-                        if(response.status) {
-                            $table = $(`<table id="step-${step}-rapport"></table>`);
-                            $tbody = $(`<tbody></table>`);
-                            $dl = $(`<dl id="step-info-${step}"></dl>`);
-
-                            $.each(response.items, function (title, content) {
-                                if(title == 'files') {
-                                    $.each(response.items.files, function (i, file) {
-                                        $tbody.append( $(`<tr><th>${file.name}</th><td>${(file.ext == 'pdf') ? (`<object width="400" height="240" data="${file.completePath}"></object>`) : file.imageBlock }</td></tr>`) );
-                                    });
-                                } else {
-                                    $tbody.append( $(`<tr><th>${title}</th><td>${content}</td></tr>`) );
-                                }
-                            });
-
-                            $table.append($tbody);
-                            form.closest('div.desc').append($table);
-
-                            form.closest('div.desc').find('div.loader').remove();
-                        } else {
-                            form.closest('div.desc').find('div.loader').remove();
-                            form.fadeIn('slow');
-                            // Display error message
-                            $.each(response.items, function (spanID, errorContent) {
-                                form.find(`span#${spanID}`).text(errorContent);
-                            });
-                        }
-                    },
-                    complete: function() {
-                        // Show finish modal when it was last step 
-                        if(response.lastStep && response.status) {
-                            // console.log('Now do something');
-                            // window.location.href = '/auth/payment';
-                        } else {
-                            if(response.status) {
-                                $(`div#step-${step}`).find('div.step-pause').hide();
-                                var passedStep = `div#step-${step}`;
-
-                                step ++;
-                                $(`div#step-${step}`).fadeIn('slow'); 
-                                var body = $("html, body");
-                                var paddingScroll = $(passedStep).height() * (30/100);
-                                // console.log( paddingScroll );
-                                body.stop().animate({scrollTop: ($(document).scrollTop() + $(passedStep).height() - 50) }, 1200, 'linear', function() { 
-                                });
-
-                                if( (typeof $(`div#step-${step}`).attr('data-summary') !== typeof undefined) && ($(`div#step-${step}`).attr('data-summary') !== false) ) {
-                                    getAndDisplaySummaryInformations( $(`div#step-${step}`) );
-                                }
-
-                                if( (typeof $(`div#step-${step}`).attr('data-hidden-step') !== typeof undefined) && ($(`div#step-${step}`).attr('data-hidden-step') !== false) ) {
-                                    $('div#nextAndPreviousStepButtons').fadeOut();
-                                }
-
-                                if( (typeof $(`div#step-${step}`).attr('data-terms-service') !== typeof undefined) && ($(`div#step-${step}`).attr('data-terms-service') !== false) ) {
-                                    getTermsOfService( $(`div#step-${step}`) );
-                                }
-
-                                if( (typeof $(`div#step-${step}`).attr('data-payment-summary') !== typeof undefined) && ($(`div#step-${step}`).attr('data-payment-summary') !== false) ) {
-                                    getPaymentSummary( $(`div#step-${step}`) );
-                                }
-
-                                if( (typeof $(`div#step-${step}`).attr('data-payment') !== typeof undefined) && ($(`div#step-${step}`).attr('data-payment') !== false) ) {
-                                    getPayment( $(`div#step-${step}`) );
-                                }
-                            }
-                            showPreviousStepButton();
-                        }
-
-                        if(response.hideStep){ 
-                            $('div#nextAndPreviousStepButtons').fadeOut();
-                        }
-                    }
-                });
-            }
-
-            nextStepAction = function() {
-                if(step <= maxStep) {
-                    sendStepForm(  $(`form#step-form-${step}`) );
-                }
-            }
-
-            previousStepAction = function() {
-                if(step >= 1) {
-                    $(`div#step-${step}`).slideUp({ duration: 1600, easing: 'linear' });
-                    var body = $("html, body");
-                    var passedStep = `div#step-${step}`;
-                    var paddingScroll = $(passedStep).height() * (20/100);
-                    body.stop().animate({scrollTop: ($(document).scrollTop() - $(passedStep).height() - paddingScroll) }, 1200, 'linear', function() { 
-                    });
-
-                    $(`div#step-${step}`).find('div.loader').remove();
-                    $(`div#step-${step}`).find('form').show();
-
-                    step --;
-                    $('div#step-block-section').find(`form#step-form-${step}`).show();
-                    $('div#step-block-section').find(`form#step-form-${step}`).closest('div.desc').find(`table`).remove();
-                    // $('div#step-block-section').find(`dl#step-info-${step}`).remove();
-
-                    if( (typeof $(`div#step-${step}`).attr('data-hidden-step') !== typeof undefined) && ($(`div#step-${step}`).attr('data-hidden-step') !== false) ) {
-                        $('div#nextAndPreviousStepButtons').fadeOut();
-                    }
-                }
-                showPreviousStepButton();
-            }
-
-            showPreviousStepButton = function () {
-                if(step <= 0) {
-                    $('button#previous-step').hide();
-                } else {
-                    $('button#previous-step').show();
-                    $(`div#step-${step}`).find('div.step-pause').show();
-                }
-            }
-
-            // EVENTS LIST
-            // Next step button
-            $('button#next-step').click(function(e){
-                e.preventDefault();
-                nextStepAction();
-            });
-
-            // Previous step button
-            $('button#previous-step').click(function(e){
-                e.preventDefault();
-                previousStepAction();
-            });
-
-            // To forced numeric input
-            $('input#phoneSubscribe, input#ice, div#step-1 input#verificationCode').on("input", function() {
-                var dInput = this.value;
-                $(this).val( this.value.replace(/\D/g,'') );
-            });
-
-            // PHONE NUMBER
-            /**
-             * Event - Detected the entry of a keyboard key - for input phone number
-             * Create to display or remove a button to send the verification code by SMS for activate phone number
-             */
-            $('input#phoneSubscribe').on("input", function() {
-                var dInput = this.value;
-
-                if( dInput.length >= 10 ) {
-                   $(this).parents('div.form-row').append( $('<div class="col-1" data-toggle="tooltip" data-placement="bottom" title="Envoyer le code de vérification"><a id="checkPhoneNumber" class="btn bg-primary-red text-light" href="#" role="button"><i class="icofont icofont-ui-messaging fa-lg"></i></a></div>') );
-                } else if (dInput.length < 10) {
-                    $(this).parents('div.form-row').find('div.col-1').remove();
-                }
-            });
-
-            /** 
-             * Detecte if input phone verification code has a good length
-             * to create and display a button that will verify the code entered is valid
-             */
-            $('body').on('input', 'div#step-1 input#verificationCode', function(e) {
-                var input = this.value;
-                if( input.length >= 4 ) {
-                    $('input#phoneSubscribe').parents('div.form-row').append( $('<div class="col-1 send-phone-code" data-toggle="tooltip" data-placement="bottom" title="Vérifier le numéro"><a id="sendPhoneNumberCode" class="btn bg-primary-red text-light" href="#" role="button"><i class="icofont icofont-check-circled fa-lg"></i></a></div>') );
-
-                    // $('body').find('div#edit-phone-block').hide();
-                } else if (input.length < 4) {
-                    $(this).parents('div.form-row').find('div.col-1.send-phone-code').remove();
-                    // $('body').find('div#edit-phone-block').show();
-                }
-            });
-
-            /** 
-             * Event when user clic to send code by SMS
-             * Generate code and send SMS
-             */
-            $('body').on('click', 'div#step-1 a#checkPhoneNumber', function(e) {
-                e.preventDefault();
-                $('input#phoneSubscribe').attr("disabled", true);
-                var $button = $(this);
-                // Display loader here
-                // $button.hide();
-                // $button.closest('div.column.one-fourth').append('<div class="loader" style="text-align: center; display: flex;"><img src="./assets/img/loader/symbol-check-info.svg" style="display: block; margin-left: auto; margin-right: auto; width: 2em;" /></div>');
-
-                // Remove old status message
-                $('span#phoneSubscribeError').text('');
-                $('span#verificationCodeError').text('');
-
-                // var phoneNumberReg = /([0-9]{10})|(\([0-9]{3}\)\s+[0-9]{3}\-[0-9]{4})/;
-                var phoneNumberReg = /(\+212|0)([ \-_/]*)(\d[ \-_/]*){9}/g;
-                var phoneNumber = $('input#phoneSubscribe').val();
-                phoneNumber = phoneNumber.replace(/\D/g,'');
-
-                // Detect if phone number is valid and execute this script
-                if (phoneNumberReg.test( phoneNumber )) {
-                    $checkButton = $('input#phoneSubscribe').parents('div.form-row').find('div.col-1');
-                    $checkButton.find('a').removeClass('bg-primary-red');
-
-                    // $checkButton.find('a i.icofont-ui-messaging').removeClass('icofont-ui-messaging').addClass('fa fa-spinner fa-spin');
-                    $checkButton.find('a#checkPhoneNumber i.icofont-ui-messaging').remove();
-                    $checkButton.find('a#checkPhoneNumber').append( $('<img class="img-fluid w-100" src="./assets/img/loader/symbol-check-info.svg" />') );
-
-                    $.ajax({
-                        url : '/verification/phone-number',
-                        type : 'POST',
-                        data: {
-                            phone: phoneNumber
-                        },
-                        success : function(data) {
-                            //  If code has been send with success
-                            if(data.success) {
-                                // remove loader at the end
-                                $checkButton.remove();
-                                // Block to the edit phone number button
-                                $('input#phoneSubscribe').parents('div.form-row').append( $('<div id="edit-phone-block" class="col-1" data-toggle="tooltip" data-placement="bottom" title="Modifier le numéro de téléphone"><a id="editPhoneNumber" class="btn bg-primary-red text-light" href="#" role="button"><i class="icofont icofont-edit-alt fa-lg"></i></a></div>') );
-                                // Block to the input code phone number
-                                $('input#phoneSubscribe').parents('div.form-row').append( $('<div class="col-2"><input class="form-control" id="verificationCode" maxlength="4" name="verificationCode" type="text" placeholder="Code" autocomplete="off"></div>') );
-                                $.notify(data.message, "success");
-                            } else {
-                                $('span#phoneSubscribeError').text('Une erreur s\'est produite, rééssayez plus tard !');
-                                $button.show();
-                                $.notify(data.message, "error");
-                            }
-                        }
-                    });
-                } else {
-                    // phone number is incorrect stop the script and display error
-                    $('span#phoneSubscribeError').text('Veuillez renseigner un numéro de téléphone valide');
-                    // remove loader at the end
-                    $button.show();
-                    $('input#phoneSubscribe').val('');
-                    $('input#phoneSubscribe').parents('div.form-row').find('div.col-1').remove();
-                }
-            });
-
-            /** 
-             * Event - Click on button to edit phone number
-             * Reset state of the input phone number
-             */
-            $('body').on('click', 'div#step-1 a#editPhoneNumber', function(e) {
-                e.preventDefault();
-                // Remove error message phone number
-                $('body').find('span#phoneSubscribeError').text('');
-                // Remove input phone number code
-                $('body').find('input#verificationCode').closest('div.col-2').remove();
-                // Remove button to send SMS
-                $('body').find('a#checkPhoneNumber').closest('div.col-1').remove();
-                // Remove button to check if code match
-                $('body').find('a#sendPhoneNumberCode').closest('div.col-1.send-phone-code').remove();
-                // Remove button to edit phone number
-                $('body').find('div#edit-phone-block').remove();
-                // Remove disabled attribute for phone number input
-                $('input#phoneSubscribe').attr("disabled", false).trigger('input').focus();
-                // Focus on phone number input
-            });
-
-            /** 
-             * Event - Click on button to edit phone number
-             * Reset state of the input phone number
-             */
-            $('body').on('click', 'div#step-1 a#sendPhoneNumberCode', function(e) {
-                e.preventDefault();
-                console.log('Send code phone number input to check if code match');
-
-                $('span#phoneSubscribeError').text('');
-                $('span#verificationCodeError').text('');
-                var $button = $(this);
-
-                var $phone = $('input#phoneSubscribe');
-                var $verificationCode = $('input#verificationCode');
-
-                if($phone.val() != '' && $verificationCode.val() != '') {
-                    $.ajax({
-                        url : '/verification/check-phone-number',
-                        type : 'POST',
-                        data: {
-                            action: 'phoneNumberVerification',
-                            phoneNumber: $phone.val(),
-                            code: $verificationCode.val()
-                        },
-                        success : function(data) {
-                            data = data;
-                            console.log(data);
-                            if(data.success) {
-                                console.log(data.message);
-                                $button.closest('div.form-row').children('div').not('.col.form-group').remove();
-                                // Add indicator to the number and code status
-                                $.notify(data.message, 'success');
-                            } else {
-                                console.log(data.message);
-                                $('span#phoneSubscribeError').text('Le code de vérification est erroné');
-                                // $('a#editPhoneNumber').closest('div.column.one-fourth').fadeIn();
-                                $.notify(data.message, 'error');
-                            }
-                        }
-                    });
-                } else {
-                    $('span#verificationCodeError').text('Veuillez saisir le bon code de vérification');
-                }
-            });
-
-            // ADDRESS EMAIL
-            /**
-             * Event - Detected the entry of a keyboard key - for input email
-             * Create to display or remove a button to send the verification code by email for activate email address
-             */
-            $('input#emailSubscribe').on("input", function() {
-                var email = this.value;
-
-                if (emailIsValid(email)) {
-                    if( $('body').find('div#step-1 a#checkEmail').length <= 0){
-                        $(this).parents('div.form-row').append( $('<div class="col-1" data-toggle="tooltip" data-placement="bottom" title="Envoyer le code de vérification"><a id="checkEmail" class="btn bg-primary-red text-light" href="#" role="button"><i class="icofont icofont-send-mail fa-lg"></i></a></div>') );
-                    }
-                } else {
-                    $(this).parents('div.form-row').find('div.col-1').remove();
-                }
-            });
-
-            /** 
-             * Detecte if input email verification code has a good length
-             * to create and display a button that will verify the code entered is valid
-             */
-            $('body').on('input', 'div#step-1 input#verificationEmailCode', function(e) {
-                var input = this.value;
-                if( input.length >= 4 ) {
-                    $('input#emailSubscribe').parents('div.form-row').append( $('<div class="col-1 send-email-code" data-toggle="tooltip" data-placement="bottom" title="Vérifier le numéro"><a id="sendEmailCode" class="btn bg-primary-red text-light" href="#" role="button"><i class="icofont icofont-check-circled fa-lg"></i></a></div>') );
-
-                } else if (input.length < 4) {
-                    $(this).parents('div.form-row').find('div.col-1.send-email-code').remove();
-                }
-            });
-
-            /** 
-             * Event when user clic to send code by SMS
-             * Generate code and send SMS
-             */
-            $('body').on('click', 'div#step-1 a#checkEmail', function(e) {
-                e.preventDefault();
-                $('input#emailSubscribe').attr("disabled", true);
-                var $button = $(this);
-
-                // Remove old status message
-                $('span#emailError').text('');
-                // $('span#verificationCodeError').text('');
-
-                var email = $('input#emailSubscribe').val();
-
-                // Detect if email is valid and execute this script
-                if (emailIsValid(email)) {
-                    $checkButton = $('input#emailSubscribe').parents('div.form-row').find('div.col-1');
-                    $checkButton.find('a').removeClass('bg-primary-red');
-
-                    // $checkButton.find('a i.icofont-ui-messaging').removeClass('icofont-ui-messaging').addClass('fa fa-spinner fa-spin');
-                    $checkButton.find('a#checkEmail i.icofont-send-mail').remove();
-                    $checkButton.find('a#checkEmail').append( $('<img class="img-fluid w-100" src="./assets/img/loader/symbol-check-info.svg" />') );
-
-                    $.ajax({
-                        url : '/verification/email',
-                        type : 'POST',
-                        data: {
-                            email: email
-                        },
-                        success : function(data) {
-                            //  If code has been send with success
-                            if(data.success) {
-                                // remove loader at the end
-                                $checkButton.remove();
-                                // Block to the edit email button
-                                $('input#emailSubscribe').parents('div.form-row').append( $('<div id="edit-email-block" class="col-1" data-toggle="tooltip" data-placement="bottom" title="Modifier l\'adresse email"><a id="editEmail" class="btn bg-primary-red text-light" href="#" role="button"><i class="icofont icofont-edit-alt fa-lg"></i></a></div>') );
-                                // Block to the input code email
-                                $('input#emailSubscribe').parents('div.form-row').append( $('<div class="col-2"><input class="form-control" id="verificationEmailCode" maxlength="4" name="verificationEmailCode" type="text" placeholder="Code" autocomplete="off"></div>') );
-                                $.notify(data.message, "success");
-                            } else {
-                                $('span#emailError').text('Une erreur s\'est produite, rééssayez plus tard !');
-                                $button.show();
-                                $.notify(data.message, "error");
-                            }
-                        }
-                    });
-                } else {
-                    // email is incorrect stop the script and display error
-                    $('span#emailError').text('Veuillez renseigner une adresse email valide');
-                    // remove loader at the end
-                    $button.show();
-                    $('input#emailSubscribe').val('');
-                    $('input#emailSubscribe').parents('div.form-row').find('div.col-1').remove();
-                }
-            });
-
-            /** 
-             * Event - Click on button to edit email address
-             * Reset state of the input email address
-             */
-            $('body').on('click', 'div#step-1 a#editEmail', function(e) {
-                e.preventDefault();
-                // Remove error message email address
-                $('body').find('span#emailError').text('');
-                // Remove input email address code
-                $('body').find('input#verificationEmailCode').closest('div.col-2').remove();
-                // Remove button to send SMS
-                $('body').find('a#checkEmail').closest('div.col-1').remove();
-                // Remove button to check if code match
-                $('body').find('a#sendEmailCode').closest('div.col-1.send-email-code').remove();
-                // Remove button to edit email address
-                $('body').find('div#edit-email-block').remove();
-                // Remove disabled attribute for email address input
-                $('input#emailSubscribe').attr("disabled", false).trigger('input').focus();
-            });
-
-            /** 
-             * Event - Click on button to edit email address
-             * Reset state of the input email address
-             */
-            $('body').on('click', 'div#step-1 a#sendEmailCode', function(e) {
-                e.preventDefault();
-                console.log('Send code email input to check if code match');
-
-                $('span#emailError').text('');
-                $('span#verificationCodeError').text('');
-                var $button = $(this);
-
-                var $email = $('input#emailSubscribe');
-                var $verificationCode = $('input#verificationEmailCode');
-
-                if($email.val() != '' && $verificationCode.val() != '') {
-                    $.ajax({
-                        url : '/verification/check-email',
-                        type : 'POST',
-                        data: {
-                            email: $email.val(),
-                            code: $verificationCode.val()
-                        },
-                        success : function(data) {
-                            data = data;
-                            if(data.success) {
-                                console.log(data.message);
-                                $button.closest('div.form-row').children('div').not('.col.form-group').remove();
-                                // Add indicator to the number and code status
-                                $.notify(data.message, 'success');
-                            } else {
-                                console.log(data.message);
-                                $('span#emailError').text('Le code de vérification est erroné');
-                                // $('a#editEmail').closest('div.column.one-fourth').fadeIn();
-                                $.notify(data.message, 'error');
-                            }
-                        }
-                    });
-                } else {
-                    // Check error and display alert message
-                    // $('span#emailError').text('Veuillez saisir le bon code de vérification');
-                }
-            });
-
-
-            // RUN
-            showPreviousStepButton();
-
-            $('[data-toggle="tooltip"]').tooltip()
-        }); 
-    </script> 
+	<script type="text/javascript" src="./assets/js/register2.js"></script>
 {% endblock %}
