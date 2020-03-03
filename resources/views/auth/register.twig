@@ -24,6 +24,13 @@
         .msg-info {
             font-size: 0.8em;
         }
+
+        .card-header h3{
+            font-size: 1.2em;
+        }
+        h3.card-title.pricing-card-title{
+            font-size: 1em;
+        }
     </style>
 {% endblock %}
 
@@ -290,7 +297,7 @@
                 </div>
 
                 <!-- Block form step 6 -->
-                <div id="step-6" class="step row text-center m-4" style="display: none" data-hidden-step="1">
+                <div id="step-6" class="step row text-center m-4" data-hidden-step="1">
                     <div class="col col-md-4 d-none d-md-block" style="background: url(./assets/img/media/factures.jpg) no-repeat center center;  -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;"></div>
                     <div class="col col-md-8 text-left">
                         <h4>Choix de l'abonnement</h4>
@@ -307,9 +314,9 @@
                                     <div class="row text-center d-none">
                                         <div class="col">
                                             <div class="form-check d-inline mx-2">
-                                            <input class="form-check-input" type="radio" name="subscriptionFormulaRadios" id="free" value="free" checked>
+                                            <input class="form-check-input" type="radio" name="subscriptionFormulaRadios" id="moukawil" value="moukawil" checked>
                                             <label class="form-check-label" for="subscriptionFormula1">
-                                                Free
+                                                Moukawil
                                             </label>
                                             </div>
                                             <div class="form-check d-inline mx-2">
@@ -324,58 +331,101 @@
                                                 Entreprise
                                             </label>
                                             </div>
+                                            <div class="form-check d-inline mx-2">
+                                            <input class="form-check-input" type="radio" name="subscriptionFormulaRadios" id="premium" value="premium">
+                                            <label class="form-check-label" for="subscriptionFormula3">
+                                                Grand Compte
+                                            </label>
+                                            </div>
                                         </div>
                                     </div>
                                 </fieldset>
 
                                 <div class="card-deck mb-3 text-center">
-                                    <div class="card mb-4 box-shadow">
-                                    <div class="card-header">
-                                        <h4 class="my-0 font-weight-normal">Free</h4>
+                                    <div class="card mb-4 mx-1 box-shadow">
+                                        <div class="card-header bg-secondary-orange text-white">
+                                            <h3 class="my-0 font-weight-normal">Moukawil</h3>
+                                        </div>
+                                        <div class="card-body px-0">
+                                            <h3 class="card-title pricing-card-title">300 <small class="text-muted">Dhs HT</small></h3>
+                                            <hr>
+                                            <div>
+                                                <span class="d-block">30 vérifications</span>
+                                                <span class="d-block">1 utilisateur</span>
+                                                <span class="d-block">Valable 3 mois</span>
+                                            </div>
+                                            <div class="text-center mt-4">
+                                                <i class="icofont icofont-computer fa-3x mx-1"></i>
+                                                <i class="icofont icofont-smart-phone fa-3x mx-1"></i>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button type="button" class="btn btn-lg btn-block btn-danger check-button check-moukawil">Choisir</button>
+                                        </div>
                                     </div>
-                                    <div class="card-body">
-                                        <h1 class="card-title pricing-card-title">$0 <small class="text-muted">/ mo</small></h1>
-                                        <ul class="list-group list-group-flush">
-                                            <li class="list-group-item">Cras justo odio</li>
-                                            <li class="list-group-item">Morbi leo risus</li>
-                                            <li class="list-group-item">Vestibulum at eros</li>
-                                        </ul>
+                                    <div class="card mb-4 mx-1 box-shadow">
+                                        <div class="card-header bg-secondary-yellow text-white">
+                                            <h3 class="my-0 font-weight-normal">Pro</h3>
+                                        </div>
+                                        <div class="card-body px-0">
+                                            <h3 class="card-title pricing-card-title">1.500 <small class="text-muted">Dhs HT</small></h3>
+                                            <hr>
+                                            <div>
+                                                <span class="d-block">180 vérifications</span>
+                                                <span class="d-block">1 utilisateur</span>
+                                                <span class="d-block">Valable 6 mois</span>
+                                            </div>
+                                            <div class="text-center mt-4">
+                                                <i class="icofont icofont-computer fa-3x mx-1"></i>
+                                                <i class="icofont icofont-smart-phone fa-3x mx-1"></i>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button type="button" class="btn btn-lg btn-block btn-light check-button check-pro">Choisir</button>
+                                        </div>
                                     </div>
-                                    <div class="card-footer">
-                                        <button type="button" class="btn btn-lg btn-block btn-danger check-button check-free">Choisir</button>
+                                    <div class="card mb-4 mx-1 box-shadow">
+                                        <div class="card-header bg-secondary-green text-white">
+                                            <h3 class="my-0 font-weight-normal">Enterprise</h3>
+                                        </div>
+                                        <div class="card-body px-0">
+                                            <h3 class="card-title pricing-card-title">4.000 <small class="text-muted">Dhs HT</small></h3>
+                                            <hr>
+                                            <div>
+                                                <span class="d-block">600 vérifications</span>
+                                                <span class="d-block">Jusqu'à 5 utilisateurs</span>
+                                                <span class="d-block">Valable 1 an</span>
+                                            </div>
+                                            <div class="text-center mt-4">
+                                                <i class="icofont icofont-computer fa-3x mx-1"></i>
+                                                <i class="icofont icofont-smart-phone fa-3x mx-1"></i>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button type="button" class="btn btn-lg btn-block btn-light check-button check-entreprise">Choisir</button>
+                                        </div>
                                     </div>
-                                    </div>
-                                    <div class="card mb-4 box-shadow">
-                                    <div class="card-header">
-                                        <h4 class="my-0 font-weight-normal">Pro</h4>
-                                    </div>
-                                    <div class="card-body">
-                                        <h1 class="card-title pricing-card-title">$15 <small class="text-muted">/ mo</small></h1>
-                                        <ul class="list-group list-group-flush">
-                                            <li class="list-group-item">Cras justo odio</li>
-                                            <li class="list-group-item">Morbi leo risus</li>
-                                            <li class="list-group-item">Vestibulum at eros</li>
-                                        </ul>
-                                    </div>
-                                    <div class="card-footer">
-                                        <button type="button" class="btn btn-lg btn-block btn-light check-button check-pro">Choisir</button>
-                                    </div>
-                                    </div>
-                                    <div class="card mb-4 box-shadow">
-                                    <div class="card-header">
-                                        <h4 class="my-0 font-weight-normal">Enterprise</h4>
-                                    </div>
-                                    <div class="card-body">
-                                        <h1 class="card-title pricing-card-title">$29 <small class="text-muted">/ mo</small></h1>
-                                        <ul class="list-group list-group-flush">
-                                            <li class="list-group-item">Cras justo odio</li>
-                                            <li class="list-group-item">Morbi leo risus</li>
-                                            <li class="list-group-item">Vestibulum at eros</li>
-                                        </ul>
-                                    </div>
-                                    <div class="card-footer">
-                                        <button type="button" class="btn btn-lg btn-block btn-light check-button check-entreprise">Choisir</button>
-                                    </div>
+                                    <div class="card mb-4 mx-1 box-shadow">
+                                        <div class="card-header bg-secondary-teal text-white">
+                                            <h3 class="my-0 font-weight-normal">Enterprise</h3>
+                                        </div>
+                                        <div class="card-body px-0">
+                                            <h3 class="card-title pricing-card-title">&lt; 5 Dhs <small class="text-muted">/ vérification</small></h3>
+                                            <hr>
+                                            <div>
+                                                <span class="d-block">&gt; 1000 vérifications Interface de gestion personnalisée du nombre d’utilisateurs</span>
+                                                <span class="d-block">1 utilisateur</span>
+                                                <span class="d-block">Valable 1 an</span>
+                                            </div>
+                                            <div class="text-center mt-4">
+                                                <i class="icofont icofont-globe fa-2x mx-1"></i>
+                                                <i class="icofont icofont-computer fa-2x mx-1"></i>
+                                                <i class="icofont icofont-smart-phone fa-2x mx-1"></i>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button type="button" class="btn btn-lg btn-block btn-light check-button check-premium">Choisir</button>
+                                        </div>
                                     </div>
                                 </div>
                                 <span id="subscriptionChoiceError" class="msg-info text-primary-red"></span>
@@ -433,5 +483,5 @@
 {% endblock %}
 
 {% block javascripts %}
-	<script type="text/javascript" src="./assets/js/register2.js"></script>
+	<script type="text/javascript" src="./assets/js/register.js"></script>
 {% endblock %}
