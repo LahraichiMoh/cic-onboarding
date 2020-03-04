@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Controllers\Auth;
 
 use Cartalyst\Sentinel\Sentinel as Auth;
