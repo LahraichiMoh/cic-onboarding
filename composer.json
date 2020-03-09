@@ -28,7 +28,8 @@
         "kwn/number-to-words": "^1.8",
         "doctrine/dbal": "^2.9",
         "phpquery/phpquery": "^0.0.2",
-        "phpmailer/phpmailer": "^6.1"
+        "phpmailer/phpmailer": "^6.1",
+        "mirazmac/php-requirements-checker": "dev-master"
     },
     "require-dev": {
         "symfony/var-dumper": "^3.2",

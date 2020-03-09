@@ -86,6 +86,8 @@ $(function() {
 
     // GENERAL STEP
     sendStepForm = function(form) {
+        $('button#next-step').prop("disabled", true);
+
         var response;
 
         // Remove all error message 
@@ -112,9 +114,9 @@ $(function() {
                 // Treat response
                 response = data;
                 if(response.status) {
-                    $table = $(`<table id="step-${step}-rapport"></table>`);
-                    $tbody = $(`<tbody></table>`);
-                    $dl = $(`<dl id="step-info-${step}"></dl>`);
+                    $table = $(`<table id="step-${step}-rapport" class="table"></table>`);
+                    $tbody = $(`<tbody></tbody>`);
+                    // $dl = $(`<dl id="step-info-${step}"></dl>`);
 
                     $.each(response.items, function (title, content) {
                         if(title == 'files') {
@@ -184,6 +186,9 @@ $(function() {
                 if(response.hideStep){ 
                     $('div#nextAndPreviousStepButtons').fadeOut();
                 }
+
+                $('button#next-step').prop("disabled", false);
+
             }
         });
     }
@@ -407,17 +412,71 @@ $(function() {
         $(this).val( this.value.replace(/\D/g,'') );
     });
 
+    // ICE
+    /**
+     *
+     */
+    $('input#ice').on("input", function() {
+        var iceInput = this.value;
+        var $input = $(this);
+
+        $('div.ice-rapport').remove();
+
+        if( iceInput.length == 15 ) {
+            $input.removeClass('checked').addClass('loading');
+           $.ajax({
+            url : '/get-ice',
+            type : 'POST',
+            data: {ice: iceInput},
+            success : function(data) {
+                $input.removeClass('loading');
+                if(data.success) {
+                    $input.addClass('checked');
+                    
+                    $div = $(`<div class="ice-rapport"><h5 class="text-info">Informations de l’entreprise</h5></div>`);
+                    $table = $(`<table class="table"></table>`);
+                    $tbody = $(`<tbody></tbody>`);
+
+                    $.each(data.iceResponse, function (title, content) {
+                        $tbody.append( $(`<tr><th>${content.name}</th><td>${content.value}</td></tr>`) );
+                    });
+
+                    $table.append($tbody);
+                    $div.append($table);
+                    $input.closest('div.desc').append($div);
+                } else {
+                    $input.addClass('not-checked');
+                }
+            },
+            complete: function() {
+
+            }
+        });
+
+           // Send request to get ICE information
+           // use complete of the ajax request to remove spinner
+           // Put check icon if information ICE is good
+        } else {
+           $(this).removeClass('loading checked not-checked');
+        }
+    });
+
     // PHONE NUMBER
     /**
      * Event - Detected the entry of a keyboard key - for input phone number
      * Create to display or remove a button to send the verification code by SMS for activate phone number
      */
     $('input#phoneSubscribe').on("input", function() {
-        var dInput = this.value;
+        var phoneInput = this.value;
 
-        if( dInput.length >= 10 ) {
+        // Force format number phone
+        if( phoneInput.length == 1 && phoneInput != '0') {
+            $('input#phoneSubscribe').val(`0${phoneInput}`);
+        }
+
+        if( phoneInput.length >= 10 ) {
            $(this).parents('div.form-row').append( $('<div class="col-1" data-toggle="tooltip" data-placement="bottom" title="Envoyer le code de vérification"><a id="checkPhoneNumber" class="btn bg-primary-red text-light" href="#" role="button"><i class="icofont icofont-ui-messaging fa-lg"></i></a></div>') );
-        } else if (dInput.length < 10) {
+        } else if (phoneInput.length < 10) {
             $(this).parents('div.form-row').find('div.col-1').remove();
         }
     });
@@ -727,6 +786,7 @@ $(function() {
         var fileName = e.target.files[0].name;
         $('#upload-icon span.filename').remove();
         $('#upload-icon').append( $(`<span class="text-muted filename" style="font-size: 0.8em; display:block">${fileName}</span>`) );
+        $('span#iceFileError').text('');
     });
 
     // Step 3 Status company event

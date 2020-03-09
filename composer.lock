@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "353aa7262b788eae04321ef4c4e6f170",
+    "content-hash": "bd935cc143394887baaa66a2c5107895",
     "packages": [
         {
             "name": "cakephp/cache",
@@ -1299,6 +1299,42 @@
                 "service"
             ],
             "time": "2017-05-10T09:20:27+00:00"
+        },
+        {
+            "name": "mirazmac/php-requirements-checker",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MirazMac/php-requirements-checker.git",
+                "reference": "2571a4f6c2375e8cc783c699b2bdbb1b4f9b9002"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/MirazMac/php-requirements-checker/zipball/2571a4f6c2375e8cc783c699b2bdbb1b4f9b9002",
+                "reference": "2571a4f6c2375e8cc783c699b2bdbb1b4f9b9002",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "MirazMac\\Requirements\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "MirazMac",
+                    "email": "mirazmac@gmail.com"
+                }
+            ],
+            "description": "A quick library to check the current environment against a set of defined requirements. It supports checking for PHP version, OS, Extensions, PHP INI values, Functions, Classes, Apache Modules and local Files and Folders.",
+            "time": "2020-02-10T14:10:00+00:00"
         },
         {
             "name": "nesbot/carbon",
@@ -4314,7 +4350,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "mirazmac/php-requirements-checker": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

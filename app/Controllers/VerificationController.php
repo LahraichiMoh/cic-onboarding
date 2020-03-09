@@ -9,6 +9,8 @@ use App\Email\Mailer;
 use App\Models\EmailVerification;
 use App\Models\PhoneNumberVerification;
 
+use App\Services\IceService;
+
 use App\Email\SenderVerificationCode;
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -393,6 +395,33 @@ class VerificationController extends Controller
     public function checkEmail(Request $request, Response $response)
     {
         return $response->withJson($this->checkIfEmailCodeMatch($request));
+    }
+
+    public function getICE(Request $request, Response $response)
+    {
+        $data = [];
+        $ice = $request->getParam('ice');
+
+        // Check if company exists before continue
+        $iceService = new IceService($ice);
+        $companyInfos = $iceService->getICEInformations();
+
+        if($companyInfos) {
+            $data['success'] = true;
+            $data['iceResponse'] = $companyInfos;
+
+            //Save ice status in session
+            // use this session value to check if ICE has been verified in register step 0
+            $_SESSION['ice-checked'] = true;
+            $_SESSION['companyInfos'] = $companyInfos;
+        } else {
+            $data['success'] = false;
+            $data['iceResponse'] = null;
+            $_SESSION['ice-checked'] = false;
+            $_SESSION['companyInfos'] = null;
+        }
+
+        return $response->withJson($data);
     }
    
 }

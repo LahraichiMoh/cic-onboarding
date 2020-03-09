@@ -424,7 +424,7 @@ class RegisterController extends Controller
                 }
                 else $iceFile = null;
     
-                if(!empty($ice) && !empty($iceFile)) {
+                if(!empty($_SESSION['ice-checked']) && !empty($iceFile)) {
     
                     $_SESSION['ice'] = $ice;
                     $_SESSION['ice-attachment'] = $filePath['upload_path'];
@@ -443,18 +443,18 @@ class RegisterController extends Controller
                     ];
     
                     // ICE Curl
-                    if(count($companyInfos) > 0) {
-                        foreach($companyInfos as $value) {
-                            $items[$value['name']] = $value['value'];
-                        }
-                    }
+                    // if(count($companyInfos) > 0) {
+                    //     foreach($companyInfos as $value) {
+                    //         $items[$value['name']] = $value['value'];
+                    //     }
+                    // }
     
                     foreach($items['files'] as &$file) {
                         if (in_array($file['ext'], ['png', 'jpeg', 'jpg'])) {
                             // It's image so prepare image bloc to display
                             $file['imageBlock'] = '<div class="image_frame image_item scale-with-grid aligncenter has_border" style="max-width: 80px">
                                 <div class="image_wrapper" >
-                                    <img class="scale-with-grid" src="'.$file['completePath'].'" alt="img">
+                                    <img class="img-fluid" src="'.$file['completePath'].'" alt="img">
                                 </div>
                             </div>';
                         }
@@ -462,7 +462,7 @@ class RegisterController extends Controller
                 } else {
                     $status = false;
                     $items = [];
-                    if(empty($ice)) {
+                    if(empty($_SESSION['ice-checked'])) {
                         $items['iceError'] = 'Veuillez fournir un ICE valide';
                     }
                     if(empty($iceFile)) {

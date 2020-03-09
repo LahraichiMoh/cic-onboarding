@@ -42,7 +42,7 @@ $app->group('/auth', function () {
     $this->get('/payment-summary', App\Controllers\Auth\RegisterController::class . ':getPaymentSummary');
     $this->get('/go-to-payment', App\Controllers\Auth\RegisterController::class . ':getPayment');
     $this->get('/payment', App\Controllers\Auth\RegisterController::class . ':payment');
-    
+
     // Send step
     $this->post('/send-step', App\Controllers\Auth\RegisterController::class . ':sendStep');
 
@@ -63,6 +63,9 @@ $app->group('', function () {
     $this->post('/verification/check-phone-number', App\Controllers\VerificationController::class . ':checkPhoneNumber');
     $this->post('/verification/email', App\Controllers\VerificationController::class . ':email');
     $this->post('/verification/check-email', App\Controllers\VerificationController::class . ':checkEmail');
+
+     // Get ICE informations
+     $this->post('/get-ice', App\Controllers\VerificationController::class . ':getICE');
 
 })->add(new App\Middlewares\Guest($container->get(Cartalyst\Sentinel\Sentinel::class)));
 
