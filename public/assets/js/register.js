@@ -134,6 +134,13 @@ $(function() {
 
                     form.closest('div.desc').find('div.loader').remove();
                 } else {
+                    if(response.items.informations) {
+                        Swal.fire(
+                            response.items.informations.title,
+                            response.items.informations.message,
+                            response.items.informations.status
+                          )
+                    }
                     form.closest('div.desc').find('div.loader').remove();
                     form.fadeIn('slow');
                     // Display error message
@@ -202,7 +209,10 @@ $(function() {
 
     previousStepAction = function() {
 
-        if(step == 1) $('div.ice-rapport').remove();
+        if(step == 1){
+            $('input#ice').trigger('input');
+            $('div.ice-rapport').remove();
+        }
 
         if(step >= 1) {
             // Remove previous error message
@@ -423,6 +433,8 @@ $(function() {
     $('input#ice').on("input", function() {
         var iceInput = this.value;
         var $input = $(this);
+
+        $('span#iceError').text('');
 
         $('div.ice-rapport').remove();
 

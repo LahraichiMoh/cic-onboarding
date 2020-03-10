@@ -18,6 +18,8 @@ use App\Data\DummyData;
 
 use App\Services\IceService;
 
+use App\Models\Lead;
+
 
 class RegisterController extends Controller
 {
@@ -396,7 +398,9 @@ class RegisterController extends Controller
 
         switch ($step) {
             case 0:
+
                 // Unset session variable
+                unset($_SESSION['ice']);
                 unset($_SESSION['emailIsValidate']);
                 unset($_SESSION['phoneNumberIsValidate']);
                 unset($_SESSION['orderNumber']);
@@ -404,69 +408,85 @@ class RegisterController extends Controller
                 $_SESSION['orderNumber'] = rand(100000,999999); 
     
                 $ice = $request->getParam('ice');
-    
-                // Get ICE information
-                // Check if company exists before continue
-                $iceService = new IceService($ice);
-                $companyInfos = $iceService->getICEInformations();
 
-                // upload ICE
-                if (!empty($request->getUploadedFiles())) {
-                    $file = $request->getUploadedFiles()['ice-file'];
-                    if ($file->getError() === UPLOAD_ERR_OK) {
-                        $filePath = $this->moveUploadedFile(
-                            'ice' . DS . 'tmps',
-                            $file
-                        );
-                        // $logo = $filePath['upload_path'];
-                        $iceFile = true;
-                    }
-                }
-                else $iceFile = null;
-    
-                if(!empty($_SESSION['ice-checked']) && !empty($iceFile)) {
-    
-                    $_SESSION['ice'] = $ice;
-                    $_SESSION['ice-attachment'] = $filePath['upload_path'];
-    
-                    $status = true;
-                    $items = [
-                        'ICE de l\'entreprise' => $_SESSION['ice'],
-                        'files' => [
-                            [
-                                'name' => 'Attestation ICE',
-                                'path' => $_SESSION['ice-attachment'],
-                                'completePath' => $_SESSION['ice-attachment'],
-                                'ext' => pathinfo($_SESSION['ice-attachment'], PATHINFO_EXTENSION)
-                            ]
-                        ]
+                $items = [];
+
+                // Get lead if exists
+                $lead = Lead::where('ice', $ice)->first();
+
+                // Check if lead exists
+                if($lead){
+                    $status = false;
+                    $informations = [
+                        'title' => 'ICE existant',
+                        'message' => 'L\'ICE renseigné existe déjà en base de données',
+                        'status' => 'error'
                     ];
-    
-                    // ICE Curl
-                    // if(count($companyInfos) > 0) {
-                    //     foreach($companyInfos as $value) {
-                    //         $items[$value['name']] = $value['value'];
-                    //     }
-                    // }
-    
-                    foreach($items['files'] as &$file) {
-                        if (in_array($file['ext'], ['png', 'jpeg', 'jpg'])) {
-                            // It's image so prepare image bloc to display
-                            $file['imageBlock'] = '<div class="image_frame image_item scale-with-grid aligncenter has_border" style="max-width: 80px">
-                                <div class="image_wrapper" >
-                                    <img class="img-fluid" src="'.$file['completePath'].'" alt="img">
-                                </div>
-                            </div>';
+                    $items['informations'] = $informations;
+                } else {
+                    // Get ICE information
+                    // Check if company exists before continue
+                    $iceService = new IceService($ice);
+                    $companyInfos = $iceService->getICEInformations();
+
+                    // upload ICE
+                    if (!empty($request->getUploadedFiles())) {
+                        $file = $request->getUploadedFiles()['ice-file'];
+                        if ($file->getError() === UPLOAD_ERR_OK) {
+                            $filePath = $this->moveUploadedFile(
+                                'ice' . DS . 'tmps',
+                                $file
+                            );
+                            // $logo = $filePath['upload_path'];
+                            $iceFile = true;
                         }
                     }
-                } else {
-                    $status = false;
-                    $items = [];
-                    if(empty($_SESSION['ice-checked'])) {
-                        $items['iceError'] = 'Veuillez fournir un ICE valide';
-                    }
-                    if(empty($iceFile)) {
-                        $items['iceFileError'] = 'Veuillez charger votre attestation ICE (Formats acceptés *.pdf, *.jpeg et *.png)';
+                    else $iceFile = null;
+        
+                    if(!empty($ice) && !empty($iceFile)) {
+        
+                        $_SESSION['ice'] = $ice;
+                        $_SESSION['ice-attachment'] = $filePath['upload_path'];
+        
+                        $status = true;
+                        $items = [
+                            'ICE de l\'entreprise' => $_SESSION['ice'],
+                            'files' => [
+                                [
+                                    'name' => 'Attestation ICE',
+                                    'path' => $_SESSION['ice-attachment'],
+                                    'completePath' => $_SESSION['ice-attachment'],
+                                    'ext' => pathinfo($_SESSION['ice-attachment'], PATHINFO_EXTENSION)
+                                ]
+                            ]
+                        ];
+        
+                        // ICE Curl
+                        // if(count($companyInfos) > 0) {
+                        //     foreach($companyInfos as $value) {
+                        //         $items[$value['name']] = $value['value'];
+                        //     }
+                        // }
+        
+                        foreach($items['files'] as &$file) {
+                            if (in_array($file['ext'], ['png', 'jpeg', 'jpg'])) {
+                                // It's image so prepare image bloc to display
+                                $file['imageBlock'] = '<div class="image_frame image_item scale-with-grid aligncenter has_border" style="max-width: 80px">
+                                    <div class="image_wrapper" >
+                                        <img class="img-fluid" src="'.$file['completePath'].'" alt="img">
+                                    </div>
+                                </div>';
+                            }
+                        }
+                    } else {
+                        $status = false;
+                        $items = [];
+                        if(empty($ice)) {
+                            $items['iceError'] = 'Veuillez fournir un ICE valide';
+                        }
+                        if(empty($iceFile)) {
+                            $items['iceFileError'] = 'Veuillez charger votre attestation ICE (Formats acceptés *.pdf, *.jpeg et *.png)';
+                        }
                     }
                 }
     
@@ -475,11 +495,20 @@ class RegisterController extends Controller
             case 1:
                 $phone = $_POST['phoneSubscribe'];
                 $email = $_POST['emailSubscribe'];
+
+                $lead = null; 
+
+                // Get session ICE if exists
+                if(!empty($_SESSION['ice'])) {
+                    $ice = $_SESSION['ice'];
+                    // Get lead if exists
+                    $lead = Lead::where('ice', $ice)->first();
+                }
     
                 // For real
-                // if((preg_match('/^[0-9]{10}+$/', $phone)) && (filter_var($email, FILTER_VALIDATE_EMAIL)) && (!empty($_SESSION['phoneNumberIsValidate'])) && (!empty($_SESSION['emailIsValidate']))) {
+                if((preg_match('/^[0-9]{10}+$/', $phone)) && (filter_var($email, FILTER_VALIDATE_EMAIL)) && (!empty($_SESSION['phoneNumberIsValidate'])) && (!empty($_SESSION['emailIsValidate']))) {
                 // For test
-                if((preg_match('/^[0-9]{10}+$/', $phone)) && (filter_var($email, FILTER_VALIDATE_EMAIL)) ) {
+                // if((preg_match('/^[0-9]{10}+$/', $phone)) && (filter_var($email, FILTER_VALIDATE_EMAIL)) ) {
                 // if((!empty($phone)) && (filter_var($email, FILTER_VALIDATE_EMAIL))) {
                     $_SESSION['phoneSubscribe'] = $phone;
                     $_SESSION['emailSubscribe'] = $email;
@@ -501,23 +530,23 @@ class RegisterController extends Controller
     
                     // Check if phone number has bees activate 
                     // Use this for real
-                    // if(empty($_SESSION['phoneNumberIsValidate'])) {
-                    //     $items['phoneSubscribeError'] = 'Numéro de téléphone non activé';
-                    // }
-                    // Use this for test
-                    if(!preg_match('/^[0-9]{10}+$/', $phone)) {
+                    if(empty($_SESSION['phoneNumberIsValidate'])) {
                         $items['phoneSubscribeError'] = 'Numéro de téléphone non activé';
                     }
+                    // // Use this for test
+                    // if(!preg_match('/^[0-9]{10}+$/', $phone)) {
+                    //     $items['phoneSubscribeError'] = 'Numéro de téléphone non activé';
+                    // }
 
                     // Check if phone number has bees activate 
                     // Use this for real
-                    // if(empty($_SESSION['emailIsValidate'])) {
-                    //     $items['emailError'] = 'Adresse Email non activé';
-                    // }
-                    // Use this for test
-                    if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    if(empty($_SESSION['emailIsValidate'])) {
                         $items['emailError'] = 'Adresse Email non activé';
                     }
+                    // // Use this for test
+                    // if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    //     $items['emailError'] = 'Adresse Email non activé';
+                    // }
                 }
                 
                 return $response->withJson(['lastStep' => false, 'status' => $status, 'items' => $items]);

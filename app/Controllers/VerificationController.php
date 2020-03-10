@@ -8,8 +8,10 @@ use Slim\Http\Response;
 use App\Email\Mailer;
 use App\Models\Verification;
 
-use App\Models\EmailVerification;
-use App\Models\PhoneNumberVerification;
+use App\Models\Lead;
+
+// use App\Models\EmailVerification;
+// use App\Models\PhoneNumberVerification;
 
 use App\Services\IceService;
 
@@ -378,6 +380,33 @@ class VerificationController extends Controller
                     // // End API usage
 
                     if($verification->email_verified_at) {
+
+                        $lead = null; 
+
+                        // Get session ICE if exists
+                        if(!empty($_SESSION['ice'])) {
+                            $ice = $_SESSION['ice'];
+                            // Get lead if exists
+                            $lead = Lead::where('ice', $ice)->first();
+
+                            if(!$lead) {
+                                $lead = Lead::create([
+                                    'ice' => $ice,
+                                    'verification_id' => $verification->id
+                                ]);
+
+                                $verification->update(['lead_id' => $lead->id]);
+                            } else {
+                                $verifOfLead = Verification::find($lead->verification_id);
+
+                                if($verifOfLead->email == $email) {
+                                    // Email use is the same that email of verification for the session ICE number
+                                } else {
+                                    // Break verification 
+                                    // Because email use not same that first email use for this ICE validation
+                                }
+                            }
+                        }
 
                         $_SESSION['emailIsValidate'] = true;
                         $status = true;
