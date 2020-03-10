@@ -77,83 +77,85 @@ class VerificationController extends Controller
 
     public function email(Request $request, Response $response)
     {
-        $emailVerification = null;
+        $verification = null;
         $email = $request->getParam('email');
 
         // // Get email in database
-        // $emailVerification = EmailVerification::where('email', $email)->first();
+        $verification = Verification::where('email', $email)->first();
 
-        // API usage to replace to replace the method above
-        // Replace '.' in adresse email
-        $emailEdit = str_replace('.', '~~', $email);
+        // // API usage to replace to replace the method above
+        // // Replace '.' in adresse email
+        // $emailEdit = str_replace('.', '~~', $email);
 
-        $curl = curl_init();
+        // $curl = curl_init();
 
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => env('API_URL').'/email-verification/'.$emailEdit,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET",
-        ));
+        // curl_setopt_array($curl, array(
+        //     CURLOPT_URL => env('API_URL').'/email-verification/'.$emailEdit,
+        //     CURLOPT_RETURNTRANSFER => true,
+        //     CURLOPT_ENCODING => "",
+        //     CURLOPT_MAXREDIRS => 10,
+        //     CURLOPT_TIMEOUT => 0,
+        //     CURLOPT_FOLLOWLOCATION => true,
+        //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        //     CURLOPT_CUSTOMREQUEST => "GET",
+        // ));
 
-        $result = curl_exec($curl);
+        // $result = curl_exec($curl);
 
-        curl_close($curl);
-        $emailVerification = json_decode($result)[0];
-        // End API usage
+        // curl_close($curl);
+        // $emailVerification = json_decode($result)[0];
+        // // End API usage
 
 
         // If email in db
-        if($emailVerification) {
+        if($verification) {
             // Email already in db
-            if(!$emailVerification->email_verified_at) return $response->withJson(['success' => true, 'message' => 'Entrez votre code de vérification']);
-            else return $response->withJson(['success' => false, 'message' => 'Cet email a déjà été utilisé !']);
+            if(!$verification->email_verified_at) return $response->withJson(['success' => true, 'message' => 'Entrez votre code de vérification']);
+            else return $response->withJson(['success' => false, 'message' => 'Cette adresse email a déjà été utilisé !']);
         } else {
             // Number phone not in db
             // Generate code and send code by email
             $code = $this->generateEmailSaltCode();
 
-            // $emailVerification = EmailVerification::create([
-            //     'email' => $email,
-            //     'code' => $code['complete'],
-            // ]);
-
-            // API Start - Save email and hash code and return email entity from the database
-
-            $data = [
+            $verification = Verification::create([
                 'email' => $email,
-                'code' => $code['complete']
-            ];
-            $curl = curl_init();
+                'email_code' => $code['complete'],
+                'email_created_at' => time(),
+                'email_code_generated_at' => time()
+            ]);
 
-            curl_setopt_array($curl, array(
-                CURLOPT_URL =>  env('API_URL').'/email-verification',
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => "",
-                CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 0,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => "POST",
-                CURLOPT_POSTFIELDS => json_encode($data),
-                CURLOPT_HTTPHEADER => array(
-                    "Content-Type: application/json"
-                ),
-            ));
+            // // API Start - Save email and hash code and return email entity from the database
 
-            $result = curl_exec($curl);
+            // $data = [
+            //     'email' => $email,
+            //     'code' => $code['complete']
+            // ];
+            // $curl = curl_init();
 
-            curl_close($curl);
-            $emailVerification = json_decode($result);
-            // API End
+            // curl_setopt_array($curl, array(
+            //     CURLOPT_URL =>  env('API_URL').'/email-verification',
+            //     CURLOPT_RETURNTRANSFER => true,
+            //     CURLOPT_ENCODING => "",
+            //     CURLOPT_MAXREDIRS => 10,
+            //     CURLOPT_TIMEOUT => 0,
+            //     CURLOPT_FOLLOWLOCATION => true,
+            //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            //     CURLOPT_CUSTOMREQUEST => "POST",
+            //     CURLOPT_POSTFIELDS => json_encode($data),
+            //     CURLOPT_HTTPHEADER => array(
+            //         "Content-Type: application/json"
+            //     ),
+            // ));
+
+            // $result = curl_exec($curl);
+
+            // curl_close($curl);
+            // $emailVerification = json_decode($result);
+            // // API End
 
             // var_dump( json_encode($data) ); exit();
 
-            if($emailVerification) {
+            if($verification) {
                 // Call method to send email at the user
                 // Send email
                 // $sendMail = $this->mailer->to($email, '')->send(new SenderVerificationCode(['name' => '', 'code' => $code['short']]));
@@ -287,7 +289,7 @@ class VerificationController extends Controller
             if($verification->phone_verified_at) $message = 'Ce numero a déjà été validé';
             else {
                 if( sha1($code.self::PHONE_NUMBER_SALT) == $verification->phone_code){
-                    $verification->update(['phone_verified_at' => date('Y-m-d H:i:s')]);
+                    $verification->update(['phone_verified_at' => time()]);
                     $_SESSION['phoneNumberIsValidate'] = true;
                     $status = true;
                     $message = 'Votre numéro de téléphone a été vérifié avec succès';
@@ -310,71 +312,72 @@ class VerificationController extends Controller
         $code = $request->getParam('code');
 
         // This code has been replace by cURL API request
-        // $emailVerification = EmailVerification::where('email', $email)->first();
+        $verification = Verification::where('email', $email)->first();
         
-        // API usage to replace to replace the method above
-        // Replace '.' in adresse email
-        $emailEdit = str_replace('.', '~~', $email);
+        // // API usage to replace to replace the method above
+        // // Replace '.' in adresse email
+        // $emailEdit = str_replace('.', '~~', $email);
 
-        $curl = curl_init();
+        // $curl = curl_init();
 
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => env('API_URL').'/email-verification/'.$emailEdit,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET",
-        ));
+        // curl_setopt_array($curl, array(
+        //     CURLOPT_URL => env('API_URL').'/email-verification/'.$emailEdit,
+        //     CURLOPT_RETURNTRANSFER => true,
+        //     CURLOPT_ENCODING => "",
+        //     CURLOPT_MAXREDIRS => 10,
+        //     CURLOPT_TIMEOUT => 0,
+        //     CURLOPT_FOLLOWLOCATION => true,
+        //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        //     CURLOPT_CUSTOMREQUEST => "GET",
+        // ));
 
-        $result = curl_exec($curl);
+        // $result = curl_exec($curl);
 
-        curl_close($curl);
-        $emailVerification = json_decode($result)[0];
-        // End API usage
+        // curl_close($curl);
+        // $emailVerification = json_decode($result)[0];
+        // // End API usage
         
 
         // If email present in email_verifications table - Database 
-        if($emailVerification) {
-            if($emailVerification->email_verified_at) $message = 'Ce numero a déjà été validé';
+        if($verification) {
+            if($verification->email_verified_at) $message = 'Ce numero a déjà été validé';
             else {
-                if( sha1($code.self::EMAIL_SALT) == $emailVerification->code){
+                if( sha1($code.self::EMAIL_SALT) == $verification->email_code){
                     // Replace by API request to update emailVerification
-                    // $emailVerification->update(['email_verified_at' => time()]);
+                    $verification->update(['email_verified_at' => time()]);
 
-                    // Update here entity by API request
-                    //Start API usage - to update entity
-                    $data = [
-                        'email' => $email,
-                        'code' => sha1($code.self::EMAIL_SALT),
-                        'email_verified_at' => time()
-                    ];
-                    $curl = curl_init();
+                    // // Update here entity by API request
+                    // //Start API usage - to update entity
+                    // $data = [
+                    //     'email' => $email,
+                    //     'code' => sha1($code.self::EMAIL_SALT),
+                    //     'email_verified_at' => time()
+                    // ];
+                    // $curl = curl_init();
 
-                    curl_setopt_array($curl, array(
-                        CURLOPT_URL => env('API_URL').'/email-verification/'.$emailVerification->id,
-                        CURLOPT_RETURNTRANSFER => true,
-                        CURLOPT_ENCODING => "",
-                        CURLOPT_MAXREDIRS => 10,
-                        CURLOPT_TIMEOUT => 0,
-                        CURLOPT_FOLLOWLOCATION => true,
-                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                        CURLOPT_CUSTOMREQUEST => "PUT",
-                        CURLOPT_POSTFIELDS => json_encode($data),
-                        CURLOPT_HTTPHEADER => array(
-                            "Content-Type: application/json"
-                        ),
-                    ));
+                    // curl_setopt_array($curl, array(
+                    //     CURLOPT_URL => env('API_URL').'/email-verification/'.$emailVerification->id,
+                    //     CURLOPT_RETURNTRANSFER => true,
+                    //     CURLOPT_ENCODING => "",
+                    //     CURLOPT_MAXREDIRS => 10,
+                    //     CURLOPT_TIMEOUT => 0,
+                    //     CURLOPT_FOLLOWLOCATION => true,
+                    //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    //     CURLOPT_CUSTOMREQUEST => "PUT",
+                    //     CURLOPT_POSTFIELDS => json_encode($data),
+                    //     CURLOPT_HTTPHEADER => array(
+                    //         "Content-Type: application/json"
+                    //     ),
+                    // ));
 
-                    $result = curl_exec($curl);
+                    // $result = curl_exec($curl);
 
-                    curl_close($curl);
-                    $emailVerification = json_decode($result);
+                    // curl_close($curl);
+                    // $emailVerification = json_decode($result);
 
-                    // End API usage
-                    if($emailVerification->email_verified_at) {
+                    // // End API usage
+
+                    if($verification->email_verified_at) {
 
                         $_SESSION['emailIsValidate'] = true;
                         $status = true;
