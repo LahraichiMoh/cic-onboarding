@@ -86,6 +86,7 @@ $(function() {
 
     // GENERAL STEP
     sendStepForm = function(form) {
+
         $('button#next-step').prop("disabled", true);
 
         var response;
@@ -200,6 +201,9 @@ $(function() {
     }
 
     previousStepAction = function() {
+
+        if(step == 1) $('div.ice-rapport').remove();
+
         if(step >= 1) {
             // Remove previous error message
             $('section#step-block-section').find(`form#step-form-${step}`).find('span.msg-info').text('');
