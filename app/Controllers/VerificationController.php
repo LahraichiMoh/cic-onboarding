@@ -6,6 +6,8 @@ use App\Views\View;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use App\Email\Mailer;
+use App\Models\Verification;
+
 use App\Models\EmailVerification;
 use App\Models\PhoneNumberVerification;
 
@@ -38,28 +40,29 @@ class VerificationController extends Controller
     public function phoneNumber(Request $request, Response $response)
     {
         $phone = $request->getParam('phone');
-        sleep(2);
 
-        // Get phone number in database
-        $phoneNumberVerification = PhoneNumberVerification::where('phone_number', $phone)->first();
+        // NEW VERIFICATION VERSION
+        $verification = Verification::where('phone', $phone)->first();
 
         // If phonenumber in db
-        if($phoneNumberVerification) {
+        if($verification) {
             // Number phone already in db
-            if(!$phoneNumberVerification->phone_number_verified_at) return $response->withJson(['success' => true, 'message' => 'Entrez votre code dé vérification']);
+            if(!$verification->phone_verified_at) return $response->withJson(['success' => true, 'message' => 'Entrez votre code dé vérification']);
             else return $response->withJson(['success' => false, 'message' => 'Ce numéro a déjà été utilisé']);
         } else {
             // Number phone not in db
             // Generate code and send code by SMS
             $code = $this->generatePhoneNumberSaltCode();
 
-            $phoneVerification = PhoneNumberVerification::create([
-                'phone_number' => $phone,
-                'code' => $code['complete'],
+            $verification = Verification::create([
+                'phone' => $phone,
+                'phone_code' => $code['complete'],
+                'phone_created_at' => time(),
+                'phone_code_generated_at' => time()
             ]);
 
 
-            if($phoneVerification) {
+            if($verification) {
 
                 // Call method to send sms at the user
                 if($this->sendSMS($phone, $code['short'].' est le code confidentiel pour compléter votre inscription. Attention! Ce code a valididté de 5 min. A ne communiquer à personne. CHECKINFO'))
@@ -271,19 +274,20 @@ class VerificationController extends Controller
 
     protected function checkIfPhoneNumberCodeMatch(Request $request)
     {
-
         $status = false;
         $message = '';
         $phoneNumber = $request->getParam('phoneNumber');
         $code = $request->getParam('code');
-        $phoneNumberVerification = PhoneNumberVerification::where('phone_number', $phoneNumber)->first();
+
+        // NEW VERIFICATION VERSION
+        $verification = Verification::where('phone', $phoneNumber)->first();
 
         // If phone number present in phone_number_verifications table - Database 
-        if($phoneNumberVerification) {
-            if($phoneNumberVerification->phone_number_verified_at) $message = 'Ce numero a déjà été validé';
+        if($verification) {
+            if($verification->phone_verified_at) $message = 'Ce numero a déjà été validé';
             else {
-                if( sha1($code.self::PHONE_NUMBER_SALT) == $phoneNumberVerification->code){
-                    $phoneNumberVerification->update(['phone_number_verified_at' => time()]);
+                if( sha1($code.self::PHONE_NUMBER_SALT) == $verification->phone_code){
+                    $verification->update(['phone_verified_at' => date('Y-m-d H:i:s')]);
                     $_SESSION['phoneNumberIsValidate'] = true;
                     $status = true;
                     $message = 'Votre numéro de téléphone a été vérifié avec succès';

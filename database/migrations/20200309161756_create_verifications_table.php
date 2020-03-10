@@ -21,21 +21,26 @@ class CreateVerificationsTable extends Migration
         $this->schema->create('tblverifications', function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->string('phone')->unique();
+            $table->string('phone')->nullable();
             $table->string('phone_code')->nullable();
             $table->timestamp('phone_created_at')->nullable();
+            $table->timestamp('phone_code_generated_at')->nullable();
             $table->timestamp('phone_verified_at')->nullable();
 
-            $table->string('email')->unique();
+            $table->string('email')->nullable();
             $table->string('email_code')->nullable();
             $table->timestamp('email_created_at')->nullable();
+            $table->timestamp('email_code_generated_at')->nullable();
             $table->timestamp('email_verified_at')->nullable();
 
-            $table->biginteger('lead_id')->unsigned();
-            $table->biginteger('customer_id')->unsigned();
+            $table->biginteger('lead_id')->nullable();
+            $table->biginteger('customer_id')->nullable();
             
             $table->timestamps();
             $table->engine = 'InnoDB';
+
+            $table->unique('phone');
+            $table->unique('email');
         });
     }
 
