@@ -114,6 +114,15 @@ $(function() {
             success : function(data) {
                 // Treat response
                 response = data;
+
+                if(response.items.informations) {
+                    Swal.fire(
+                        response.items.informations.title,
+                        response.items.informations.message,
+                        response.items.informations.status
+                    );
+                }
+
                 if(response.status) {
                     $table = $(`<table id="step-${step}-rapport" class="table"></table>`);
                     $tbody = $(`<tbody></tbody>`);
@@ -125,7 +134,7 @@ $(function() {
                                 $tbody.append( $(`<tr><th>${file.name}</th><td>${(file.ext == 'pdf') ? (`<object width="400" height="240" data="${file.completePath}"></object>`) : file.imageBlock }</td></tr>`) );
                             });
                         } else {
-                            $tbody.append( $(`<tr><th>${title}</th><td>${content}</td></tr>`) );
+                            if(title != 'informations') $tbody.append( $(`<tr><th>${title}</th><td>${content}</td></tr>`) );
                         }
                     });
 
@@ -134,13 +143,7 @@ $(function() {
 
                     form.closest('div.desc').find('div.loader').remove();
                 } else {
-                    if(response.items.informations) {
-                        Swal.fire(
-                            response.items.informations.title,
-                            response.items.informations.message,
-                            response.items.informations.status
-                          )
-                    }
+                    
                     form.closest('div.desc').find('div.loader').remove();
                     form.fadeIn('slow');
                     // Display error message
@@ -160,6 +163,29 @@ $(function() {
                         // var passedStep = `div#step-${step}`;
 
                         step ++;
+
+                        if(step == 1){
+                            $('input#phoneSubscribe').prop("disabled", false);
+                            $('input#emailSubscribe').prop("disabled", false);
+
+                            // Remove dinamic element for phone number validation 
+                            $('div#edit-phone-block').remove();
+                            $('#verificationCode').parent('div').remove();
+                            $('div.col-1.send-phone-code').remove();
+                            $('a#checkPhoneNumber').parent('div').remove();
+                            // Trigger input
+                            $('input#phoneSubscribe').trigger('input');
+
+                            // Remove dinamic element for email validation
+                            $('div#edit-email-block').remove();
+                            $('#verificationEmailCode').parent('div').remove();
+                            $('div.col-1.send-email-code').remove();
+                            $('a#checkEmail').parent('div').remove();
+                            // Trigger input
+                            $('input#emailSubscribe').trigger('input');
+                            
+                        }
+
                         var passedStep = `div#step-${step}`;
                         $(`div#step-${step}`).fadeIn('slow'); 
                         var body = $("html, body");
@@ -208,6 +234,8 @@ $(function() {
     }
 
     previousStepAction = function() {
+
+        $('button#next-step').prop("disabled", false);
 
         if(step == 1){
             $('input#ice').trigger('input');
@@ -560,9 +588,13 @@ $(function() {
                         $('input#phoneSubscribe').parents('div.form-row').append( $('<div class="col-2"><input class="form-control" id="verificationCode" maxlength="4" name="verificationCode" type="text" placeholder="Code" autocomplete="off"></div>') );
                         $.notify(data.message, "success");
                     } else {
-                        $('span#phoneSubscribeError').text('Une erreur s\'est produite, rééssayez plus tard !');
+                        $('span#phoneSubscribeError').text(data.message);
                         $button.show();
                         $.notify(data.message, "error");
+
+                        $('input#phoneSubscribe').prop('disabled', false);
+                        $('a#checkPhoneNumber').parent('div').remove();
+                        $('input#phoneSubscribe').trigger('input');
                     }
                 }
             });
@@ -714,9 +746,13 @@ $(function() {
                         $('input#emailSubscribe').parents('div.form-row').append( $('<div class="col-2"><input class="form-control" id="verificationEmailCode" maxlength="4" name="verificationEmailCode" type="text" placeholder="Code" autocomplete="off"></div>') );
                         $.notify(data.message, "success");
                     } else {
-                        $('span#emailError').text('Une erreur s\'est produite, rééssayez plus tard !');
+                        $('span#emailError').text(data.message);
                         $button.show();
                         $.notify(data.message, "error");
+
+                        $('input#emailSubscribe').prop('disabled', false);
+                        $('a#checkEmail').parent('div').remove();
+                        $('input#emailSubscribe').trigger('input');
                     }
                 }
             });

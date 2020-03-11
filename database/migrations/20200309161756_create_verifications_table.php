@@ -18,7 +18,7 @@ class CreateVerificationsTable extends Migration
      */
     public function up()
     {
-        $this->schema->create('tblverifications', function (Blueprint $table) {
+        $this->schema->create('verifications', function (Blueprint $table) {
             $table->bigIncrements('id');
 
             $table->string('phone')->nullable();
@@ -51,6 +51,6 @@ class CreateVerificationsTable extends Migration
      */
     public function down()
     {
-        $this->schema->dropIfExists('tblverifications');
+        $this->schema->dropIfExists('verifications');
     }
 }

@@ -416,11 +416,11 @@ class RegisterController extends Controller
 
                 // Check if lead exists
                 if($lead){
-                    $status = false;
+                    $status = true;
                     $informations = [
                         'title' => 'ICE existant',
                         'message' => 'L\'ICE renseigné existe déjà en base de données',
-                        'status' => 'error'
+                        'status' => 'warning'
                     ];
                     $items['informations'] = $informations;
                 } else {
@@ -493,8 +493,8 @@ class RegisterController extends Controller
                 return $response->withJson(['lastStep' => false, 'status' => $status, 'items' => $items]);
                 break;
             case 1:
-                $phone = $_POST['phoneSubscribe'];
-                $email = $_POST['emailSubscribe'];
+                $phone = $request->getParam('phoneSubscribe');
+                $email = $request->getParam('emailSubscribe');
 
                 $lead = null; 
 
@@ -505,11 +505,15 @@ class RegisterController extends Controller
                     $lead = Lead::where('ice', $ice)->first();
                 }
     
-                // For real
-                if((preg_match('/^[0-9]{10}+$/', $phone)) && (filter_var($email, FILTER_VALIDATE_EMAIL)) && (!empty($_SESSION['phoneNumberIsValidate'])) && (!empty($_SESSION['emailIsValidate']))) {
+                /********************************************************************************************************************************
+                | Save session variable to check if phone and email has been validate - inside Verification controller before activate this code
+                *********************************************************************************************************************************/
+                
+                // // For real
+                // if((preg_match('/^[0-9]{10}+$/', $phone)) && (filter_var($email, FILTER_VALIDATE_EMAIL)) && (!empty($_SESSION['phoneNumberIsValidate'])) && (!empty($_SESSION['emailIsValidate']))) {
                 // For test
                 // if((preg_match('/^[0-9]{10}+$/', $phone)) && (filter_var($email, FILTER_VALIDATE_EMAIL)) ) {
-                // if((!empty($phone)) && (filter_var($email, FILTER_VALIDATE_EMAIL))) {
+                if((!empty($phone)) && (filter_var($email, FILTER_VALIDATE_EMAIL))) {
                     $_SESSION['phoneSubscribe'] = $phone;
                     $_SESSION['emailSubscribe'] = $email;
     
@@ -527,6 +531,7 @@ class RegisterController extends Controller
                     if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                         $items['emailError'] = 'Veuillez renseigner un email valide';
                     }
+                    
     
                     // Check if phone number has bees activate 
                     // Use this for real

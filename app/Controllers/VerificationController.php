@@ -6,8 +6,8 @@ use App\Views\View;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use App\Email\Mailer;
-use App\Models\Verification;
 
+use App\Models\Verification;
 use App\Models\Lead;
 
 // use App\Models\EmailVerification;
@@ -41,171 +41,168 @@ class VerificationController extends Controller
 
     public function phoneNumber(Request $request, Response $response)
     {
+        $lead = null;
+        $verification = null;
         $phone = $request->getParam('phone');
 
-        // NEW VERIFICATION VERSION
-        $verification = Verification::where('phone', $phone)->first();
+        $code = $this->generatePhoneNumberSaltCode();
 
-        // If phonenumber in db
-        if($verification) {
-            // Number phone already in db
-            if(!$verification->phone_verified_at) return $response->withJson(['success' => true, 'message' => 'Entrez votre code dé vérification']);
-            else return $response->withJson(['success' => false, 'message' => 'Ce numéro a déjà été utilisé']);
-        } else {
-            // Number phone not in db
-            // Generate code and send code by SMS
-            $code = $this->generatePhoneNumberSaltCode();
+        // Get Lead if exists
+        if( !empty($_SESSION['ice']) ) $lead = Lead::where('ice', $_SESSION['ice'])->first();
 
+        
+        // If Lead exists found verification entity
+        if($lead && $lead->verification_id) {
+            $verification = Verification::find($lead->verification_id);
+
+            // if(!$verification->phone_verified_at) return $response->withJson(['success' => true, 'message' => 'Entrez votre code dé vérification']);
+            // else return $response->withJson(['success' => false, 'message' => 'Ce numéro a déjà été utilisé']);
+
+            $verification = $verification->update([
+                'phone' => $phone,
+                'phone_code' => $code['complete'],
+                'phone_created_at' => time(),
+                'phone_code_generated_at' => time()
+            ]);
+        }
+
+        // Else create new
+        else {
             $verification = Verification::create([
                 'phone' => $phone,
                 'phone_code' => $code['complete'],
                 'phone_created_at' => time(),
                 'phone_code_generated_at' => time()
             ]);
-
-
-            if($verification) {
-
-                // Call method to send sms at the user
-                if($this->sendSMS($phone, $code['short'].' est le code confidentiel pour compléter votre inscription. Attention! Ce code a valididté de 5 min. A ne communiquer à personne. CHECKINFO'))
-                    return $response->withJson(['success' => true, 'message' => 'Le code de vérification a été envoyé']);
-                else
-                    return $response->withJson(['success' => false, 'message' => 'Le code de vérification n\'a pas pu être envoyé']);
-            }
-            else 
-                return $response->withJson(['success' => false, 'message' => 'Le code de vérification n\'a pas pu être envoyé']);
         }
+
+        return $response->withJson(['success' => true, 'message' => 'Le code de vérification a été envoyé']);
+
+
+        // ACTIVATE THIS CODE AFTER TEST
+        // // Call method to send sms at the user
+        // if($this->sendSMS($phone, $code['short'].' est le code confidentiel pour compléter votre inscription. Attention! Ce code a valididté de 5 min. A ne communiquer à personne. CHECKINFO'))
+        //     return $response->withJson(['success' => true, 'message' => 'Le code de vérification a été envoyé']);
+        // else
+        //     return $response->withJson(['success' => false, 'message' => 'Le code de vérification n\'a pas pu être envoyé']);
+
     }
 
     public function email(Request $request, Response $response)
     {
+        $lead = null;
         $verification = null;
         $email = $request->getParam('email');
 
-        // // Get email in database
-        $verification = Verification::where('email', $email)->first();
+        $code = $this->generateEmailSaltCode();
 
-        // // API usage to replace to replace the method above
-        // // Replace '.' in adresse email
-        // $emailEdit = str_replace('.', '~~', $email);
+        // Get Lead if exists
+        if( !empty($_SESSION['ice']) ) $lead = Lead::where('ice', $_SESSION['ice'])->first();
 
-        // $curl = curl_init();
+        
+        // If Lead exists found verification entity
+        if($lead && $lead->verification_id) {
+            $verification = Verification::find($lead->verification_id);
 
-        // curl_setopt_array($curl, array(
-        //     CURLOPT_URL => env('API_URL').'/email-verification/'.$emailEdit,
-        //     CURLOPT_RETURNTRANSFER => true,
-        //     CURLOPT_ENCODING => "",
-        //     CURLOPT_MAXREDIRS => 10,
-        //     CURLOPT_TIMEOUT => 0,
-        //     CURLOPT_FOLLOWLOCATION => true,
-        //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        //     CURLOPT_CUSTOMREQUEST => "GET",
-        // ));
+            // if(!$verification->phone_verified_at) return $response->withJson(['success' => true, 'message' => 'Entrez votre code dé vérification']);
+            // else return $response->withJson(['success' => false, 'message' => 'Ce numéro a déjà été utilisé']);
 
-        // $result = curl_exec($curl);
+            $verification = $verification->update([
+                'email' => $email,
+                'email_code' => $code['complete'],
+                'email_created_at' => time(),
+                'email_code_generated_at' => time()
+            ]);
+        }
 
-        // curl_close($curl);
-        // $emailVerification = json_decode($result)[0];
-        // // End API usage
-
-
-        // If email in db
-        if($verification) {
-            // Email already in db
-            if(!$verification->email_verified_at) return $response->withJson(['success' => true, 'message' => 'Entrez votre code de vérification']);
-            else return $response->withJson(['success' => false, 'message' => 'Cette adresse email a déjà été utilisé !']);
-        } else {
-            // Number phone not in db
-            // Generate code and send code by email
-            $code = $this->generateEmailSaltCode();
-
+        // Else create new
+        else {
             $verification = Verification::create([
                 'email' => $email,
                 'email_code' => $code['complete'],
                 'email_created_at' => time(),
                 'email_code_generated_at' => time()
             ]);
-
-            // // API Start - Save email and hash code and return email entity from the database
-
-            // $data = [
-            //     'email' => $email,
-            //     'code' => $code['complete']
-            // ];
-            // $curl = curl_init();
-
-            // curl_setopt_array($curl, array(
-            //     CURLOPT_URL =>  env('API_URL').'/email-verification',
-            //     CURLOPT_RETURNTRANSFER => true,
-            //     CURLOPT_ENCODING => "",
-            //     CURLOPT_MAXREDIRS => 10,
-            //     CURLOPT_TIMEOUT => 0,
-            //     CURLOPT_FOLLOWLOCATION => true,
-            //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            //     CURLOPT_CUSTOMREQUEST => "POST",
-            //     CURLOPT_POSTFIELDS => json_encode($data),
-            //     CURLOPT_HTTPHEADER => array(
-            //         "Content-Type: application/json"
-            //     ),
-            // ));
-
-            // $result = curl_exec($curl);
-
-            // curl_close($curl);
-            // $emailVerification = json_decode($result);
-            // // API End
-
-            // var_dump( json_encode($data) ); exit();
-
-            if($verification) {
-                // Call method to send email at the user
-                // Send email
-                // $sendMail = $this->mailer->to($email, '')->send(new SenderVerificationCode(['name' => '', 'code' => $code['short']]));
-
-                $mail = new PHPMailer(true);
-                // $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      // Enable verbose debug output
-                $mail->isSMTP();                                            // Send using SMTP
-                // $mail->Host       = 'smtp.gmail.com';                    // Set the SMTP server to send through
-                $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-                // $mail->Username   = 'maxmind.ulrich@gmail.com';                     // SMTP username
-                // $mail->Password   = 'MaxmindUlrich2019*';                               // SMTP password
-
-		        $mail->Host = $this->config->get('smtp.host');
-		        $mail->Username = $this->config->get('smtp.username');
-		        $mail->Password = $this->config->get('smtp.password');
-
-
-                // Server
-                // $mail->Host       = 'mail.maxmind.ma';                    // Set the SMTP server to send through
-                // $mail->Username   = 'verification-cic@maxmind.ma';                     // SMTP username
-                // $mail->Password   = 'HHSkismalj88ç';                               // SMTP password
-
-                // $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
-                $mail->SMTPSecure = 'ssl';
-                $mail->Port       = 465; 
-
-                $mail->setFrom($this->config->get('smtp.username'), 'CheckInfo Validation');
-
-                // Server
-                // $mail->setFrom('verification-cic@maxmind.ma', 'Code de Validation CheckInfo');
-                $mail->addAddress($email, 'User');
-                $mail->Subject  = 'Code de Validation CheckInfo';
-
-                // $mail->Body = 'Votre code de validation est le : '.$code['short'];
-                // $htmlMailContent = $this->view->render($response, 'emails/verification-code.twig', array('name' => '', 'code' => $code['short']));
-                $htmlMailContent = $this->view->make('emails/verification-code.twig', array('name' => '', 'code' => $code['short']));
-                $mail->Body = $htmlMailContent;
-                $mail->CharSet = 'UTF-8';
-                $mail->IsHTML(true);
-
-                if( $mail->send() )
-                    return $response->withJson(['success' => true, 'message' => 'Le code de vérification a été envoyé']);
-                else
-                    return $response->withJson(['success' => false, 'message' => 'Le code de vérification n\'a pas pu être envoyé']);
-            }
-            else 
-                return $response->withJson(['success' => false, 'message' => 'Le code de vérification n\'a pas pu être envoyé']);
         }
+
+        return $response->withJson(['success' => true, 'message' => 'Le code de vérification a été envoyé']);
+
+
+        // // Get Lead if exists
+        // if( !empty($_SESSION['ice']) ) $lead = Lead::where('ice', $_SESSION['ice'])->first();
+
+        // // // Get email in database
+        // $verification = Verification::where('email', $email)->first();
+
+        // // If email in db
+        // if($verification) {
+        //     // Email already in db but not verified
+        //     if(!$verification->email_verified_at) return $response->withJson(['success' => true, 'message' => 'Entrez votre code de vérification']);
+        //     else return $response->withJson(['success' => false, 'message' => 'Cette adresse email a déjà été utilisée !']);
+        // } else {
+        //     // Email not in db
+        //     // Generate code and send code by email
+        //     $code = $this->generateEmailSaltCode();
+
+        //     if($lead) {
+        //         // If lead already exists update Verification
+        //         $verification = Verification::where('id', $lead->verification_id)->first();
+
+        //         $verification = $verification->update([
+        //             'email' => $email,
+        //             'email_code' => $code['complete'],
+        //             'email_created_at' => time(),
+        //             'email_code_generated_at' => time()
+        //         ]);
+
+        //     } else {
+        //         // If lead not exists create new Verification
+        //         $verification = Verification::create([
+        //             'email' => $email,
+        //             'email_code' => $code['complete'],
+        //             'email_created_at' => time(),
+        //             'email_code_generated_at' => time()
+        //         ]);
+        //     }
+
+        //     return $response->withJson(['success' => true, 'message' => 'Le code de vérification a été envoyé']);
+
+        //     // if($verification) {
+        //     //     // Send email
+        //     //     $mail = new PHPMailer(true);
+        //     //     $mail->isSMTP();                                            // Send using SMTP
+        //     //     $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
+
+		//     //     $mail->Host = $this->config->get('smtp.host');
+		//     //     $mail->Username = $this->config->get('smtp.username');
+		//     //     $mail->Password = $this->config->get('smtp.password');
+
+        //     //     // $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
+        //     //     $mail->SMTPSecure = 'ssl';
+        //     //     $mail->Port       = 465; 
+
+        //     //     $mail->setFrom($this->config->get('smtp.username'), 'CheckInfo Validation');
+
+        //     //     // Server
+        //     //     // $mail->setFrom('verification-cic@maxmind.ma', 'Code de Validation CheckInfo');
+        //     //     $mail->addAddress($email, 'User');
+        //     //     $mail->Subject  = 'Code de Validation CheckInfo';
+
+        //     //     // $mail->Body = 'Votre code de validation est le : '.$code['short'];
+        //     //     // $htmlMailContent = $this->view->render($response, 'emails/verification-code.twig', array('name' => '', 'code' => $code['short']));
+        //     //     $htmlMailContent = $this->view->make('emails/verification-code.twig', array('name' => '', 'code' => $code['short']));
+        //     //     $mail->Body = $htmlMailContent;
+        //     //     $mail->CharSet = 'UTF-8';
+        //     //     $mail->IsHTML(true);
+
+        //     //     if( $mail->send() )
+        //     //         return $response->withJson(['success' => true, 'message' => 'Le code de vérification a été envoyé']);
+        //     //     else
+        //     //         return $response->withJson(['success' => false, 'message' => 'Le code de vérification n\'a pas pu être envoyé']);
+        //     // }
+        //     // else 
+        //         return $response->withJson(['success' => false, 'message' => 'Le code de vérification n\'a pas pu être envoyé']);
+        // }
     }
 
     public function generateEmailSaltCode($length = null)
@@ -286,24 +283,47 @@ class VerificationController extends Controller
         // NEW VERIFICATION VERSION
         $verification = Verification::where('phone', $phoneNumber)->first();
 
-        // If phone number present in phone_number_verifications table - Database 
         if($verification) {
-            if($verification->phone_verified_at) $message = 'Ce numero a déjà été validé';
-            else {
-                if( sha1($code.self::PHONE_NUMBER_SALT) == $verification->phone_code){
-                    $verification->update(['phone_verified_at' => time()]);
-                    $_SESSION['phoneNumberIsValidate'] = true;
-                    $status = true;
-                    $message = 'Votre numéro de téléphone a été vérifié avec succès';
-                } else {
-                    $message = 'Le code saisi est erroné';
-                }
+            $ice = !empty($_SESSION['ice']) ? $_SESSION['ice'] : '--';
+
+            if(!$verification->lead_id) {
+                $lead = Lead::create([
+                    'ice' => $ice,
+                    'verification_id' => $verification->id
+                ]);
+            } else {
+                $lead = Lead::find($verification->lead_id);
             }
+
+            $verification->update(['lead_id' => $lead->id]);
+
+            $verification->update(['phone_verified_at' => time()]);
+            
+            $_SESSION['phoneNumberIsValidate'] = true;
+            return ['success' => true, 'message' => 'Votre email a été validé avec succès'];
         } else {
-            $message = 'Le numero de téléphone suivant '.$phoneNumber.' ne correspond à aucun enregistrement';
+            return ['success' => false, 'message' => 'L\'email ne correspond à aucun enregistrement'];
         }
 
-        return ['success' => $status, 'message' => $message];
+
+        // // If phone number present in phone_number_verifications table - Database 
+        // if($verification) {
+        //     if($verification->phone_verified_at) $message = 'Ce numero a déjà été validé';
+        //     else {
+        //         if( sha1($code.self::PHONE_NUMBER_SALT) == $verification->phone_code){
+        //             $verification->update(['phone_verified_at' => time()]);
+        //             $_SESSION['phoneNumberIsValidate'] = true;
+        //             $status = true;
+        //             $message = 'Votre numéro de téléphone a été vérifié avec succès';
+        //         } else {
+        //             $message = 'Le code saisi est erroné';
+        //         }
+        //     }
+        // } else {
+        //     $message = 'Le numero de téléphone suivant '.$phoneNumber.' ne correspond à aucun enregistrement';
+        // }
+
+        // return ['success' => $status, 'message' => $message];
     }
 
     protected function checkIfEmailCodeMatch(Request $request)
@@ -313,114 +333,79 @@ class VerificationController extends Controller
         $email = $request->getParam('email');
         $code = $request->getParam('code');
 
-        // This code has been replace by cURL API request
+        // NEW VERIFICATION VERSION
         $verification = Verification::where('email', $email)->first();
-        
-        // // API usage to replace to replace the method above
-        // // Replace '.' in adresse email
-        // $emailEdit = str_replace('.', '~~', $email);
 
-        // $curl = curl_init();
-
-        // curl_setopt_array($curl, array(
-        //     CURLOPT_URL => env('API_URL').'/email-verification/'.$emailEdit,
-        //     CURLOPT_RETURNTRANSFER => true,
-        //     CURLOPT_ENCODING => "",
-        //     CURLOPT_MAXREDIRS => 10,
-        //     CURLOPT_TIMEOUT => 0,
-        //     CURLOPT_FOLLOWLOCATION => true,
-        //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        //     CURLOPT_CUSTOMREQUEST => "GET",
-        // ));
-
-        // $result = curl_exec($curl);
-
-        // curl_close($curl);
-        // $emailVerification = json_decode($result)[0];
-        // // End API usage
-        
-
-        // If email present in email_verifications table - Database 
         if($verification) {
-            if($verification->email_verified_at) $message = 'Ce numero a déjà été validé';
-            else {
-                if( sha1($code.self::EMAIL_SALT) == $verification->email_code){
-                    // Replace by API request to update emailVerification
-                    $verification->update(['email_verified_at' => time()]);
+            $ice = !empty($_SESSION['ice']) ? $_SESSION['ice'] : '--';
 
-                    // // Update here entity by API request
-                    // //Start API usage - to update entity
-                    // $data = [
-                    //     'email' => $email,
-                    //     'code' => sha1($code.self::EMAIL_SALT),
-                    //     'email_verified_at' => time()
-                    // ];
-                    // $curl = curl_init();
-
-                    // curl_setopt_array($curl, array(
-                    //     CURLOPT_URL => env('API_URL').'/email-verification/'.$emailVerification->id,
-                    //     CURLOPT_RETURNTRANSFER => true,
-                    //     CURLOPT_ENCODING => "",
-                    //     CURLOPT_MAXREDIRS => 10,
-                    //     CURLOPT_TIMEOUT => 0,
-                    //     CURLOPT_FOLLOWLOCATION => true,
-                    //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                    //     CURLOPT_CUSTOMREQUEST => "PUT",
-                    //     CURLOPT_POSTFIELDS => json_encode($data),
-                    //     CURLOPT_HTTPHEADER => array(
-                    //         "Content-Type: application/json"
-                    //     ),
-                    // ));
-
-                    // $result = curl_exec($curl);
-
-                    // curl_close($curl);
-                    // $emailVerification = json_decode($result);
-
-                    // // End API usage
-
-                    if($verification->email_verified_at) {
-
-                        $lead = null; 
-
-                        // Get session ICE if exists
-                        if(!empty($_SESSION['ice'])) {
-                            $ice = $_SESSION['ice'];
-                            // Get lead if exists
-                            $lead = Lead::where('ice', $ice)->first();
-
-                            if(!$lead) {
-                                $lead = Lead::create([
-                                    'ice' => $ice,
-                                    'verification_id' => $verification->id
-                                ]);
-
-                                $verification->update(['lead_id' => $lead->id]);
-                            } else {
-                                $verifOfLead = Verification::find($lead->verification_id);
-
-                                if($verifOfLead->email == $email) {
-                                    // Email use is the same that email of verification for the session ICE number
-                                } else {
-                                    // Break verification 
-                                    // Because email use not same that first email use for this ICE validation
-                                }
-                            }
-                        }
-
-                        $_SESSION['emailIsValidate'] = true;
-                        $status = true;
-                        $message = 'Votre email a été vérifié avec succès';
-                    }
-                } else {
-                    $message = 'Le code saisi est erroné';
-                }
+            if(!$verification->lead_id) {
+                $lead = Lead::create([
+                    'ice' => $ice,
+                    'verification_id' => $verification->id
+                ]);
+            } else {
+                $lead = Lead::find($verification->lead_id);
             }
+
+            $verification->update(['lead_id' => $lead->id]);
+
+            $verification->update(['email_verified_at' => time()]);
+            
+            $_SESSION['emailIsValidate'] = true;
+            return ['success' => true, 'message' => 'Votre email a été validé avec succès'];
         } else {
-            $message = 'L\'adresse mail suivante '.$email.' ne correspond à aucun enregistrement';
+            return ['success' => false, 'message' => 'L\'email ne correspond à aucun enregistrement'];
         }
 
-        return ['success' => $status, 'message' => $message];
+        // // This code has been replace by cURL API request
+        // $verification = Verification::where('email', $email)->first();
+
+        // // If email present in email_verifications table - Database 
+        // if($verification) {
+        //     if($verification->email_verified_at) $message = 'Ce numero a déjà été validé';
+        //     else {
+        //         if( sha1($code.self::EMAIL_SALT) == $verification->email_code){
+        //             // Replace by API request to update emailVerification
+        //             $verification->update(['email_verified_at' => time()]);
+
+        //             if($verification->email_verified_at) {
+
+        //                 $lead = null; 
+
+        //                 // Get session ICE if exists
+        //                 if(!empty($_SESSION['ice'])) {
+        //                     $ice = $_SESSION['ice'];
+        //                     // Get lead if exists
+        //                     $lead = Lead::where('ice', $ice)->first();
+
+        //                     if(!$lead) {
+        //                         $lead = Lead::create([
+        //                             'ice' => $ice,
+        //                             'verification_id' => $verification->id
+        //                         ]);
+
+        //                         $verification->update(['lead_id' => $lead->id]);
+        //                     } else {
+        //                         $verifOfLead = Verification::find($lead->verification_id);
+
+        //                         // Update verification
+        //                     }
+        //                 }
+
+        //                 $_SESSION['emailIsValidate'] = true;
+        //                 $status = true;
+        //                 $message = 'Votre email a été vérifié avec succès';
+        //             }
+        //         } else {
+        //             $message = 'Le code saisi est erroné';
+        //         }
+        //     }
+        // } else {
+        //     $message = 'L\'adresse mail suivante '.$email.' ne correspond à aucun enregistrement';
+        // }
+
+        // return ['success' => $status, 'message' => $message];
     }
 
     public function checkPhoneNumber(Request $request, Response $response)
